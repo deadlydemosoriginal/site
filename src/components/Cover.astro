@@ -1,0 +1,70 @@
+---
+/**
+ * Colour-blocked cover art. Falls back to a procedural block built from
+ * the episode number when no artwork file exists, so the archive looks
+ * designed rather than full of placeholder boxes.
+ */
+interface Props {
+  artwork?: string | undefined;
+  number?: number | undefined;
+  title: string;
+  tone?: string;
+  /** Small mono label in the top-left corner. */
+  kicker?: string | undefined;
+  class?: string | undefined;
+}
+
+const { artwork, number, title, tone = 'purple', kicker, class: klass = '' } = Astro.props;
+---
+
+<div class={`cover tone-${tone} ${klass}`}>
+  {artwork
+    ? <img src={artwork} alt={`Artwork for ${title}`} class="cover__img" loading="lazy" decoding="async" />
+    : (
+      <>
+        {kicker && <span class="cover__kicker">{kicker}</span>}
+        <span class="cover__num" aria-hidden="true">
+          {number !== undefined ? String(number).padStart(2, '0') : title.slice(0, 2).toUpperCase()}
+        </span>
+      </>
+    )}
+</div>
+
+<style>
+  .cover {
+    position: relative;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--block-bg);
+    color: var(--block-fg);
+  }
+
+  .cover__img { width: 100%; height: 100%; object-fit: cover; }
+
+  .cover__num {
+    font-family: var(--face-display);
+    font-weight: 800;
+    font-variation-settings: 'wdth' 75;
+    font-size: clamp(4rem, 34cqw, 16rem);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+  }
+
+  .cover__kicker {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    opacity: 0.75;
+  }
+
+  /* Container query units keep the numeral proportional to the tile,
+     not the viewport — tiles appear at wildly different sizes. */
+  .cover { container-type: inline-size; }
+
+</style>

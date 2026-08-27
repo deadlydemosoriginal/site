@@ -1,0 +1,92 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPlaylists, formatDate } from '../../lib/content';
+import { getEntry } from 'astro:content';
+
+const playlists = await getPlaylists();
+const rows = await Promise.all(
+  playlists.map(async (p) => ({
+    entry: p,
+    curator: (await getEntry('members', p.data.curator.id))?.data.name ?? 'Deadly Demos',
+  })),
+);
+---
+
+<Base title="Playlists" description="Curated Spotify playlists from the Deadly Demos crew.">
+  <section class="shell head">
+    <p class="meta head__eyebrow">
+      <span>Curated</span>
+      <span>{playlists.length} playlists</span>
+    </p>
+    <h1 class="head__title">
+      <span class="head__a">Playlists</span>
+      <span class="head__b">for specific weather</span>
+    </h1>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="shell section">
+    <div class="grid12 plist">
+      {rows.map(({ entry, curator }, i) => (
+        <a href={`/playlists/${entry.id}/`} class={`pl on-${entry.data.tone} ${i === 0 ? 'pl--wide' : ''}`}>
+          <p class="meta pl__top">
+            <span>{curator}</span>
+            <span>{String(playlists.length - i).padStart(2, '0')}</span>
+          </p>
+
+          <h2 class="pl__title">{entry.data.title}</h2>
+          <p class="pl__desc">{entry.data.description}</p>
+
+          <p class="meta pl__foot">
+            {formatDate(entry.data.date)}
+            {entry.data.tracks.length > 0 && <> · {entry.data.tracks.length} tracks</>}
+          </p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head { padding-block: clamp(2rem, 5vw, 4rem) 2rem; }
+  .head__eyebrow { display: flex; justify-content: space-between; padding-bottom: 1.5rem; }
+  .head__title { display: grid; font-size: var(--step-xl); text-transform: uppercase; line-height: 0.84; }
+  .head__a { font-variation-settings: 'wdth' 75; }
+  .head__b {
+    font-variation-settings: 'wdth' 100;
+    font-size: 0.42em;
+    color: var(--lavender);
+    text-align: right;
+  }
+
+  .pl {
+    grid-column: span 4;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    min-height: 18rem;
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--bg);
+  }
+  .pl--wide { grid-column: span 8; }
+  .pl:hover { filter: brightness(1.12); }
+
+  .pl__top { display: flex; justify-content: space-between; gap: 1rem; }
+  .pl__title {
+    font-size: var(--step-m);
+    line-height: 0.95;
+    font-variation-settings: 'wdth' 90;
+    margin-top: auto;
+  }
+  .pl__desc { color: var(--fg-muted); font-size: 0.95rem; max-width: 44ch; }
+
+  @media (max-width: 900px) {
+    .pl, .pl--wide { grid-column: span 6; }
+  }
+  @media (max-width: 560px) {
+    .pl, .pl--wide { grid-column: span 2; }
+  }
+</style>

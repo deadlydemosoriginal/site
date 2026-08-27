@@ -1,0 +1,96 @@
+---
+const links = [
+  { href: '/shows/',     label: 'Shows' },
+  { href: '/playlists/', label: 'Playlists' },
+  { href: '/articles/',  label: 'Articles' },
+  { href: '/about/',     label: 'About' },
+  { href: '/contact/',   label: 'Contact' },
+];
+
+const path = Astro.url.pathname;
+---
+
+<header class="nav">
+  <div class="shell nav__inner">
+    <a href="/" class="wordmark" aria-label="Deadly Demos — home">
+      Deadly<span class="wordmark__break"> </span>Demos<span class="wordmark__dot" aria-hidden="true">.</span>
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="nav__list">
+        {links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              class="nav__link"
+              aria-current={path.startsWith(l.href) ? 'page' : undefined}
+            >{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+  <hr class="rule" />
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--gutter);
+    padding-block: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .wordmark {
+    font-family: var(--face-display);
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    color: var(--fg);
+    text-decoration: none;
+    font-variation-settings: 'wdth' 85;
+    text-transform: uppercase;
+  }
+  .wordmark:hover { color: var(--fg); }
+  .wordmark__dot { color: var(--accent); }
+
+  .nav__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav__link {
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--fg-muted);
+    text-decoration: none;
+    padding-block: 0.25rem;
+    border-bottom: 2px solid transparent;
+  }
+  .nav__link:hover { color: var(--fg); }
+  .nav__link[aria-current='page'] {
+    color: var(--fg);
+    border-bottom-color: var(--accent);
+  }
+
+  @media (max-width: 560px) {
+    .nav__inner { gap: 0.5rem; }
+    .nav__list { gap: 1rem; }
+  }
+</style>

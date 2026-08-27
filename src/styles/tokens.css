@@ -1,0 +1,121 @@
+/* ============================================================
+   deadlydemos — design tokens
+   Palette pulled directly from the three colour pins in inspo/.
+   Dark ground is the site's identity; light blocks are used as
+   inverted sections *within* pages, not as a theme toggle.
+   ============================================================ */
+
+:root {
+  /* ---- Raw palette ---- */
+  --ink:            #0D0D0D;  /* Jet Black   */
+  --ink-raised:     #141414;  /* Nox Noir    */
+  --paper:          #FAFAFA;  /* Soft White  */
+  --purple-deep:    #433075;  /* Deep Purple */
+  --purple-royal:   #7E49B3;  /* Royal Amethyst */
+  --lavender:       #A58CF4;  /* Lavender    */
+  --periwinkle:     #E3D9FC;  /* Periwinkle  */
+  --magenta:        #BF40FA;  /* Hyper Magenta — the ONLY hot accent */
+  --ultrasonic:     #4928C2;  /* Ultrasonic Blue */
+  --mist:           #CFCFCF;  /* Steel Mist  */
+
+  /* ---- Semantic ---- */
+  --bg:             var(--ink);
+  --bg-raised:      var(--ink-raised);
+  --fg:             var(--paper);
+  --fg-muted:       #8A8A8F;
+  --rule:           #2A2A2E;
+  --accent:         var(--magenta);
+  --link:           var(--lavender);
+
+  /* ---- Type ---- */
+  --face-display:   var(--font-display), 'Helvetica Neue', Arial, sans-serif;
+  --face-body:      var(--font-body), 'Helvetica Neue', Arial, sans-serif;
+  --face-mono:      var(--font-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+  --face-serif:     var(--font-serif), Georgia, 'Times New Roman', serif;
+
+  /* Fluid editorial scale. The top end is deliberately enormous —
+     poster-scale headlines are the whole point. */
+  --step-xl:        clamp(3.25rem, 11.5vw, 10.5rem);
+  --step-l:         clamp(2.25rem, 6.5vw, 5.5rem);
+  --step-m:         clamp(1.6rem, 3.4vw, 2.75rem);
+  --step-s:         clamp(1.15rem, 1.7vw, 1.4rem);
+  --step-body:      1.0625rem;
+  --step-meta:      0.75rem;
+
+  /* ---- Space ---- */
+  --gutter:         clamp(1rem, 4vw, 2.5rem);
+  --space-section:  clamp(3.5rem, 9vw, 8rem);
+  --measure:        66ch;
+  --maxw:           1680px;
+
+  /* ---- Lines ---- */
+  --hair:           1px solid var(--rule);
+  --hair-strong:    1px solid var(--fg);
+}
+
+/* Blocks that invert to paper — used for article bodies and
+   colour-blocked sections, mirroring the print references. */
+.on-paper {
+  --bg: var(--paper);
+  --bg-raised: #FFFFFF;
+  --fg: var(--ink);
+  --fg-muted: #55555C;
+  --rule: #D8D8DE;
+  --link: var(--ultrasonic);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.on-periwinkle {
+  --bg: var(--periwinkle);
+  --bg-raised: #F0EAFD;
+  --fg: var(--ink);
+  --fg-muted: #4A3F6B;
+  --rule: #C7B8EE;
+  --link: var(--ultrasonic);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.on-purple {
+  --bg: var(--purple-deep);
+  --bg-raised: #4E3985;
+  --fg: var(--paper);
+  --fg-muted: #B6A8DC;
+  --rule: #5B4790;
+  --link: var(--periwinkle);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.on-ultrasonic {
+  --bg: var(--ultrasonic);
+  --bg-raised: #5836D6;
+  --fg: var(--paper);
+  --fg-muted: #C3B7F2;
+  --rule: #6244D9;
+  --link: var(--periwinkle);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.on-ink {
+  --bg: var(--ink-raised);
+  --bg-raised: #1C1C20;
+  --fg: var(--paper);
+  --fg-muted: #8A8A8F;
+  --rule: #333338;
+  --link: var(--lavender);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* ------------------------------------------------------------
+   Colour-block tones. Global (not component-scoped) because both
+   Cover.astro and the About page paint blocks from the same set.
+   ------------------------------------------------------------ */
+.tone-purple      { --block-bg: var(--purple-deep);  --block-fg: var(--magenta); }
+.tone-ultrasonic  { --block-bg: var(--ultrasonic);   --block-fg: var(--periwinkle); }
+.tone-periwinkle  { --block-bg: var(--periwinkle);   --block-fg: var(--purple-deep); }
+.tone-paper       { --block-bg: var(--paper);        --block-fg: var(--ink); }
+.tone-ink         { --block-bg: var(--ink-raised);   --block-fg: var(--lavender); }

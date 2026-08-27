@@ -1,0 +1,119 @@
+@import './tokens.css';
+
+/* ---------- reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--face-body);
+  font-size: var(--step-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;           /* body never scrolls sideways */
+  /* room for the persistent player bar */
+  padding-bottom: var(--player-h, 0px);
+}
+
+img, svg, video { display: block; max-width: 100%; height: auto; }
+button, input, select, textarea { font: inherit; color: inherit; }
+
+/* ---------- typography ---------- */
+h1, h2, h3, h4 {
+  font-family: var(--face-display);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+a { color: var(--link); text-underline-offset: 0.18em; }
+a:hover { color: var(--accent); }
+
+/* Mono metadata — dates, durations, indexes, tags.
+   This is the connective tissue of the whole design. */
+.meta {
+  font-family: var(--face-mono);
+  font-size: var(--step-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--fg-muted);
+}
+
+.serif { font-family: var(--face-serif); font-weight: 400; letter-spacing: -0.01em; }
+
+/* ---------- layout ---------- */
+.shell {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* 12-column grid. Tiles deliberately span unequal widths —
+   never a uniform 3-up card row. */
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+
+@media (max-width: 900px) {
+  .grid12 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .grid12 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Split display heading: two halves pushed to opposite margins. */
+.split-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.2em 1em;
+  font-family: var(--face-display);
+  font-weight: 800;
+  font-size: var(--step-l);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  margin-block: 0;
+}
+.split-head > :last-child { text-align: right; }
+
+.rule { border: 0; border-top: var(--hair); margin: 0; }
+
+.section { padding-block: var(--space-section); }
+
+/* ---------- a11y ---------- */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute; left: var(--gutter); top: -100px;
+  background: var(--accent); color: var(--ink);
+  padding: 0.6rem 1rem; z-index: 200;
+  font-family: var(--face-mono); font-size: var(--step-meta);
+  text-transform: uppercase; letter-spacing: 0.09em;
+}
+.skip-link:focus { top: 0.5rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

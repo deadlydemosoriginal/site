@@ -1,0 +1,140 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPlaylists, formatDateLong } from '../../lib/content';
+import { getEntry, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const playlists = await getPlaylists();
+  return playlists.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const curator = await getEntry('members', entry.data.curator.id);
+const d = entry.data;
+
+/** Spotify playlist id, for the embed fallback. */
+const spotifyId = d.spotifyUrl.split('/playlist/')[1]?.split('?')[0] ?? '';
+---
+
+<Base title={d.title} description={d.description}>
+  <article>
+    <section class={`shell-full top on-${d.tone}`}>
+      <div class="shell">
+        <p class="meta top__eyebrow">
+          <a href="/playlists/">← Playlists</a>
+          <span>Curated by {curator?.data.name ?? 'Deadly Demos'}</span>
+        </p>
+        <h1 class="top__title">{d.title}</h1>
+        <p class="top__desc">{d.description}</p>
+        <p class="meta top__date">{formatDateLong(d.date)}</p>
+      </div>
+    </section>
+
+    <section class="shell section body">
+      <div class="body__notes">
+        <h2 class="meta body__label">Sleeve note</h2>
+        <div class="prose"><Content /></div>
+
+        <a class="spotify" href={d.spotifyUrl} target="_blank" rel="noopener noreferrer">
+          Open in Spotify ↗
+        </a>
+      </div>
+
+      <div class="body__tracks">
+        <h2 class="meta body__label">
+          Tracklist{d.tracks.length > 0 && <> · {d.tracks.length}</>}
+        </h2>
+
+        {d.tracks.length > 0 ? (
+          <ol class="tracks">
+            {d.tracks.map((t, i) => (
+              <li class="track">
+                <span class="meta track__num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="track__text">
+                  <span class="track__artist">{t.artist}</span>
+                  <span class="track__title">{t.title}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="meta pending">Tracklist syncs from Spotify at build time.</p>
+        )}
+
+        {spotifyId && (
+          <iframe
+            class="embed"
+            src={`https://open.spotify.com/embed/playlist/${spotifyId}?theme=0`}
+            width="100%" height="380" frameborder="0"
+            loading="lazy"
+            allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            title={`${d.title} on Spotify`}
+          ></iframe>
+        )}
+      </div>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .shell-full { width: 100%; }
+  .top { padding-block: clamp(2.5rem, 7vw, 6rem); }
+  .top__eyebrow { display: flex; justify-content: space-between; gap: 1rem; padding-bottom: 2.5rem; }
+  .top__eyebrow a { color: inherit; text-decoration: none; opacity: 0.75; }
+  .top__eyebrow a:hover { opacity: 1; }
+
+  .top__title {
+    font-size: var(--step-l);
+    line-height: 0.88;
+    text-transform: uppercase;
+    font-variation-settings: 'wdth' 85;
+  }
+  .top__desc { max-width: 52ch; margin-top: 1.5rem; font-size: var(--step-s); line-height: 1.4; }
+  .top__date { margin-top: 1.5rem; }
+
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .body__label { margin-bottom: 1.25rem; color: var(--fg); font-weight: 700; }
+
+  .prose { max-width: var(--measure); }
+  .prose :global(p) { margin-bottom: 1.1rem; line-height: 1.6; }
+
+  .spotify {
+    display: inline-block;
+    margin-top: 1.5rem;
+    border: 1px solid var(--rule);
+    padding: 0.8rem 1.2rem;
+    text-decoration: none;
+    color: var(--fg);
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+  .spotify:hover { border-color: var(--lavender); color: var(--lavender); }
+
+  .tracks { list-style: none; padding: 0; margin: 0 0 2rem; }
+  .track {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding-block: 0.7rem;
+    border-bottom: var(--hair);
+  }
+  .track__text { display: grid; gap: 0.15rem; }
+  .track__artist { font-weight: 700; }
+  .track__title { color: var(--fg-muted); font-size: 0.95rem; }
+
+  .pending { border: 1px dashed var(--rule); padding: 0.75rem 1rem; margin-bottom: 2rem; }
+  .embed { border: 0; display: block; }
+
+  @media (max-width: 900px) {
+    .body { grid-template-columns: 1fr; }
+  }
+</style>

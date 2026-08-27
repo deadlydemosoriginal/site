@@ -1,0 +1,251 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cover from '../../components/Cover.astro';
+import { getShows, resolveMembers, formatDateLong, toSeconds } from '../../lib/content';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const shows = await getShows();
+  return shows.map((show, i) => ({
+    params: { slug: show.id },
+    props: {
+      show,
+      next: shows[i - 1] ?? null,
+      prev: shows[i + 1] ?? null,
+    },
+  }));
+}
+
+const { show, next, prev } = Astro.props;
+const { Content } = await render(show);
+const hosts = await resolveMembers(show.data.hosts);
+const d = show.data;
+---
+
+<Base title={d.title} description={d.description}>
+  <article>
+    <section class="shell top">
+      <p class="meta top__eyebrow">
+        <a href="/shows/">← Archive</a>
+        <span>Episode {d.episode}</span>
+      </p>
+
+      <div class="top__grid">
+        <Cover
+          class="top__cover"
+          artwork={d.artwork}
+          number={d.episode}
+          title={d.title}
+          tone={d.tone}
+          kicker={`№ ${d.episode}`}
+        />
+
+        <div class="top__body">
+          <p class="meta">
+            {formatDateLong(d.date)}
+            {d.duration && <> · {d.duration}</>}
+          </p>
+
+          <h1 class="top__title">{d.title}</h1>
+          <p class="top__desc">{d.description}</p>
+
+          <p class="meta top__hosts">
+            Hosted by {hosts.map((h) => h.data.name).join(' & ')}
+          </p>
+
+          <div class="tags">
+            {d.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+
+          {d.audioUrl ? (
+            <button
+              class="play"
+              type="button"
+              data-audio={d.audioUrl}
+              data-title={d.title}
+              data-episode={d.episode}
+              data-slug={show.id}
+              data-href={`/shows/${show.id}/`}
+              data-peaks={d.peaks ? JSON.stringify(d.peaks) : undefined}
+            >
+              <span class="play__icon" aria-hidden="true"></span>
+              <span>Play episode</span>
+            </button>
+          ) : (
+            <p class="meta pending">Audio being uploaded — tracklist below</p>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="shell section body">
+      <div class="body__notes">
+        <h2 class="meta body__label">Show notes</h2>
+        <div class="prose"><Content /></div>
+      </div>
+
+      {d.tracklist.length > 0 && (
+        <div class="body__tracks">
+          <h2 class="meta body__label">Tracklist · {d.tracklist.length}</h2>
+          <ol class="tracks">
+            {d.tracklist.map((t, i) => (
+              <li class="track">
+                <span class="meta track__num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="track__text">
+                  <span class="track__artist">{t.artist}</span>
+                  <span class="track__title">{t.title}</span>
+                </span>
+                {t.timestamp && (
+                  d.audioUrl
+                    ? <button class="meta track__cue" type="button" data-seek={toSeconds(t.timestamp)}>{t.timestamp}</button>
+                    : <span class="meta track__cue track__cue--flat">{t.timestamp}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+    </section>
+
+    <hr class="rule" />
+
+    <nav class="shell section pager" aria-label="More shows">
+      {prev ? (
+        <a href={`/shows/${prev.id}/`} class="pager__link">
+          <span class="meta">← Previous</span>
+          <span class="pager__title">{prev.data.title}</span>
+        </a>
+      ) : <span />}
+      {next ? (
+        <a href={`/shows/${next.id}/`} class="pager__link pager__link--next">
+          <span class="meta">Next →</span>
+          <span class="pager__title">{next.data.title}</span>
+        </a>
+      ) : <span />}
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .top { padding-block: clamp(1.5rem, 4vw, 3rem) 3rem; }
+  .top__eyebrow { display: flex; justify-content: space-between; padding-bottom: 2rem; }
+  .top__eyebrow a { color: var(--fg-muted); text-decoration: none; }
+  .top__eyebrow a:hover { color: var(--fg); }
+
+  .top__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+
+  .top__body { display: grid; gap: 1.1rem; justify-items: start; }
+
+  .top__title {
+    font-size: var(--step-l);
+    line-height: 0.88;
+    font-variation-settings: 'wdth' 90;
+  }
+  .top__desc { max-width: 52ch; color: var(--fg-muted); font-size: var(--step-s); line-height: 1.4; }
+  .top__hosts { color: var(--lavender); }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag {
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    border: 1px solid var(--rule);
+    padding: 0.25rem 0.55rem;
+    color: var(--fg-muted);
+  }
+
+  .play {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--magenta);
+    color: var(--ink);
+    border: 0;
+    padding: 0.9rem 1.5rem;
+    cursor: pointer;
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-weight: 700;
+  }
+  .play:hover { background: var(--lavender); }
+  .play__icon {
+    width: 0; height: 0;
+    border-left: 10px solid currentColor;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+  .pending { border: 1px dashed var(--rule); padding: 0.75rem 1rem; }
+
+  /* ---- body ---- */
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .body__label { margin-bottom: 1.25rem; color: var(--fg); font-weight: 700; }
+
+  .prose { max-width: var(--measure); }
+  .prose :global(p) { margin-bottom: 1.1rem; line-height: 1.6; }
+  .prose :global(h2) {
+    font-family: var(--face-serif);
+    font-weight: 400;
+    font-size: var(--step-m);
+    margin: 2rem 0 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .tracks { list-style: none; padding: 0; margin: 0; }
+  .track {
+    display: grid;
+    grid-template-columns: 2rem 1fr auto;
+    gap: 1rem;
+    align-items: baseline;
+    padding-block: 0.7rem;
+    border-bottom: var(--hair);
+  }
+  .track__text { display: grid; gap: 0.15rem; }
+  .track__artist { font-weight: 700; }
+  .track__title { color: var(--fg-muted); font-size: 0.95rem; }
+
+  .track__cue {
+    background: none;
+    border: 0;
+    color: var(--lavender);
+    cursor: pointer;
+    padding: 0.2rem 0.35rem;
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    letter-spacing: 0.09em;
+  }
+  .track__cue:hover { color: var(--magenta); }
+  .track__cue--flat { color: var(--fg-muted); cursor: default; }
+
+  /* ---- pager ---- */
+  .pager { display: flex; justify-content: space-between; gap: var(--gutter); }
+  .pager__link { display: grid; gap: 0.4rem; text-decoration: none; color: var(--fg); max-width: 22ch; }
+  .pager__link--next { text-align: right; }
+  .pager__title {
+    font-family: var(--face-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    line-height: 1.05;
+    font-variation-settings: 'wdth' 90;
+  }
+  .pager__link:hover .pager__title { color: var(--lavender); }
+
+  @media (max-width: 900px) {
+    .top__grid { grid-template-columns: 1fr; }
+    .body { grid-template-columns: 1fr; }
+  }
+</style>

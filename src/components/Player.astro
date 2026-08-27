@@ -1,0 +1,349 @@
+---
+/**
+ * Persistent audio player.
+ *
+ * Carries `transition:persist` in the layout, so the <audio> node survives
+ * client-side navigation and a show keeps playing while you browse. This is
+ * the reason the site is built on Astro rather than a plain static generator.
+ */
+---
+
+<div
+  id="dd-player"
+  class="player"
+  data-state="idle"
+  aria-live="polite"
+  transition:persist="dd-player"
+>
+  <div class="player__inner shell">
+    <button id="dd-toggle" class="player__btn" type="button" aria-label="Play">
+      <span class="player__icon player__icon--play" aria-hidden="true"></span>
+      <span class="player__icon player__icon--pause" aria-hidden="true"></span>
+    </button>
+
+    <a id="dd-title" class="player__meta" href="/shows/">
+      <span id="dd-ep" class="meta player__ep">—</span>
+      <span id="dd-name" class="player__name">Nothing playing</span>
+    </a>
+
+    <div class="player__scrub">
+      <canvas id="dd-wave" class="player__wave" aria-hidden="true"></canvas>
+      <div id="dd-prog" class="player__prog"><span id="dd-fill" class="player__fill"></span></div>
+      <input
+        id="dd-range"
+        class="player__range"
+        type="range"
+        min="0" max="1000" value="0" step="1"
+        aria-label="Seek"
+      />
+    </div>
+
+    <p class="meta player__time">
+      <span id="dd-cur">0:00</span><span class="player__sep">/</span><span id="dd-dur">0:00</span>
+    </p>
+
+    <button id="dd-close" class="player__close" type="button" aria-label="Close player">&times;</button>
+  </div>
+
+  <audio id="dd-audio" preload="none"></audio>
+</div>
+
+<style>
+  .player {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 150;
+    background: var(--ink-raised);
+    border-top: 1px solid var(--rule);
+    transform: translateY(100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .player[data-state='loaded'],
+  .player[data-state='playing'] { transform: translateY(0); }
+
+  .player__inner {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+    padding-block: 0.7rem;
+  }
+
+  .player__btn {
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
+    background: var(--magenta);
+    color: var(--ink);
+    border: 0;
+    cursor: pointer;
+  }
+  .player__btn:hover { background: var(--lavender); }
+
+  .player__icon--play {
+    width: 0; height: 0;
+    border-left: 11px solid currentColor;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    margin-left: 3px;
+  }
+  .player__icon--pause {
+    display: none;
+    width: 12px; height: 14px;
+    border-left: 4px solid currentColor;
+    border-right: 4px solid currentColor;
+  }
+  .player[data-state='playing'] .player__icon--play { display: none; }
+  .player[data-state='playing'] .player__icon--pause { display: block; }
+
+  .player__meta {
+    flex: none;
+    max-width: 24ch;
+    display: grid;
+    gap: 0.15rem;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .player__ep { line-height: 1; }
+  .player__name {
+    font-family: var(--face-display);
+    font-weight: 700;
+    font-variation-settings: 'wdth' 85;
+    font-size: 1rem;
+    line-height: 1.05;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .player__scrub {
+    position: relative;
+    flex: 1 1 auto;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    min-width: 4rem;
+  }
+
+  .player__wave { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
+  .player[data-wave='true'] .player__wave { display: block; }
+  .player[data-wave='true'] .player__prog { display: none; }
+
+  .player__prog { position: absolute; inset-inline: 0; height: 3px; background: var(--rule); }
+  .player__fill { display: block; height: 100%; width: 0%; background: var(--lavender); }
+
+  /* Transparent range sits on top so seeking is keyboard accessible. */
+  .player__range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .player__range:focus-visible { opacity: 1; }
+
+  .player__time { flex: none; display: flex; gap: 0.4rem; white-space: nowrap; }
+  .player__sep { opacity: 0.4; }
+
+  .player__close {
+    flex: none;
+    background: none;
+    border: 0;
+    color: var(--fg-muted);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.25rem;
+  }
+  .player__close:hover { color: var(--fg); }
+
+  @media (max-width: 700px) {
+    .player__meta { max-width: 12ch; }
+    .player__time { font-size: 0.65rem; }
+  }
+  @media (max-width: 480px) {
+    .player__meta { display: none; }
+  }
+</style>
+
+<script>
+  // Guarded so ClientRouter navigations don't re-bind or reset playback.
+  if (!(window as any).__ddPlayer) {
+    const el = (id: string) => document.getElementById(id)!;
+
+    const root = el('dd-player');
+    const audio = el('dd-audio') as HTMLAudioElement;
+    const toggle = el('dd-toggle') as HTMLButtonElement;
+    const range = el('dd-range') as HTMLInputElement;
+    const fill = el('dd-fill');
+    const wave = el('dd-wave') as HTMLCanvasElement;
+    const curEl = el('dd-cur');
+    const durEl = el('dd-dur');
+    const epEl = el('dd-ep');
+    const nameEl = el('dd-name');
+    const titleLink = el('dd-title') as HTMLAnchorElement;
+    const closeBtn = el('dd-close');
+
+    let peaks: number[] = [];
+    let slug = '';
+    let seen = new Set<number>();
+
+    const fmt = (s: number) => {
+      if (!isFinite(s) || s < 0) s = 0;
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const sec = Math.floor(s % 60);
+      return h > 0
+        ? `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
+        : `${m}:${String(sec).padStart(2, '0')}`;
+    };
+
+    const track = (event: string) => {
+      const u = (window as any).umami;
+      if (u && typeof u.track === 'function') u.track(event, { show: slug });
+    };
+
+    const drawWave = () => {
+      if (!peaks.length) return;
+      const dpr = window.devicePixelRatio || 1;
+      const w = wave.clientWidth;
+      const h = wave.clientHeight;
+      if (!w || !h) return;
+      wave.width = w * dpr;
+      wave.height = h * dpr;
+      const ctx = wave.getContext('2d');
+      if (!ctx) return;
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, w, h);
+
+      const styles = getComputedStyle(document.documentElement);
+      const done = styles.getPropertyValue('--lavender').trim() || '#A58CF4';
+      const todo = styles.getPropertyValue('--rule').trim() || '#2A2A2E';
+      const pct = audio.duration ? audio.currentTime / audio.duration : 0;
+
+      const gap = 1;
+      const barW = Math.max(1, w / peaks.length - gap);
+      peaks.forEach((p, i) => {
+        const x = i * (barW + gap);
+        const bh = Math.max(2, p * h);
+        ctx.fillStyle = x / w < pct ? done : todo;
+        ctx.fillRect(x, (h - bh) / 2, barW, bh);
+      });
+    };
+
+    const paint = () => {
+      const d = audio.duration;
+      const c = audio.currentTime;
+      curEl.textContent = fmt(c);
+      if (isFinite(d)) durEl.textContent = fmt(d);
+      const pct = d ? c / d : 0;
+      range.value = String(Math.round(pct * 1000));
+      fill.style.width = `${pct * 100}%`;
+      if (peaks.length) drawWave();
+
+      // Listen-through milestones — this is what a custom player buys us
+      // that an embedded third-party widget never would.
+      [25, 50, 75].forEach((m) => {
+        if (pct * 100 >= m && !seen.has(m)) {
+          seen.add(m);
+          track(`show_progress_${m}`);
+        }
+      });
+    };
+
+    const setHeight = () => {
+      const h = root.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--player-h', `${h}px`);
+    };
+
+    const api = {
+      load(opts: { src: string; title: string; episode?: number; href?: string; slug?: string; peaks?: number[] }) {
+        const same = audio.src === opts.src;
+        if (!same) {
+          audio.src = opts.src;
+          peaks = opts.peaks || [];
+          slug = opts.slug || opts.title;
+          seen = new Set();
+          root.setAttribute('data-wave', peaks.length ? 'true' : 'false');
+          nameEl.textContent = opts.title;
+          epEl.textContent = opts.episode !== undefined ? `№ ${opts.episode}` : 'Show';
+          if (opts.href) titleLink.href = opts.href;
+          durEl.textContent = '0:00';
+          curEl.textContent = '0:00';
+        }
+        root.setAttribute('data-state', 'loaded');
+        setHeight();
+        audio.play().catch(() => {});
+      },
+      toggle() {
+        if (audio.paused) audio.play().catch(() => {});
+        else audio.pause();
+      },
+      seekTo(seconds: number) {
+        if (isFinite(audio.duration)) audio.currentTime = seconds;
+      },
+      get audio() { return audio; },
+    };
+
+    (window as any).__ddPlayer = api;
+    (window as any).ddPlayer = api;
+
+    toggle.addEventListener('click', () => api.toggle());
+
+    audio.addEventListener('play', () => {
+      root.setAttribute('data-state', 'playing');
+      toggle.setAttribute('aria-label', 'Pause');
+      track('show_play');
+    });
+    audio.addEventListener('pause', () => {
+      root.setAttribute('data-state', 'loaded');
+      toggle.setAttribute('aria-label', 'Play');
+    });
+    audio.addEventListener('ended', () => track('show_complete'));
+    audio.addEventListener('timeupdate', paint);
+    audio.addEventListener('loadedmetadata', () => { paint(); setHeight(); });
+
+    range.addEventListener('input', () => {
+      if (!isFinite(audio.duration)) return;
+      audio.currentTime = (Number(range.value) / 1000) * audio.duration;
+      paint();
+    });
+
+    closeBtn.addEventListener('click', () => {
+      audio.pause();
+      root.setAttribute('data-state', 'idle');
+      document.documentElement.style.setProperty('--player-h', '0px');
+    });
+
+    window.addEventListener('resize', () => { drawWave(); setHeight(); });
+
+    // Delegated: any [data-audio] control anywhere on the site starts playback.
+    // Bound to document so it survives ClientRouter body swaps.
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-audio]');
+      if (!btn) return;
+      e.preventDefault();
+      const raw = btn.getAttribute('data-peaks');
+      api.load({
+        src: btn.getAttribute('data-audio')!,
+        title: btn.getAttribute('data-title') || 'Untitled',
+        episode: btn.hasAttribute('data-episode') ? Number(btn.getAttribute('data-episode')) : undefined,
+        href: btn.getAttribute('data-href') || undefined,
+        slug: btn.getAttribute('data-slug') || undefined,
+        peaks: raw ? JSON.parse(raw) : [],
+      });
+    });
+
+    // Tracklist timestamps seek the running show.
+    document.addEventListener('click', (e) => {
+      const cue = (e.target as HTMLElement).closest<HTMLElement>('[data-seek]');
+      if (!cue) return;
+      e.preventDefault();
+      api.seekTo(Number(cue.getAttribute('data-seek')));
+    });
+  }
+</script>

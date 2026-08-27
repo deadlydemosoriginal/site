@@ -1,0 +1,237 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cover from '../../components/Cover.astro';
+import { getShows, resolveMembers, formatDate, collectTags } from '../../lib/content';
+
+const shows = await getShows();
+const tags = collectTags(shows);
+
+const rows = await Promise.all(
+  shows.map(async (show) => ({
+    show,
+    hosts: (await resolveMembers(show.data.hosts)).map((m) => m.data.name).join(' & '),
+  })),
+);
+---
+
+<Base
+  title="Show archive"
+  description="Every Deadly Demos radio show, archived in full with tracklists."
+>
+  <section class="shell head">
+    <p class="meta head__eyebrow">
+      <span>The archive</span>
+      <span>{shows.length} shows</span>
+    </p>
+    <h1 class="head__title">Show<br /><span class="head__title--wide">archive</span></h1>
+    <p class="head__lead">
+      Everything we have broadcast, in full, with tracklists. Nothing is
+      trimmed and nothing is taken down.
+    </p>
+  </section>
+
+  <!-- Client-side filter: no framework, just hidden attributes. -->
+  <section class="shell filters">
+    <div class="filters__row" role="group" aria-label="Filter shows by tag">
+      <button class="chip" type="button" data-filter="*" aria-pressed="true">All</button>
+      {tags.map(({ tag, count }) => (
+        <button class="chip" type="button" data-filter={tag} aria-pressed="false">
+          {tag} <span class="chip__count">{count}</span>
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="shell section">
+    <ol class="list" id="show-list">
+      {rows.map(({ show, hosts }, i) => (
+        <li
+          class="row"
+          data-tags={JSON.stringify(show.data.tags)}
+        >
+          <a href={`/shows/${show.id}/`} class="row__link">
+            <span class="meta row__index">{String(shows.length - i).padStart(3, '0')}</span>
+
+            <Cover
+              class="row__cover"
+              artwork={show.data.artwork}
+              number={show.data.episode}
+              title={show.data.title}
+              tone={show.data.tone}
+            />
+
+            <span class="row__body">
+              <span class="meta row__meta">
+                {formatDate(show.data.date)} · {hosts}
+                {show.data.duration && <> · {show.data.duration}</>}
+              </span>
+              <span class="row__title">{show.data.title}</span>
+              <span class="row__desc">{show.data.description}</span>
+              <span class="tags">
+                {show.data.tags.map((t) => <span class="tag">{t}</span>)}
+              </span>
+            </span>
+          </a>
+
+          {show.data.audioUrl && (
+            <button
+              class="row__play"
+              type="button"
+              data-audio={show.data.audioUrl}
+              data-title={show.data.title}
+              data-episode={show.data.episode}
+              data-slug={show.id}
+              data-href={`/shows/${show.id}/`}
+              aria-label={`Play ${show.data.title}`}
+            >
+              <span class="row__playicon" aria-hidden="true"></span>
+            </button>
+          )}
+        </li>
+      ))}
+    </ol>
+
+    <p class="meta empty" id="show-empty" hidden>No shows with that tag.</p>
+  </section>
+</Base>
+
+<style>
+  .head { padding-block: clamp(2rem, 5vw, 4rem) 2rem; }
+  .head__eyebrow { display: flex; justify-content: space-between; padding-bottom: 1.5rem; }
+  .head__title {
+    font-size: var(--step-xl);
+    text-transform: uppercase;
+    line-height: 0.84;
+    font-variation-settings: 'wdth' 75;
+  }
+  .head__title--wide { font-variation-settings: 'wdth' 100; color: var(--lavender); }
+  .head__lead { max-width: 46ch; margin-top: 1.5rem; color: var(--fg-muted); font-size: var(--step-s); }
+
+  .filters { padding-bottom: 1.5rem; }
+  .filters__row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip {
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    background: none;
+    border: 1px solid var(--rule);
+    color: var(--fg-muted);
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+  }
+  .chip:hover { color: var(--fg); border-color: var(--fg-muted); }
+  .chip[aria-pressed='true'] {
+    background: var(--fg);
+    color: var(--ink);
+    border-color: var(--fg);
+  }
+  .chip__count { opacity: 0.5; }
+
+  .list { list-style: none; padding: 0; margin: 0; }
+
+  .row {
+    position: relative;
+    border-bottom: var(--hair);
+  }
+  .row[hidden] { display: none; }
+
+  .row__link {
+    display: grid;
+    grid-template-columns: 3rem 8rem 1fr;
+    gap: var(--gutter);
+    align-items: start;
+    padding-block: 1.5rem;
+    padding-right: 4rem;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .row__link:hover .row__title { color: var(--lavender); }
+
+  .row__index { padding-top: 0.35rem; }
+  .row__cover { width: 8rem; }
+
+  .row__body { display: grid; gap: 0.6rem; align-content: start; }
+  .row__title {
+    font-family: var(--face-display);
+    font-weight: 800;
+    font-size: var(--step-m);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-variation-settings: 'wdth' 90;
+  }
+  .row__desc { max-width: 60ch; color: var(--fg-muted); font-size: 0.95rem; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag {
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    border: 1px solid var(--rule);
+    padding: 0.25rem 0.5rem;
+    color: var(--fg-muted);
+  }
+
+  .row__play {
+    position: absolute;
+    top: 1.5rem;
+    right: 0;
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    background: var(--magenta);
+    color: var(--ink);
+    border: 0;
+    cursor: pointer;
+  }
+  .row__play:hover { background: var(--lavender); }
+  .row__playicon {
+    width: 0; height: 0;
+    border-left: 12px solid currentColor;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    margin-left: 3px;
+  }
+
+  .empty { padding-block: 3rem; }
+
+  @media (max-width: 700px) {
+    .row__link { grid-template-columns: 5rem 1fr; padding-right: 0; }
+    .row__index { display: none; }
+    .row__cover { width: 5rem; }
+    .row__play { position: static; margin-bottom: 1.5rem; }
+  }
+</style>
+
+<script>
+  // Tag filter. Re-bound on every navigation because ClientRouter swaps the body.
+  function initShowFilter() {
+    const chips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const rows = document.querySelectorAll<HTMLLIElement>('#show-list .row');
+    const empty = document.getElementById('show-empty');
+    if (!chips.length || !rows.length) return;
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const want = chip.dataset.filter!;
+        chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+
+        let shown = 0;
+        rows.forEach((row) => {
+          const tags: string[] = JSON.parse(row.dataset.tags || '[]');
+          const match = want === '*' || tags.includes(want);
+          row.hidden = !match;
+          if (match) shown++;
+        });
+        if (empty) empty.hidden = shown > 0;
+      });
+    });
+  }
+
+  initShowFilter();
+  document.addEventListener('astro:page-load', initShowFilter);
+</script>

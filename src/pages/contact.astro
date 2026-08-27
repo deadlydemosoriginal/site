@@ -1,0 +1,129 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Placeholder address — swap for the real one.
+const email = 'hello@deadlydemos.com';
+
+const routes = [
+  {
+    label: 'Send us a record',
+    body: 'Demos, test pressings, things you found in a loft. We listen to everything, we reply to most of it, and we do not do paid placement.',
+    action: `mailto:${email}?subject=Demo`,
+    cta: email,
+  },
+  {
+    label: 'Play on the show',
+    body: 'If you want to guest, send a rough idea of what you would play and roughly how long for. Two hours is the usual slot.',
+    action: `mailto:${email}?subject=Guest%20slot`,
+    cta: 'Pitch a guest slot',
+  },
+  {
+    label: 'Everything else',
+    body: 'Corrections, arguments about sequencing, and people who think we got something wrong. Especially those.',
+    action: `mailto:${email}?subject=Hello`,
+    cta: 'Just say hello',
+  },
+];
+
+const socials = [
+  { label: 'Instagram', url: 'https://instagram.com/' },
+  { label: 'Spotify', url: 'https://open.spotify.com/' },
+];
+---
+
+<Base title="Contact" description="Get in touch with Deadly Demos.">
+  <section class="shell head">
+    <p class="meta head__eyebrow">
+      <span>Get in touch</span>
+      <span>We do reply</span>
+    </p>
+    <h1 class="head__title">
+      <span class="head__a">Say</span>
+      <span class="head__b">something</span>
+    </h1>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="shell section">
+    <div class="grid12 routes">
+      {routes.map((r, i) => (
+        <div class={`route ${i === 0 ? 'route--wide' : ''}`}>
+          <p class="meta route__num">{String(i + 1).padStart(2, '0')}</p>
+          <h2 class="route__title">{r.label}</h2>
+          <p class="route__body">{r.body}</p>
+          <a href={r.action} class="route__cta">{r.cta} →</a>
+        </div>
+      ))}
+    </div>
+
+    <div class="socials">
+      <h2 class="meta socials__label">Elsewhere</h2>
+      <ul class="socials__list">
+        {socials.map((s) => (
+          <li>
+            <a href={s.url} target="_blank" rel="noopener noreferrer" class="socials__link">
+              {s.label} ↗
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head { padding-block: clamp(2rem, 5vw, 4rem) 2rem; }
+  .head__eyebrow { display: flex; justify-content: space-between; padding-bottom: 1.5rem; }
+  .head__title { display: grid; font-size: var(--step-xl); text-transform: uppercase; line-height: 0.84; }
+  .head__a { font-variation-settings: 'wdth' 75; }
+  .head__b { font-variation-settings: 'wdth' 100; color: var(--accent); text-align: right; }
+
+  .route {
+    grid-column: span 4;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: var(--hair);
+    min-height: 16rem;
+  }
+  .route--wide { grid-column: span 12; }
+
+  .route__title {
+    font-size: var(--step-m);
+    line-height: 0.95;
+    font-variation-settings: 'wdth' 90;
+  }
+  .route__body { color: var(--fg-muted); max-width: 52ch; }
+  .route__cta {
+    margin-top: auto;
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    text-decoration: none;
+    color: var(--link);
+  }
+  .route__cta:hover { color: var(--accent); }
+
+  .socials { margin-top: var(--space-section); }
+  .socials__label { color: var(--fg); font-weight: 700; margin-bottom: 1rem; }
+  .socials__list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 1.5rem; }
+  .socials__link {
+    font-family: var(--face-display);
+    font-weight: 700;
+    font-size: var(--step-m);
+    font-variation-settings: 'wdth' 85;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .socials__link:hover { color: var(--lavender); }
+
+  @media (max-width: 900px) {
+    .route, .route--wide { grid-column: span 6; }
+  }
+  @media (max-width: 560px) {
+    .route, .route--wide { grid-column: span 2; }
+  }
+</style>

@@ -1,0 +1,248 @@
+---
+import Base from '../layouts/Base.astro';
+import Cover from '../components/Cover.astro';
+import { getShows, getArticles, getPlaylists, resolveMembers, formatDate } from '../lib/content';
+import { getEntry } from 'astro:content';
+
+const shows = await getShows();
+const articles = await getArticles();
+const playlists = await getPlaylists();
+
+const featured = shows.find((s) => s.data.featured) ?? shows[0];
+const featuredHosts = featured
+  ? (await resolveMembers(featured.data.hosts)).map((m) => m.data.name).join(' & ')
+  : '';
+
+// Interleave the three content types so the grid reads as one editorial
+// wire rather than three separate sections.
+const wire = [
+  ...shows.filter((s) => s !== featured).slice(0, 3).map((e) => ({
+    kind: 'Show', href: `/shows/${e.id}/`, title: e.data.title,
+    meta: `${formatDate(e.data.date)}${e.data.duration ? ` · ${e.data.duration}` : ''}`,
+    tone: e.data.tone, date: e.data.date,
+  })),
+  ...articles.slice(0, 2).map((e) => ({
+    kind: 'Article', href: `/articles/${e.id}/`, title: e.data.title,
+    meta: formatDate(e.data.date), tone: e.data.tone, date: e.data.date,
+  })),
+  ...playlists.slice(0, 2).map((e) => ({
+    kind: 'Playlist', href: `/playlists/${e.id}/`, title: e.data.title,
+    meta: `${formatDate(e.data.date)}${e.data.tracks.length ? ` · ${e.data.tracks.length} tracks` : ''}`,
+    tone: e.data.tone, date: e.data.date,
+  })),
+]
+  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .slice(0, 6);
+
+// Deliberately uneven column spans, cycled.
+const spans = ['span-5', 'span-7', 'span-4', 'span-4', 'span-4', 'span-6'];
+---
+
+<Base title="Deadly Demos">
+  <section class="shell hero">
+    <p class="meta hero__eyebrow">
+      <span>Archive · Playlists · Writing</span>
+      <span>{shows.length} shows archived</span>
+    </p>
+
+    <h1 class="hero__head">
+      <span class="hero__line hero__line--a">Latest</span>
+      <span class="hero__line hero__line--b">transmissions</span>
+      <span class="hero__line hero__line--c">from the</span>
+      <span class="hero__line hero__line--d">deadly demos</span>
+    </h1>
+
+    <p class="hero__lead">
+      Three people, a back catalogue of radio shows nobody archived properly,
+      and strong opinions about records that were never meant to leave the room.
+    </p>
+  </section>
+
+  <hr class="rule" />
+
+  {featured && (
+    <section class="shell section">
+      <h2 class="split-head">
+        <span>Featured</span>
+        <span>№ {featured.data.episode}</span>
+      </h2>
+
+      <article class="feature">
+        <Cover
+          class="feature__art"
+          artwork={featured.data.artwork}
+          number={featured.data.episode}
+          title={featured.data.title}
+          tone={featured.data.tone}
+        />
+
+        <div class="feature__body">
+          <p class="meta">
+            {featuredHosts}
+            {featured.data.duration && <> · {featured.data.duration}</>}
+          </p>
+
+          <h3 class="feature__title">
+            <a href={`/shows/${featured.id}/`}>{featured.data.title}</a>
+          </h3>
+
+          <p class="feature__desc">{featured.data.description}</p>
+
+          <ul class="tags">
+            {featured.data.tags.map((t) => <li class="tag">{t}</li>)}
+          </ul>
+
+          {featured.data.audioUrl ? (
+            <button
+              class="play" type="button"
+              data-audio={featured.data.audioUrl}
+              data-title={featured.data.title}
+              data-episode={featured.data.episode}
+              data-slug={featured.id}
+              data-href={`/shows/${featured.id}/`}
+              data-peaks={featured.data.peaks ? JSON.stringify(featured.data.peaks) : undefined}
+            >
+              <span class="play__icon" aria-hidden="true"></span>
+              <span>Play episode</span>
+            </button>
+          ) : (
+            <a class="play play--link" href={`/shows/${featured.id}/`}>
+              <span>Read the tracklist</span>
+            </a>
+          )}
+        </div>
+      </article>
+    </section>
+  )}
+
+  <hr class="rule" />
+
+  <section class="shell section">
+    <h2 class="split-head">
+      <span>Recently</span>
+      <span>on the wire</span>
+    </h2>
+
+    <div class="grid12 tiles">
+      {wire.map((t, i) => (
+        <a href={t.href} class={`tile on-${t.tone} ${spans[i % spans.length]}`}>
+          <p class="meta tile__top">
+            <span>{t.kind}</span>
+            <span>{String(wire.length - i).padStart(2, '0')}</span>
+          </p>
+          <h3 class="tile__title">{t.title}</h3>
+          <p class="meta tile__meta">{t.meta}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-block: clamp(2rem, 6vw, 5rem) clamp(3rem, 7vw, 6rem); }
+  .hero__eyebrow { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 1rem; padding-bottom: 1.5rem; }
+
+  .hero__head {
+    font-size: var(--step-xl);
+    font-weight: 800;
+    line-height: 0.84;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    display: grid;
+  }
+  .hero__line--a { font-variation-settings: 'wdth' 75; }
+  .hero__line--b { font-variation-settings: 'wdth' 100; color: var(--lavender); }
+  .hero__line--c { font-variation-settings: 'wdth' 75; font-weight: 200; text-align: right; }
+  .hero__line--d { font-variation-settings: 'wdth' 100; text-align: right; color: var(--accent); }
+
+  .hero__lead {
+    font-size: var(--step-s);
+    line-height: 1.4;
+    max-width: 48ch;
+    margin-top: clamp(1.5rem, 4vw, 3rem);
+    color: var(--fg-muted);
+  }
+
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--gutter);
+    margin-top: 2.5rem;
+    align-items: center;
+  }
+  .feature__body { display: grid; gap: 1.1rem; justify-items: start; }
+  .feature__title { font-size: var(--step-l); line-height: 0.9; font-variation-settings: 'wdth' 90; }
+  .feature__title a { color: var(--fg); text-decoration: none; }
+  .feature__title a:hover { color: var(--lavender); }
+  .feature__desc { color: var(--fg-muted); max-width: 52ch; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; padding: 0; margin: 0; }
+  .tag {
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    border: 1px solid var(--rule);
+    padding: 0.3rem 0.6rem;
+    color: var(--fg-muted);
+  }
+
+  .play {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--accent);
+    color: var(--ink);
+    border: 0;
+    padding: 0.85rem 1.4rem;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-weight: 700;
+  }
+  .play:hover { background: var(--lavender); color: var(--ink); }
+  .play__icon {
+    width: 0; height: 0;
+    border-left: 10px solid currentColor;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+
+  .tiles { margin-top: 2.5rem; }
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    min-height: 15rem;
+    text-decoration: none;
+    color: var(--fg);
+    border: var(--hair);
+    background: var(--bg);
+    transition: transform 0.18s ease;
+  }
+  .tile:hover { transform: translateY(-4px); color: var(--fg); }
+  .tile__top { display: flex; justify-content: space-between; gap: 1rem; }
+  .tile__title {
+    font-size: var(--step-m);
+    line-height: 0.95;
+    margin-top: auto;
+    font-variation-settings: 'wdth' 90;
+  }
+
+  .span-4 { grid-column: span 4; }
+  .span-5 { grid-column: span 5; }
+  .span-6 { grid-column: span 6; }
+  .span-7 { grid-column: span 7; }
+
+  @media (max-width: 900px) {
+    .feature { grid-template-columns: 1fr; }
+    .span-4, .span-5, .span-6, .span-7 { grid-column: span 6; }
+  }
+  @media (max-width: 560px) {
+    .span-4, .span-5, .span-6, .span-7 { grid-column: span 2; }
+  }
+</style>

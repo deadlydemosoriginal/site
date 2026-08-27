@@ -1,0 +1,108 @@
+---
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    title: 'Listen',
+    links: [
+      { href: '/shows/',     label: 'Show archive' },
+      { href: '/playlists/', label: 'Playlists' },
+    ],
+  },
+  {
+    title: 'Read',
+    links: [
+      { href: '/articles/', label: 'Articles' },
+      { href: '/about/',    label: 'Who we are' },
+    ],
+  },
+  {
+    title: 'Elsewhere',
+    links: [
+      { href: 'https://instagram.com/', label: 'Instagram' },
+      { href: 'https://open.spotify.com/', label: 'Spotify' },
+      { href: '/contact/', label: 'Get in touch' },
+    ],
+  },
+];
+---
+
+<footer class="foot on-purple">
+  <div class="shell">
+    <div class="foot__grid">
+      <div class="foot__brand">
+        <p class="foot__mark">Deadly<br />Demos</p>
+        <p class="meta foot__tag">Radio, records and writing<br />since {year}</p>
+      </div>
+
+      <div class="foot__cols">
+        {columns.map((col) => (
+          <div>
+            <h2 class="meta foot__coltitle">{col.title}</h2>
+            <ul class="foot__list">
+              {col.links.map((l) => (
+                <li><a href={l.href} class="foot__link">{l.label}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <hr class="rule foot__rule" />
+
+    <p class="meta foot__colophon">
+      <span>&copy; {year} Deadly Demos</span>
+      <span>Set in Bricolage Grotesque, Inter Tight &amp; Space Mono</span>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .foot { padding-block: var(--space-section) 2rem; }
+
+  .foot__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 3rem var(--gutter);
+  }
+
+  .foot__mark {
+    font-family: var(--face-display);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: 0.85;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    font-variation-settings: 'wdth' 85;
+  }
+
+  .foot__tag { margin-top: 1.25rem; }
+
+  .foot__cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+
+  .foot__coltitle { color: var(--fg); margin-bottom: 0.9rem; font-weight: 700; }
+
+  .foot__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
+
+  .foot__link {
+    color: var(--fg-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .foot__link:hover { color: var(--fg); text-decoration: underline; }
+
+  .foot__rule { margin-block: 3rem 1.25rem; }
+
+  .foot__colophon {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+  }
+</style>

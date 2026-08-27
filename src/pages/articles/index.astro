@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getArticles, resolveMembers, formatDate } from '../../lib/content';
+import { getEntry } from 'astro:content';
+
+const articles = await getArticles();
+const rows = await Promise.all(
+  articles.map(async (a) => ({
+    entry: a,
+    author: (await getEntry('members', a.data.author.id))?.data.name ?? 'Deadly Demos',
+  })),
+);
+---
+
+<Base title="Articles" description="Essays and field notes from the Deadly Demos crew.">
+  <section class="shell head">
+    <p class="meta head__eyebrow">
+      <span>Writing</span>
+      <span>{articles.length} pieces</span>
+    </p>
+    <h1 class="head__title">
+      <span class="head__a">Words</span>
+      <span class="head__b">about records</span>
+    </h1>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="shell section">
+    <ol class="pieces">
+      {rows.map(({ entry, author }, i) => (
+        <li class={`piece piece--${entry.data.tone}`}>
+          <a href={`/articles/${entry.id}/`} class="piece__link">
+            <p class="meta piece__top">
+              <span>{formatDate(entry.data.date)} · {author}</span>
+              <span>{String(articles.length - i).padStart(2, '0')}</span>
+            </p>
+            <h2 class="piece__title serif">{entry.data.title}</h2>
+            <p class="piece__stand">{entry.data.standfirst}</p>
+            <p class="meta piece__more">Read →</p>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+</Base>
+
+<style>
+  .head { padding-block: clamp(2rem, 5vw, 4rem) 2rem; }
+  .head__eyebrow { display: flex; justify-content: space-between; padding-bottom: 1.5rem; }
+  .head__title {
+    display: grid;
+    font-size: var(--step-xl);
+    text-transform: uppercase;
+    line-height: 0.84;
+  }
+  .head__a { font-variation-settings: 'wdth' 75; }
+  .head__b { font-variation-settings: 'wdth' 100; color: var(--lavender); text-align: right; }
+
+  .pieces { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--gutter); }
+
+  .piece { border: var(--hair); }
+  .piece__link {
+    display: grid;
+    gap: 1rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--bg);
+    min-height: 100%;
+  }
+  .piece__top { display: flex; justify-content: space-between; gap: 1rem; }
+
+  .piece__title {
+    font-size: clamp(1.9rem, 4.5vw, 3.4rem);
+    line-height: 1.02;
+    max-width: 20ch;
+  }
+  .piece__stand { max-width: 58ch; color: var(--fg-muted); font-size: var(--step-s); line-height: 1.4; }
+  .piece__more { color: var(--link); }
+  .piece__link:hover .piece__more { color: var(--accent); }
+
+  /* Alternating column widths so the list never reads as a card grid. */
+  @media (min-width: 900px) {
+    .pieces { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .piece:nth-child(3n + 1) { grid-column: span 12; }
+    .piece:nth-child(3n + 2) { grid-column: span 7; }
+    .piece:nth-child(3n + 3) { grid-column: span 5; }
+  }
+</style>

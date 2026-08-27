@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getArticles, formatDateLong } from '../../lib/content';
+import { getEntry, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  return articles.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: articles[i - 1] ?? null },
+  }));
+}
+
+const { entry, next } = Astro.props;
+const { Content } = await render(entry);
+const author = await getEntry('members', entry.data.author.id);
+const d = entry.data;
+---
+
+<Base title={d.title} description={d.standfirst}>
+  <article class="piece on-paper">
+    <header class="shell piece__head">
+      <p class="meta piece__eyebrow">
+        <a href="/articles/">← Articles</a>
+        <span>{d.tags.join(' · ')}</span>
+      </p>
+
+      <h1 class="piece__title serif">{d.title}</h1>
+      <p class="piece__stand">{d.standfirst}</p>
+
+      <p class="meta piece__byline">
+        {author?.data.name ?? 'Deadly Demos'} · {formatDateLong(d.date)}
+      </p>
+    </header>
+
+    <hr class="rule" />
+
+    <div class="shell">
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+
+    {next && (
+      <footer class="shell piece__next">
+        <hr class="rule" />
+        <a href={`/articles/${next.id}/`} class="next">
+          <span class="meta">Next piece →</span>
+          <span class="next__title serif">{next.data.title}</span>
+        </a>
+      </footer>
+    )}
+  </article>
+</Base>
+
+<style>
+  .piece { padding-bottom: clamp(3rem, 8vw, 6rem); }
+  .piece__head { padding-block: clamp(2rem, 5vw, 4rem) 2.5rem; }
+  .piece__eyebrow { display: flex; justify-content: space-between; gap: 1rem; padding-bottom: 2.5rem; }
+  .piece__eyebrow a { color: var(--fg-muted); text-decoration: none; }
+  .piece__eyebrow a:hover { color: var(--fg); }
+
+  .piece__title {
+    font-size: clamp(2.4rem, 7vw, 5.5rem);
+    line-height: 0.98;
+    max-width: 18ch;
+  }
+  .piece__stand {
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    line-height: 1.35;
+    max-width: 48ch;
+    margin-top: 1.5rem;
+    color: var(--fg-muted);
+  }
+  .piece__byline { margin-top: 2rem; }
+
+  .prose { max-width: var(--measure); padding-top: 2.5rem; }
+  .prose :global(p) { margin-bottom: 1.25rem; line-height: 1.65; }
+  .prose :global(h2) {
+    font-family: var(--face-serif);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    line-height: 1.1;
+    margin: 2.5rem 0 1rem;
+  }
+  .prose :global(blockquote) {
+    margin: 2rem 0;
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--purple-royal);
+    font-family: var(--face-serif);
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    line-height: 1.25;
+  }
+  .prose :global(blockquote p) { margin-bottom: 0; }
+
+  .piece__next { padding-top: 2rem; }
+  .next { display: grid; gap: 0.5rem; text-decoration: none; color: var(--fg); padding-top: 2rem; }
+  .next__title { font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.05; max-width: 20ch; }
+  .next:hover .next__title { color: var(--ultrasonic); }
+</style>

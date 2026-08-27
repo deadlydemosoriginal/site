@@ -1,0 +1,115 @@
+---
+import Base from '../layouts/Base.astro';
+import { getMembers } from '../lib/content';
+import { render } from 'astro:content';
+
+const members = await getMembers();
+const rendered = await Promise.all(
+  members.map(async (m) => ({ member: m, Content: (await render(m)).Content })),
+);
+
+const tones = ['purple', 'ultrasonic', 'periwinkle'];
+---
+
+<Base title="About" description="The three people behind Deadly Demos.">
+  <section class="shell head">
+    <p class="meta head__eyebrow">
+      <span>Who we are</span>
+      <span>{members.length} of us</span>
+    </p>
+    <h1 class="head__title">
+      <span class="head__a">Three people</span>
+      <span class="head__b">and a lot of records</span>
+    </h1>
+    <p class="head__lead">
+      We started because the shows we wanted to hear were not being made, and
+      because one of us had access to a room with reasonable acoustics and a
+      door that locked.
+    </p>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section">
+    {rendered.map(({ member, Content }, i) => (
+      <div class="shell person">
+        <div class={`person__block tone-${tones[i % tones.length]}`} aria-hidden="true">
+          <span class="person__initial">{member.data.name.slice(0, 1)}</span>
+        </div>
+
+        <div class="person__body">
+          <p class="meta">{String(i + 1).padStart(2, '0')} · {member.data.role}</p>
+          <h2 class="person__name">{member.data.name}</h2>
+          <div class="prose"><Content /></div>
+
+          {member.data.links.length > 0 && (
+            <ul class="person__links">
+              {member.data.links.map((l) => (
+                <li>
+                  <a class="meta person__link" href={l.url} target="_blank" rel="noopener noreferrer">
+                    {l.label} ↗
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    ))}
+  </section>
+</Base>
+
+<style>
+  .head { padding-block: clamp(2rem, 5vw, 4rem) 2rem; }
+  .head__eyebrow { display: flex; justify-content: space-between; padding-bottom: 1.5rem; }
+  .head__title { display: grid; font-size: var(--step-l); text-transform: uppercase; line-height: 0.86; }
+  .head__a { font-variation-settings: 'wdth' 75; }
+  .head__b { font-variation-settings: 'wdth' 100; color: var(--lavender); text-align: right; }
+  .head__lead { max-width: 48ch; margin-top: 2rem; color: var(--fg-muted); font-size: var(--step-s); }
+
+  .person {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding-block: clamp(2rem, 5vw, 4rem);
+    border-bottom: var(--hair);
+    align-items: start;
+  }
+  .person:last-child { border-bottom: 0; }
+
+  .person__block {
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    background: var(--block-bg);
+    color: var(--block-fg);
+    container-type: inline-size;
+  }
+  .person__initial {
+    font-family: var(--face-display);
+    font-weight: 800;
+    font-variation-settings: 'wdth' 75;
+    font-size: 46cqw;
+    line-height: 0.8;
+    text-transform: uppercase;
+  }
+
+  .person__body { display: grid; gap: 1rem; }
+  .person__name {
+    font-size: var(--step-l);
+    line-height: 0.9;
+    font-variation-settings: 'wdth' 85;
+    text-transform: uppercase;
+  }
+  .prose { max-width: var(--measure); }
+  .prose :global(p) { line-height: 1.6; color: var(--fg-muted); }
+
+  .person__links { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 1rem; }
+  .person__link { color: var(--link); text-decoration: none; }
+  .person__link:hover { color: var(--accent); }
+
+  @media (max-width: 800px) {
+    .person { grid-template-columns: 1fr; }
+    .person__block { max-width: 12rem; }
+  }
+</style>
