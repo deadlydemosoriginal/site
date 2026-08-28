@@ -1,0 +1,142 @@
+# Sveltia CMS — the /admin editor.
+#
+# These collections mirror the Zod schemas in src/content.config.ts. If you
+# change a schema there, change it here too, or the CMS will happily write
+# frontmatter that fails the next build.
+#
+# Auth needs a free Cloudflare Worker (Sveltia's GitHub authenticator) plus a
+# GitHub OAuth app. Set base_url to the Worker's URL once it exists.
+backend:
+  name: github
+  repo: deadlydemosoriginal/site
+  branch: main
+  # base_url: https://your-auth-worker.workers.dev
+
+media_folder: public/uploads
+public_folder: /uploads
+
+# Editing goes via a PR-style workflow so a bad save never breaks the live site.
+publish_mode: editorial_workflow
+
+collections:
+  - name: shows
+    label: Shows
+    label_singular: Show
+    folder: src/content/shows
+    create: true
+    slug: "{{episode}}-{{slug}}"
+    sortable_fields: [episode, date, title]
+    summary: "№{{episode}} — {{title}}"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: episode, label: Episode number, widget: number, value_type: int, min: 1 }
+      - { name: date, label: Broadcast date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMM YYYY", time_format: false }
+      - name: hosts
+        label: Hosts
+        widget: relation
+        collection: members
+        value_field: "{{slug}}"
+        search_fields: [name]
+        display_fields: [name]
+        multiple: true
+      - { name: description, label: Description, widget: text }
+      - name: audioUrl
+        label: Audio URL
+        widget: string
+        required: false
+        hint: "Public MP3 URL on Cloudflare R2 (audio.deadlydemos.com/...). Upload the file to R2 first — MP3s must never go in this repo."
+      - { name: duration, label: Duration, widget: string, required: false, pattern: ['^\d{1,2}:\d{2}:\d{2}$', "Use HH:MM:SS"] }
+      - { name: artwork, label: Artwork, widget: image, required: false, hint: "Optional. Without it, a colour-blocked cover is generated from the episode number." }
+      - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: purple }
+      - { name: tags, label: Tags, widget: list, default: [] }
+      - name: tracklist
+        label: Tracklist
+        widget: list
+        required: false
+        label_singular: Track
+        summary: "{{fields.artist}} — {{fields.title}}"
+        fields:
+          - { name: artist, label: Artist, widget: string }
+          - { name: title, label: Track, widget: string }
+          - { name: timestamp, label: Timestamp, widget: string, required: false, hint: "M:SS or H:MM:SS — makes this track a seek link in the player." }
+      - { name: featured, label: Feature on homepage, widget: boolean, default: false }
+      - { name: draft, label: Draft, widget: boolean, default: false }
+      - { name: body, label: Show notes, widget: markdown }
+
+  - name: articles
+    label: Articles
+    label_singular: Article
+    folder: src/content/articles
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: standfirst, label: Standfirst, widget: text, hint: "The bold intro paragraph under the headline." }
+      - { name: date, label: Date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMM YYYY", time_format: false }
+      - name: author
+        label: Author
+        widget: relation
+        collection: members
+        value_field: "{{slug}}"
+        search_fields: [name]
+        display_fields: [name]
+      - { name: heroImage, label: Hero image, widget: image, required: false }
+      - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: paper }
+      - { name: tags, label: Tags, widget: list, default: [] }
+      - { name: draft, label: Draft, widget: boolean, default: false }
+      - { name: body, label: Body, widget: markdown }
+
+  - name: playlists
+    label: Playlists
+    label_singular: Playlist
+    folder: src/content/playlists
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Description, widget: text }
+      - { name: spotifyUrl, label: Spotify URL, widget: string, pattern: ['^https://open\.spotify\.com/playlist/', "Must be an open.spotify.com playlist link"] }
+      - name: curator
+        label: Curator
+        widget: relation
+        collection: members
+        value_field: "{{slug}}"
+        search_fields: [name]
+        display_fields: [name]
+      - { name: date, label: Date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMM YYYY", time_format: false }
+      - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: ultrasonic }
+      - name: tracks
+        label: Tracklist (fallback)
+        widget: list
+        required: false
+        summary: "{{fields.artist}} — {{fields.title}}"
+        hint: "Only needed if Spotify credentials aren't configured — otherwise this syncs at build time."
+        fields:
+          - { name: artist, label: Artist, widget: string }
+          - { name: title, label: Track, widget: string }
+      - { name: draft, label: Draft, widget: boolean, default: false }
+      - { name: body, label: Sleeve note, widget: markdown }
+
+  - name: members
+    label: Members
+    label_singular: Member
+    folder: src/content/members
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: [order, name]
+    fields:
+      - { name: name, label: Name, widget: string }
+      - { name: role, label: Role, widget: string }
+      - { name: order, label: Sort order, widget: number, value_type: int, default: 0 }
+      - { name: photo, label: Photo, widget: image, required: false }
+      - name: links
+        label: Links
+        widget: list
+        required: false
+        summary: "{{fields.label}}"
+        fields:
+          - { name: label, label: Label, widget: string }
+          - { name: url, label: URL, widget: string }
+      - { name: body, label: Bio, widget: markdown }

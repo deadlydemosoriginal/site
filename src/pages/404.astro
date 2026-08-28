@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Not found" description="That page does not exist.">
+  <section class="shell nf">
+    <p class="meta nf__eyebrow">
+      <span>Error 404</span>
+      <span>Dead air</span>
+    </p>
+
+    <h1 class="nf__head">
+      <span class="nf__a">Nothing</span>
+      <span class="nf__b">on this</span>
+      <span class="nf__c">frequency</span>
+    </h1>
+
+    <p class="nf__lead">
+      The page you wanted is not here. It may have been renamed, or it may
+      never have existed — we have been known to link to things we only
+      intended to make.
+    </p>
+
+    <div class="nf__links">
+      <a href="/shows/" class="nf__cta">Show archive →</a>
+      <a href="/articles/" class="nf__cta">Articles →</a>
+      <a href="/" class="nf__cta">Home →</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { padding-block: clamp(3rem, 8vw, 7rem); }
+  .nf__eyebrow { display: flex; justify-content: space-between; padding-bottom: 1.5rem; }
+
+  .nf__head {
+    display: grid;
+    font-size: var(--step-xl);
+    text-transform: uppercase;
+    line-height: 0.84;
+  }
+  .nf__a { font-variation-settings: 'wdth' 75; }
+  .nf__b { font-variation-settings: 'wdth' 100; font-weight: 200; text-align: right; }
+  .nf__c { font-variation-settings: 'wdth' 100; color: var(--accent); }
+
+  .nf__lead {
+    max-width: 46ch;
+    margin-top: 2.5rem;
+    color: var(--fg-muted);
+    font-size: var(--step-s);
+    line-height: 1.4;
+  }
+
+  .nf__links { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 2.5rem; }
+  .nf__cta {
+    font-family: var(--face-mono);
+    font-size: var(--step-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    text-decoration: none;
+    color: var(--link);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 0.2rem;
+  }
+  .nf__cta:hover { color: var(--accent); border-bottom-color: currentColor; }
+</style>

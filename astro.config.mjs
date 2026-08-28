@@ -1,8 +1,12 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://deadlydemos.com',
+
+  // /admin is the CMS shell, not content — keep it out of the sitemap.
+  integrations: [sitemap({ filter: (page) => !page.includes('/admin') })],
 
   // Fonts are served from our own origin — no third-party request,
   // no consent implications.

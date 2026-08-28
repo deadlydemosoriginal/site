@@ -13,7 +13,8 @@ const path = Astro.url.pathname;
 <header class="nav">
   <div class="shell nav__inner">
     <a href="/" class="wordmark" aria-label="Deadly Demos — home">
-      Deadly<span class="wordmark__break"> </span>Demos<span class="wordmark__dot" aria-hidden="true">.</span>
+      <span class="wordmark__mark" aria-hidden="true"></span>
+      <span class="wordmark__text">Deadly Demos</span>
     </a>
 
     <nav aria-label="Primary">
@@ -51,6 +52,9 @@ const path = Astro.url.pathname;
   }
 
   .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
     font-family: var(--face-display);
     font-weight: 800;
     font-size: 1.35rem;
@@ -62,7 +66,23 @@ const path = Astro.url.pathname;
     text-transform: uppercase;
   }
   .wordmark:hover { color: var(--fg); }
-  .wordmark__dot { color: var(--accent); }
+  .wordmark:hover .wordmark__mark { transform: rotate(-8deg); }
+
+  /* The supplied PNG is a 2000px square with the diamond occupying only the
+     middle 45.1% x 28.5% (measured, not guessed). Scaling the background to
+     222% and matching the box to the art's 1.58 aspect crops exactly to the
+     diamond. The plate behind it is the same colour as --ink, so no seam. */
+  .wordmark__mark {
+    flex: none;
+    width: 2.9rem;
+    aspect-ratio: 1.58;
+    background-image: url('/brand/dd-mark.png');
+    background-size: 222% auto;
+    background-position: 49.3% 50%;
+    background-repeat: no-repeat;
+    transform-origin: center;
+    transition: transform 0.2s ease;
+  }
 
   .nav__list {
     display: flex;
@@ -89,8 +109,49 @@ const path = Astro.url.pathname;
     border-bottom-color: var(--accent);
   }
 
-  @media (max-width: 560px) {
-    .nav__inner { gap: 0.5rem; }
-    .nav__list { gap: 1rem; }
+  /* Mobile: the five links wrapped to a second row and orphaned CONTACT,
+     making the sticky header 134px tall on a 812px screen. Keep them on one
+     line, let the row scroll if a longer label is ever added, and give every
+     link a 44px touch target. */
+  @media (max-width: 620px) {
+    .nav__inner {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.15rem;
+      padding-block: 0.6rem 0;
+    }
+
+    .wordmark { font-size: 1.15rem; }
+    .wordmark__mark { width: 2.4rem; }
+
+    /* The <nav> wrapper is the flex item; it needs the same min-width:0
+       escape as the list, or it inherits the content width and pushes out. */
+    .nav__inner > nav {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .nav__list {
+      flex-wrap: nowrap;
+      gap: 0.8rem;
+      /* Without min-width:0 a flex item's automatic minimum size is its
+         content width, so the row grew to 367px at 320px wide and
+         overflow-x never engaged — it pushed the whole page instead. */
+      min-width: 0;
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      /* bleed to the screen edges so the row can scroll under the gutter */
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+    }
+    .nav__list::-webkit-scrollbar { display: none; }
+
+    .nav__link {
+      white-space: nowrap;
+      font-size: 0.7rem;
+      padding-block: 0.85rem 0.7rem;
+    }
   }
 </style>

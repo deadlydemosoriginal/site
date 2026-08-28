@@ -7,23 +7,26 @@
 
 :root {
   /* ---- Raw palette ---- */
-  --ink:            #0D0D0D;  /* Jet Black   */
-  --ink-raised:     #141414;  /* Nox Noir    */
+  /* Ground is sampled from the logo artwork so the badge PNGs sit on the
+     page with no visible plate behind them. */
+  --ink:            #171616;  /* Brand ground (from logo) */
+  --ink-raised:     #201F1F;
   --paper:          #FAFAFA;  /* Soft White  */
   --purple-deep:    #433075;  /* Deep Purple */
   --purple-royal:   #7E49B3;  /* Royal Amethyst */
-  --lavender:       #A58CF4;  /* Lavender    */
+  --lavender:       #A551E4;  /* Brand purple (sampled from logo) */
   --periwinkle:     #E3D9FC;  /* Periwinkle  */
   --magenta:        #BF40FA;  /* Hyper Magenta — the ONLY hot accent */
   --ultrasonic:     #4928C2;  /* Ultrasonic Blue */
   --mist:           #CFCFCF;  /* Steel Mist  */
+  --bone:           #D8D6AA;  /* Logo's ESTD/NOTTS cream */
 
   /* ---- Semantic ---- */
   --bg:             var(--ink);
   --bg-raised:      var(--ink-raised);
   --fg:             var(--paper);
-  --fg-muted:       #8A8A8F;
-  --rule:           #2A2A2E;
+  --fg-muted:       #8E8A8A;
+  --rule:           #302E2E;
   --accent:         var(--magenta);
   --link:           var(--lavender);
 
@@ -101,10 +104,10 @@
 
 .on-ink {
   --bg: var(--ink-raised);
-  --bg-raised: #1C1C20;
+  --bg-raised: #282626;
   --fg: var(--paper);
   --fg-muted: #8A8A8F;
-  --rule: #333338;
+  --rule: #3A3737;
   --link: var(--lavender);
   background: var(--bg);
   color: var(--fg);

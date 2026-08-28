@@ -1,5 +1,6 @@
 ---
 const year = new Date().getFullYear();
+const founded = 2024; // per the logo: ESTD 2024, Notts, UK
 
 const columns = [
   {
@@ -31,8 +32,11 @@ const columns = [
   <div class="shell">
     <div class="foot__grid">
       <div class="foot__brand">
-        <p class="foot__mark">Deadly<br />Demos</p>
-        <p class="meta foot__tag">Radio, records and writing<br />since {year}</p>
+        <span class="foot__badge" aria-hidden="true"></span>
+        <p class="meta foot__tag">
+          Radio, records and writing<br />
+          Notts, UK &middot; Est. {founded}
+        </p>
       </div>
 
       <div class="foot__cols">
@@ -52,7 +56,7 @@ const columns = [
     <hr class="rule foot__rule" />
 
     <p class="meta foot__colophon">
-      <span>&copy; {year} Deadly Demos</span>
+      <span>&copy; {year} Deadly Demos &middot; Notts, UK</span>
       <span>Set in Bricolage Grotesque, Inter Tight &amp; Space Mono</span>
     </p>
   </div>
@@ -68,14 +72,16 @@ const columns = [
     gap: 3rem var(--gutter);
   }
 
-  .foot__mark {
-    font-family: var(--face-display);
-    font-weight: 800;
-    font-size: clamp(2.5rem, 7vw, 5rem);
-    line-height: 0.85;
-    letter-spacing: -0.045em;
-    text-transform: uppercase;
-    font-variation-settings: 'wdth' 85;
+  /* Full circular badge. Art occupies the middle 65.7% x 60.6% of the
+     square PNG (measured), so 152% background-size crops to it. */
+  .foot__badge {
+    display: block;
+    width: clamp(9rem, 18vw, 13rem);
+    aspect-ratio: 1.08;
+    background-image: url('/brand/dd-badge.png');
+    background-size: 152% auto;
+    background-position: 50.9% 49.2%;
+    background-repeat: no-repeat;
   }
 
   .foot__tag { margin-top: 1.25rem; }

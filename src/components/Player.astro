@@ -157,16 +157,41 @@
     font-size: 1.5rem;
     line-height: 1;
     cursor: pointer;
-    padding: 0 0.25rem;
+    padding: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
   }
   .player__close:hover { color: var(--fg); }
 
   @media (max-width: 700px) {
-    .player__meta { max-width: 12ch; }
+    .player__meta { max-width: 14ch; }
     .player__time { font-size: 0.65rem; }
   }
-  @media (max-width: 480px) {
-    .player__meta { display: none; }
+
+  /* Below ~560px a single row cannot hold the title, and hiding it meant you
+     could not see what was playing on the device most people listen on.
+     Two rows instead: transport + title, then a full-width scrubber. */
+  @media (max-width: 560px) {
+    .player__inner {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas:
+        'btn  meta  close'
+        'scrub scrub time';
+      gap: 0.5rem 0.75rem;
+      align-items: center;
+      padding-block: 0.6rem;
+    }
+
+    .player__btn   { grid-area: btn; }
+    .player__meta  { grid-area: meta; max-width: none; min-width: 0; }
+    .player__close { grid-area: close; }
+    .player__scrub { grid-area: scrub; height: 1.6rem; }
+    .player__time  { grid-area: time; justify-self: end; }
+
+    .player__name { font-size: 0.95rem; }
   }
 </style>
 
@@ -221,7 +246,7 @@
       ctx.clearRect(0, 0, w, h);
 
       const styles = getComputedStyle(document.documentElement);
-      const done = styles.getPropertyValue('--lavender').trim() || '#A58CF4';
+      const done = styles.getPropertyValue('--lavender').trim() || '#A551E4';
       const todo = styles.getPropertyValue('--rule').trim() || '#2A2A2E';
       const pct = audio.duration ? audio.currentTime / audio.duration : 0;
 
