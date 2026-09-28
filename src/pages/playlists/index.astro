@@ -20,7 +20,7 @@ const rows = await Promise.all(
     </p>
     <h1 class="head__title">
       <span class="head__a">Playlists</span>
-      <span class="head__b">for specific weather</span>
+      <span class="head__b">that you <del>will</del> <span class="head__might">might</span> actually like</span>
     </h1>
   </section>
 
@@ -59,6 +59,8 @@ const rows = await Promise.all(
     color: var(--lavender);
     text-align: right;
   }
+  .head__b del { color: var(--lavender); text-decoration-color: var(--fg); }
+  .head__might { color: var(--fg); }
 
   .pl {
     grid-column: span 4;
