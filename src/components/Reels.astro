@@ -1,0 +1,149 @@
+---
+import { getCollection } from 'astro:content';
+import { formatDate } from '../lib/content';
+
+interface Props {
+  limit?: number;
+  handle?: string;
+}
+const { limit = 3, handle = 'deadlydemos' } = Astro.props;
+
+const reels = (await getCollection('reels', (e) => import.meta.env.DEV || !e.data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, limit);
+---
+
+{reels.length > 0 && (
+  <section class="shell section">
+    <h2 class="split-head">
+      <span>Latest on</span>
+      <span>Instagram</span>
+    </h2>
+
+    <!-- Scroll-snap row: a grid on desktop, a swipeable wheel on mobile. -->
+    <ul class="reels">
+      {reels.map((reel, i) => (
+        <li class="reel">
+          <a
+            href={reel.data.url}
+            class="reel__link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class={`reel__media tone-${reel.data.tone}`}>
+              {reel.data.thumbnail ? (
+                <img
+                  src={reel.data.thumbnail}
+                  alt=""
+                  class="reel__img"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <span class="reel__num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              )}
+              <span class="reel__play" aria-hidden="true"></span>
+            </div>
+
+            <p class="meta reel__date">{formatDate(reel.data.date)}</p>
+            <p class="reel__caption">{reel.data.caption}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <a
+      class="reels__follow meta"
+      href={`https://www.instagram.com/${handle}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      @{handle} on Instagram ↗
+    </a>
+  </section>
+)}
+
+<style>
+  .reels {
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gutter);
+  }
+
+  .reel__link { text-decoration: none; color: var(--fg); display: grid; gap: 0.75rem; }
+
+  .reel__media {
+    position: relative;
+    /* Reels are 9:16 — respect the format rather than cropping to a square. */
+    aspect-ratio: 9 / 16;
+    background: var(--block-bg);
+    color: var(--block-fg);
+    overflow: hidden;
+    container-type: inline-size;
+    display: grid;
+    place-items: center;
+  }
+
+  .reel__img { width: 100%; height: 100%; object-fit: cover; }
+
+  .reel__num {
+    font-family: var(--face-display);
+    font-weight: 800;
+    font-variation-settings: 'wdth' 75;
+    font-size: 42cqw;
+    line-height: 0.8;
+  }
+
+  /* Magenta play glyph, bottom-left — same transport language as the player. */
+  .reel__play {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--magenta);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .reel__play::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-40%, -50%);
+    border-left: 11px solid var(--ink);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+  }
+  .reel__link:hover .reel__play { background: var(--lavender); }
+
+  .reel__caption { font-size: 0.95rem; line-height: 1.35; color: var(--fg-muted); }
+  .reel__link:hover .reel__caption { color: var(--fg); }
+
+  .reels__follow {
+    display: inline-block;
+    margin-top: 2rem;
+    color: var(--link);
+    text-decoration: none;
+  }
+  .reels__follow:hover { color: var(--accent); }
+
+  /* Below 700px it becomes an actual wheel you swipe. */
+  @media (max-width: 700px) {
+    .reels {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      /* bleed to the screen edges so the row reads as a carousel */
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .reels::-webkit-scrollbar { display: none; }
+    .reel { flex: 0 0 68%; scroll-snap-align: start; }
+  }
+</style>

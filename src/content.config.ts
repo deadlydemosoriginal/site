@@ -93,4 +93,22 @@ const playlists = defineCollection({
   }),
 });
 
-export const collections = { members, shows, articles, playlists };
+
+const reels = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/reels' }),
+  schema: z.object({
+    /** Permalink to the reel or post. */
+    url: z.string().url(),
+    caption: z.string(),
+    date: z.coerce.date(),
+    /**
+     * Thumbnail in public/uploads. Optional — without it the tile falls back
+     * to a colour block, so the row still looks deliberate with no images.
+     */
+    thumbnail: z.string().optional(),
+    tone: tone.default('purple'),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { members, shows, articles, playlists, reels };

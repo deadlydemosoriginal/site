@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Cover from '../components/Cover.astro';
+import Reels from '../components/Reels.astro';
 import { getShows, getArticles, getPlaylists, resolveMembers, formatDate } from '../lib/content';
 import { getEntry } from 'astro:content';
 
@@ -136,6 +137,10 @@ const spans = ['span-5', 'span-7', 'span-4', 'span-4', 'span-4', 'span-6'];
       ))}
     </div>
   </section>
+
+  <hr class="rule" />
+
+  <Reels limit={3} handle="deadlydemos" />
 </Base>
 
 <style>
