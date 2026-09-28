@@ -17,7 +17,7 @@ const author = await getEntry('members', entry.data.author.id);
 const d = entry.data;
 ---
 
-<Base title={d.title} description={d.standfirst}>
+<Base title={d.title} description={d.standfirst} ogImage={`/og/articles/${entry.id}.png`}>
   <article class="piece on-paper">
     <header class="shell piece__head">
       <p class="meta piece__eyebrow">

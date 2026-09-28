@@ -22,7 +22,7 @@ const hosts = await resolveMembers(show.data.hosts);
 const d = show.data;
 ---
 
-<Base title={d.title} description={d.description}>
+<Base title={d.title} description={d.description} ogImage={`/og/shows/${show.id}.png`}>
   <article>
     <section class="shell top">
       <p class="meta top__eyebrow">

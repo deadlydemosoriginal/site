@@ -9,15 +9,20 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  /** Path to this page's generated OG card, e.g. /og/shows/042-x.png */
+  ogImage?: string;
 }
 
 const {
   title,
+  ogImage = '/og/default.png',
   description = 'Deadly Demos — archived radio shows, curated playlists and writing from three people who spend too much time on records.',
 } = Astro.props;
 
 const fullTitle = title === 'Deadly Demos' ? title : `${title} — Deadly Demos`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// Social scrapers require absolute URLs — a relative path silently fails.
+const ogImageUrl = new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
@@ -34,7 +39,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={fullTitle} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImageUrl} />
     <meta name="theme-color" content="#171616" />
 
     <Font cssVariable="--font-display" preload />

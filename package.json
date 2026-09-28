@@ -12,9 +12,12 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^7.2.9"
+    "@resvg/resvg-js": "^2.6.2",
+    "astro": "^7.2.9",
+    "satori": "^0.33.4"
   },
   "allowScripts": {
-    "esbuild@0.28.2": true
+    "esbuild@0.28.2": true,
+    "@resvg/resvg-js@2.6.2": true
   }
 }
