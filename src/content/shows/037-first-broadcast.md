@@ -1,18 +1,31 @@
 ---
-title: First Broadcast
-episode: 37
+title: The Beginning...
+episode: 1
 date: 2026-06-12
-hosts: [isaac, liam, tom]
-description: >-
-  The three of us in a room with a mixer none of us understood, playing
-  records for ninety minutes to an audience of roughly four people.
-duration: "01:29:56"
+hosts:
+  - isaac
+  - tom
+description: '"Hello hello, happy Saturday." This is where it all began. Isaac and Tom figure out how to do everything.'
+audioUrl: https://archive.org/details/1.-post-punk-revival
+duration: 01:55:50
+artwork: ''
 tone: purple
-tags: [archive, "the first one"]
+tags:
+  - postpunk
+  - isaac
+  - tom
 tracklist:
-  - { artist: "Can", title: "Vitamin C", timestamp: "0:00" }
-  - { artist: "This Heat", title: "24 Track Loop", timestamp: "8:19" }
-  - { artist: "Faust", title: "It's a Rainy Day, Sunshine Girl", timestamp: "15:02" }
+  - artist: HMLTD
+    title: Is This What You Wanted
+    timestamp: ''
+  - artist: Maruja
+    title: Break The Tension
+    timestamp: ''
+  - artist: Amyl and the Sniffers
+    title: Tiny Bikini
+    timestamp: ''
+featured: false
+draft: false
 ---
 
 Kept for the archive rather than the quality. The mic is peaking for the
