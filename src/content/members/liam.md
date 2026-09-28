@@ -3,7 +3,7 @@ name: Liam
 role: Words, arguments, and most of the writing
 order: 2
 links:
-  - { label: Instagram, url: "https://instagram.com/" }
+  - { label: Instagram, url: "https://www.instagram.com/deadlydemos" }
 ---
 
 Writes the long ones. Has strong feelings about sequencing, sleeve notes,

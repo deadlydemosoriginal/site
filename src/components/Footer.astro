@@ -1,4 +1,6 @@
 ---
+import { socials } from '../lib/socials';
+
 const year = new Date().getFullYear();
 const founded = 2024; // per the logo: ESTD 2024, Notts, UK
 
@@ -8,6 +10,7 @@ const columns = [
     links: [
       { href: '/shows/',     label: 'Show archive' },
       { href: '/playlists/', label: 'Playlists' },
+      { href: '/podcast/',   label: 'Podcast' },
     ],
   },
   {
@@ -20,8 +23,7 @@ const columns = [
   {
     title: 'Elsewhere',
     links: [
-      { href: 'https://instagram.com/', label: 'Instagram' },
-      { href: 'https://open.spotify.com/', label: 'Spotify' },
+      ...socials.map((s) => ({ href: s.url, label: s.label })),
       { href: '/contact/', label: 'Get in touch' },
     ],
   },
@@ -34,8 +36,8 @@ const columns = [
       <div class="foot__brand">
         <span class="foot__badge" aria-hidden="true"></span>
         <p class="meta foot__tag">
-          Radio, records and writing<br />
-          Notts, UK &middot; Est. {founded}
+          Independent music content and radio show<br />
+          Yorkshire / North West / London, UK &middot; Est. {founded}
         </p>
       </div>
 
