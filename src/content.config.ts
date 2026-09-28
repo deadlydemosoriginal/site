@@ -1,5 +1,5 @@
 import { defineCollection, reference, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { glob, type Loader } from 'astro/loaders';
 
 /** Palette tones a colour-blocked tile can use. */
 const tone = z.enum(['purple', 'ultrasonic', 'periwinkle', 'paper', 'ink']);
@@ -94,15 +94,78 @@ const playlists = defineCollection({
 });
 
 
+/**
+ * Reels come from the Instagram API (Instagram Login flavour — needs a
+ * Business or Creator account) when INSTAGRAM_ACCESS_TOKEN is set, so every
+ * build picks up the latest posts. Without a token, or if the API call fails,
+ * the hand-written entries in src/content/reels are used instead.
+ */
+const reelsFallback = glob({ pattern: '**/*.md', base: './src/content/reels' });
+const tones = tone.options;
+
+const instagramReels: Loader = {
+  name: 'instagram-reels',
+  async load(context) {
+    const token = process.env.INSTAGRAM_ACCESS_TOKEN ?? import.meta.env.INSTAGRAM_ACCESS_TOKEN;
+    if (!token) return reelsFallback.load(context);
+
+    try {
+      // Long-lived tokens expire after 60 days unless refreshed. Refreshing on
+      // every build keeps them alive as long as the scheduled build keeps running.
+      await fetch(
+        `https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${token}`,
+      ).catch(() => {});
+
+      const fields = 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp';
+      const res = await fetch(
+        `https://graph.instagram.com/me/media?fields=${fields}&limit=24&access_token=${token}`,
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+      const { data: media } = (await res.json()) as {
+        data: {
+          id: string;
+          caption?: string;
+          media_type: 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM';
+          media_url?: string;
+          thumbnail_url?: string;
+          permalink: string;
+          timestamp: string;
+        }[];
+      };
+
+      context.store.clear();
+      for (const [i, m] of media.entries()) {
+        const firstLine = (m.caption ?? '').split('\n')[0].trim();
+        const data = await context.parseData({
+          id: m.id,
+          data: {
+            url: m.permalink,
+            caption: firstLine.length > 140 ? `${firstLine.slice(0, 139)}…` : firstLine,
+            date: m.timestamp,
+            thumbnail: m.media_type === 'VIDEO' ? m.thumbnail_url : m.media_url,
+            tone: tones[i % tones.length],
+          },
+        });
+        context.store.set({ id: m.id, data });
+      }
+      context.logger.info(`Loaded ${media.length} posts from Instagram`);
+    } catch (err) {
+      context.logger.warn(`Instagram fetch failed, using local reels: ${err}`);
+      return reelsFallback.load(context);
+    }
+  },
+};
+
 const reels = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/reels' }),
+  loader: instagramReels,
   schema: z.object({
     /** Permalink to the reel or post. */
     url: z.string().url(),
     caption: z.string(),
     date: z.coerce.date(),
     /**
-     * Thumbnail in public/uploads. Optional — without it the tile falls back
+     * Thumbnail — an Instagram CDN URL when fetched from the API, otherwise
+     * a path in public/uploads. Optional — without it the tile falls back
      * to a colour block, so the row still looks deliberate with no images.
      */
     thumbnail: z.string().optional(),

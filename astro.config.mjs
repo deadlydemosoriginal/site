@@ -6,6 +6,14 @@ export default defineConfig({
   site: 'https://deadlydemos.com',
 
   // /admin is the CMS shell, not content — keep it out of the sitemap.
+  // Reel thumbnails are fetched from Instagram's CDN and re-hosted at build.
+  image: {
+    remotePatterns: [
+      { protocol: 'https', hostname: '**.cdninstagram.com' },
+      { protocol: 'https', hostname: '**.fbcdn.net' },
+    ],
+  },
+
   integrations: [sitemap({ filter: (page) => !page.includes('/admin') })],
 
   // Fonts are served from our own origin — no third-party request,
