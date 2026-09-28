@@ -1,23 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
-import Cover from '../components/Cover.astro';
 import Reels from '../components/Reels.astro';
-import { getShows, getArticles, getPlaylists, resolveMembers, formatDate } from '../lib/content';
+import { getShows, getArticles, getPlaylists, formatDate } from '../lib/content';
 import { getEntry } from 'astro:content';
 
 const shows = await getShows();
 const articles = await getArticles();
 const playlists = await getPlaylists();
 
-const featured = shows.find((s) => s.data.featured) ?? shows[0];
-const featuredHosts = featured
-  ? (await resolveMembers(featured.data.hosts)).map((m) => m.data.name).join(' & ')
-  : '';
-
 // Interleave the three content types so the grid reads as one editorial
 // wire rather than three separate sections.
 const wire = [
-  ...shows.filter((s) => s !== featured).slice(0, 3).map((e) => ({
+  ...shows.slice(0, 3).map((e) => ({
     kind: 'Show', href: `/shows/${e.id}/`, title: e.data.title,
     meta: `${formatDate(e.data.date)}${e.data.duration ? ` · ${e.data.duration}` : ''}`,
     tone: e.data.tone, date: e.data.date,
@@ -61,60 +55,7 @@ const spans = ['span-5', 'span-7', 'span-4', 'span-4', 'span-4', 'span-6'];
 
   <hr class="rule" />
 
-  {featured && (
-    <section class="shell section">
-      <h2 class="split-head">
-        <span>Featured</span>
-        <span>№ {featured.data.episode}</span>
-      </h2>
-
-      <article class="feature">
-        <Cover
-          class="feature__art"
-          artwork={featured.data.artwork}
-          number={featured.data.episode}
-          title={featured.data.title}
-          tone={featured.data.tone}
-        />
-
-        <div class="feature__body">
-          <p class="meta">
-            {featuredHosts}
-            {featured.data.duration && <> · {featured.data.duration}</>}
-          </p>
-
-          <h3 class="feature__title">
-            <a href={`/shows/${featured.id}/`}>{featured.data.title}</a>
-          </h3>
-
-          <p class="feature__desc">{featured.data.description}</p>
-
-          <ul class="tags">
-            {featured.data.tags.map((t) => <li class="tag">{t}</li>)}
-          </ul>
-
-          {featured.data.audioUrl ? (
-            <button
-              class="play" type="button"
-              data-audio={featured.data.audioUrl}
-              data-title={featured.data.title}
-              data-episode={featured.data.episode}
-              data-slug={featured.id}
-              data-href={`/shows/${featured.id}/`}
-              data-peaks={featured.data.peaks ? JSON.stringify(featured.data.peaks) : undefined}
-            >
-              <span class="play__icon" aria-hidden="true"></span>
-              <span>Play episode</span>
-            </button>
-          ) : (
-            <a class="play play--link" href={`/shows/${featured.id}/`}>
-              <span>Read the tracklist</span>
-            </a>
-          )}
-        </div>
-      </article>
-    </section>
-  )}
+  <Reels handle="deadlydemos" />
 
   <hr class="rule" />
 
@@ -137,10 +78,6 @@ const spans = ['span-5', 'span-7', 'span-4', 'span-4', 'span-4', 'span-6'];
       ))}
     </div>
   </section>
-
-  <hr class="rule" />
-
-  <Reels limit={3} handle="deadlydemos" />
 </Base>
 
 <style>
@@ -166,54 +103,6 @@ const spans = ['span-5', 'span-7', 'span-4', 'span-4', 'span-4', 'span-6'];
     max-width: 48ch;
     margin-top: clamp(1.5rem, 4vw, 3rem);
     color: var(--fg-muted);
-  }
-
-  .feature {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: var(--gutter);
-    margin-top: 2.5rem;
-    align-items: center;
-  }
-  .feature__body { display: grid; gap: 1.1rem; justify-items: start; }
-  .feature__title { font-size: var(--step-l); line-height: 0.9; font-variation-settings: 'wdth' 90; }
-  .feature__title a { color: var(--fg); text-decoration: none; }
-  .feature__title a:hover { color: var(--lavender); }
-  .feature__desc { color: var(--fg-muted); max-width: 52ch; }
-
-  .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; padding: 0; margin: 0; }
-  .tag {
-    font-family: var(--face-mono);
-    font-size: var(--step-meta);
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    border: 1px solid var(--rule);
-    padding: 0.3rem 0.6rem;
-    color: var(--fg-muted);
-  }
-
-  .play {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: var(--accent);
-    color: var(--ink);
-    border: 0;
-    padding: 0.85rem 1.4rem;
-    cursor: pointer;
-    text-decoration: none;
-    font-family: var(--face-mono);
-    font-size: var(--step-meta);
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    font-weight: 700;
-  }
-  .play:hover { background: var(--lavender); color: var(--ink); }
-  .play__icon {
-    width: 0; height: 0;
-    border-left: 10px solid currentColor;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
   }
 
   .tiles { margin-top: 2.5rem; }
@@ -254,7 +143,6 @@ const spans = ['span-5', 'span-7', 'span-4', 'span-4', 'span-4', 'span-6'];
   }
 
   @media (max-width: 900px) {
-    .feature { grid-template-columns: 1fr; }
     .span-4, .span-5, .span-6, .span-7 { grid-column: span 6; }
   }
   @media (max-width: 560px) {

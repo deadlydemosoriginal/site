@@ -11,7 +11,7 @@ const rendered = await Promise.all(
 const tones = ['purple', 'ultrasonic', 'periwinkle'];
 ---
 
-<Base title="About" description="The three people behind Deadly Demos.">
+<Base title="About" description="All about the Deadly Demos.">
   <section class="shell head">
     <p class="meta head__eyebrow">
       <span>Who we are</span>
@@ -35,7 +35,7 @@ const tones = ['purple', 'ultrasonic', 'periwinkle'];
         </div>
 
         <div class="person__body">
-          <p class="meta">{String(i + 1).padStart(2, '0')} · {member.data.role}</p>
+          <p class="meta">{member.data.role}</p>
           <h2 class="person__name">{member.data.name}</h2>
           <div class="prose"><Content /></div>
 
@@ -60,7 +60,12 @@ const tones = ['purple', 'ultrasonic', 'periwinkle'];
   .head { padding-block: clamp(2rem, 5vw, 4rem) 2rem; }
   .head__eyebrow { display: flex; justify-content: space-between; padding-bottom: 1.5rem; }
   .head__title { display: grid; font-size: var(--step-l); text-transform: uppercase; line-height: 0.86; }
-  .head__a { font-variation-settings: 'wdth' 75; }
+  .head__a {
+    display: block;
+    font-variation-settings: 'wdth' 75;
+    color: var(--lavender);
+    text-align: right;
+  }
   .head__b { font-variation-settings: 'wdth' 100; color: var(--lavender); text-align: right; }
   .head__lead { max-width: 48ch; margin-top: 2rem; color: var(--fg-muted); font-size: var(--step-s); }
 
@@ -100,6 +105,7 @@ const tones = ['purple', 'ultrasonic', 'periwinkle'];
   }
   .prose { max-width: var(--measure); }
   .prose :global(p) { line-height: 1.6; color: var(--fg-muted); }
+  .prose :global(p + p) { margin-top: 1em; }
 
   .person__links { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 1rem; }
   .person__link { color: var(--link); text-decoration: none; }

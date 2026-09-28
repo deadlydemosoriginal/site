@@ -6,7 +6,7 @@ interface Props {
   limit?: number;
   handle?: string;
 }
-const { limit = 3, handle = 'deadlydemos' } = Astro.props;
+const { limit = 12, handle = 'deadlydemos' } = Astro.props;
 
 const reels = (await getCollection('reels', (e) => import.meta.env.DEV || !e.data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
@@ -14,14 +14,15 @@ const reels = (await getCollection('reels', (e) => import.meta.env.DEV || !e.dat
 ---
 
 {reels.length > 0 && (
-  <section class="shell section">
+  <section class="shell section" data-carousel>
     <h2 class="split-head">
-      <span>Latest on</span>
-      <span>Instagram</span>
+      <span>Deadly</span>
+      <span>Domscroll</span>
     </h2>
 
-    <!-- Scroll-snap row: a grid on desktop, a swipeable wheel on mobile. -->
-    <ul class="reels">
+    <!-- Scroll-snap track: 3 per view on desktop, 2 on tablet, 1 on phones.
+         The arrows just scroll the track, so swipe and trackpad still work. -->
+    <ul class="reels" data-track tabindex="0" aria-label="Recent Instagram reels">
       {reels.map((reel, i) => (
         <li class="reel">
           <a
@@ -54,25 +55,45 @@ const reels = (await getCollection('reels', (e) => import.meta.env.DEV || !e.dat
       ))}
     </ul>
 
-    <a
-      class="reels__follow meta"
-      href={`https://www.instagram.com/${handle}`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      @{handle} on Instagram ↗
-    </a>
+    <div class="reels__foot">
+      <a
+        class="reels__follow meta"
+        href={`https://www.instagram.com/${handle}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @{handle} on Instagram ↗
+      </a>
+
+      <div class="reels__nav">
+        <button class="reels__btn" type="button" data-prev aria-label="Previous reels">←</button>
+        <button class="reels__btn" type="button" data-next aria-label="Next reels">→</button>
+      </div>
+    </div>
   </section>
 )}
 
 <style>
   .reels {
+    --per: 3;
     list-style: none;
     padding: 0;
     margin: 2.5rem 0 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
     gap: var(--gutter);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .reels::-webkit-scrollbar { display: none; }
+  .reels:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+  .reel {
+    flex: 0 0 calc((100% - var(--gutter) * (var(--per) - 1)) / var(--per));
+    min-width: 0;
+    scroll-snap-align: start;
   }
 
   .reel__link { text-decoration: none; color: var(--fg); display: grid; gap: 0.75rem; }
@@ -107,7 +128,6 @@ const reels = (await getCollection('reels', (e) => import.meta.env.DEV || !e.dat
     width: 2.5rem;
     height: 2.5rem;
     background: var(--magenta);
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   }
   .reel__play::after {
     content: '';
@@ -124,26 +144,75 @@ const reels = (await getCollection('reels', (e) => import.meta.env.DEV || !e.dat
   .reel__caption { font-size: 0.95rem; line-height: 1.35; color: var(--fg-muted); }
   .reel__link:hover .reel__caption { color: var(--fg); }
 
-  .reels__follow {
-    display: inline-block;
+  .reels__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
     margin-top: 2rem;
-    color: var(--link);
-    text-decoration: none;
   }
+
+  .reels__follow { color: var(--link); text-decoration: none; }
   .reels__follow:hover { color: var(--accent); }
 
-  /* Below 700px it becomes an actual wheel you swipe. */
-  @media (max-width: 700px) {
-    .reels {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      /* bleed to the screen edges so the row reads as a carousel */
-      margin-inline: calc(var(--gutter) * -1);
-      padding-inline: var(--gutter);
-      scrollbar-width: none;
-    }
-    .reels::-webkit-scrollbar { display: none; }
-    .reel { flex: 0 0 68%; scroll-snap-align: start; }
+  .reels__nav { display: flex; gap: 0.5rem; }
+  .reels__btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
+    font-family: var(--face-mono);
+    font-size: 1.1rem;
+    background: none;
+    color: var(--fg);
+    border: 1px solid var(--rule);
+    cursor: pointer;
   }
+  .reels__btn:hover:not(:disabled) { background: var(--magenta); color: var(--ink); border-color: var(--magenta); }
+  .reels__btn:disabled { opacity: 0.3; cursor: default; }
+  /* Nothing to scroll through — hide the arrows entirely. */
+  .reels__nav[data-idle] { visibility: hidden; }
+
+  @media (max-width: 900px) { .reels { --per: 2; } }
+  @media (max-width: 560px) { .reels { --per: 1; } }
+
+  @media (prefers-reduced-motion: reduce) { .reels { scroll-behavior: auto; } }
 </style>
+
+<script>
+  // Carousel arrows. Re-bound on every navigation because ClientRouter swaps the body.
+  function initReels() {
+    document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+      const track = root.querySelector<HTMLElement>('[data-track]');
+      const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
+      const next = root.querySelector<HTMLButtonElement>('[data-next]');
+      if (!track || !prev || !next || root.dataset.bound) return;
+      root.dataset.bound = '';
+
+      // Step by one "page" of visible reels, measured from the real layout.
+      const step = () => {
+        const items = track.children;
+        if (items.length < 2) return track.clientWidth;
+        const pitch = (items[1] as HTMLElement).offsetLeft - (items[0] as HTMLElement).offsetLeft;
+        const per = Math.max(1, Math.round((track.clientWidth + pitch - (items[0] as HTMLElement).offsetWidth) / pitch));
+        return pitch * per;
+      };
+
+      const update = () => {
+        const max = track.scrollWidth - track.clientWidth;
+        prev.disabled = track.scrollLeft <= 1;
+        next.disabled = track.scrollLeft >= max - 1;
+        prev.parentElement!.toggleAttribute('data-idle', max <= 1);
+      };
+
+      prev.addEventListener('click', () => track.scrollBy({ left: -step() }));
+      next.addEventListener('click', () => track.scrollBy({ left: step() }));
+      track.addEventListener('scroll', update, { passive: true });
+      new ResizeObserver(update).observe(track);
+      update();
+    });
+  }
+
+  initReels();
+  document.addEventListener('astro:page-load', initReels);
+</script>

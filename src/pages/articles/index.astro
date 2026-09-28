@@ -82,12 +82,4 @@ const rows = await Promise.all(
   .piece__stand { max-width: 58ch; color: var(--fg-muted); font-size: var(--step-s); line-height: 1.4; }
   .piece__more { color: var(--link); }
   .piece__link:hover .piece__more { color: var(--accent); }
-
-  /* Alternating column widths so the list never reads as a card grid. */
-  @media (min-width: 900px) {
-    .pieces { grid-template-columns: repeat(12, minmax(0, 1fr)); }
-    .piece:nth-child(3n + 1) { grid-column: span 12; }
-    .piece:nth-child(3n + 2) { grid-column: span 7; }
-    .piece:nth-child(3n + 3) { grid-column: span 5; }
-  }
 </style>
