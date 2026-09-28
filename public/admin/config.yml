@@ -5,12 +5,13 @@
 # frontmatter that fails the next build.
 #
 # Auth needs a free Cloudflare Worker (Sveltia's GitHub authenticator) plus a
-# GitHub OAuth app. Set base_url to the Worker's URL once it exists.
+# GitHub OAuth app (owned by the deadlydemosoriginal org). The Worker lives
+# in a fork of sveltia/sveltia-cms-auth on Cloudflare.
 backend:
   name: github
   repo: deadlydemosoriginal/site
   branch: main
-  # base_url: https://your-auth-worker.workers.dev
+  base_url: https://sveltia-cms-auth.deadlydemos.workers.dev
 
 site_url: https://deadlydemos.com
 display_url: https://deadlydemos.com
