@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
   pages: write
   id-token: write
 
@@ -31,11 +32,38 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build
+      # Log is kept so a failed build can be reported back in plain sight.
+      - run: set -o pipefail; npm run build 2>&1 | tee build.log
         env:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+
+      # A bad CMS save fails the build and the live site simply stays as it
+      # was — this makes sure someone actually hears about it. One open issue
+      # at a time; later failures add a comment instead of piling up.
+      - name: Report failed build
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "The site didn't update. The live site is fine — it's still showing the last good version."
+            echo
+            echo "Most likely a recent edit has a field in the wrong format. The error below names the file and the field."
+            echo
+            echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo
+            echo '```'
+            grep -iE -A8 'error|invalid|failed' build.log | tail -n 60 || tail -n 60 build.log
+            echo '```'
+          } > report.md
+          existing=$(gh issue list --state open --search 'in:title "Site build failed"' --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file report.md
+          else
+            gh issue create --title "Site build failed" --body-file report.md
+          fi
 
       - uses: actions/upload-pages-artifact@v5
         with:

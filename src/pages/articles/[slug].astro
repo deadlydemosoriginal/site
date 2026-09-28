@@ -33,7 +33,13 @@ const d = entry.data;
       </p>
     </header>
 
-    <hr class="rule" />
+    {d.heroImage
+      ? (
+        <figure class="shell piece__hero">
+          <img src={d.heroImage} alt="" decoding="async" />
+        </figure>
+      )
+      : <hr class="rule" />}
 
     <div class="shell">
       <div class="prose">
@@ -73,6 +79,9 @@ const d = entry.data;
     color: var(--fg-muted);
   }
   .piece__byline { margin-top: 2rem; }
+
+  .piece__hero { margin: 0; }
+  .piece__hero img { display: block; width: 100%; max-height: 80vh; object-fit: cover; }
 
   .prose { max-width: var(--measure); padding-top: 2.5rem; }
   .prose :global(p) { margin-bottom: 1.25rem; line-height: 1.65; }

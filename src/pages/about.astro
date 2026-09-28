@@ -30,9 +30,13 @@ const tones = ['purple', 'ultrasonic', 'periwinkle'];
   <section class="section">
     {rendered.map(({ member, Content }, i) => (
       <div class="shell person">
-        <div class={`person__block tone-${tones[i % tones.length]}`} aria-hidden="true">
-          <span class="person__initial">{member.data.name.slice(0, 1)}</span>
-        </div>
+        {member.data.photo
+          ? <img class="person__block person__photo" src={member.data.photo} alt={member.data.name} loading="lazy" decoding="async" />
+          : (
+            <div class={`person__block tone-${tones[i % tones.length]}`} aria-hidden="true">
+              <span class="person__initial">{member.data.name.slice(0, 1)}</span>
+            </div>
+          )}
 
         <div class="person__body">
           <p class="meta">{member.data.role}</p>
@@ -87,6 +91,7 @@ const tones = ['purple', 'ultrasonic', 'periwinkle'];
     color: var(--block-fg);
     container-type: inline-size;
   }
+  .person__photo { width: 100%; height: auto; object-fit: cover; }
   .person__initial {
     font-family: var(--face-display);
     font-weight: 800;

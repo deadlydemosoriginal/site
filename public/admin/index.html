@@ -8,5 +8,9 @@
   </head>
   <body>
     <script src="https://unpkg.com/@sveltia/cms@0/dist/sveltia-cms.js"></script>
+    <script>
+      // Make the side-by-side preview look like the real article page.
+      CMS.registerPreviewStyle('/admin/preview.css');
+    </script>
   </body>
 </html>

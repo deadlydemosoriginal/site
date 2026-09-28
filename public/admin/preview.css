@@ -1,0 +1,56 @@
+/* Styles for the CMS preview pane, so drafts read like the article page
+   (src/pages/articles/[slug].astro). Colours mirror src/styles/tokens.css
+   (.on-paper); fonts come from Google here because the site's self-hosted
+   files are hashed build assets the CMS can't see. */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,800&family=Inter+Tight:wght@400;700&family=Instrument+Serif&family=Space+Mono&display=swap');
+
+:root {
+  --ink: #171616;
+  --paper: #FAFAFA;
+  --fg-muted: #55555C;
+  --purple-royal: #7E49B3;
+  --ultrasonic: #4928C2;
+  --rule: #D8D8DE;
+}
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+body { max-width: 66ch; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+h1 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  line-height: 0.98;
+}
+
+h2, h3 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.1;
+  margin: 2.5rem 0 1rem;
+}
+
+p { margin: 0 0 1.25rem; }
+a { color: var(--ultrasonic); }
+img { max-width: 100%; height: auto; }
+hr { border: 0; border-top: 1px solid var(--rule); }
+
+blockquote {
+  margin: 2rem 0;
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--purple-royal);
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  line-height: 1.25;
+}
+blockquote p { margin-bottom: 0; }
+
+code { font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.9em; }
