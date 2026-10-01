@@ -17,13 +17,10 @@ tags:
 tracklist:
   - artist: HMLTD
     title: Is This What You Wanted
-    timestamp: ''
   - artist: Maruja
     title: Break The Tension
-    timestamp: ''
   - artist: Amyl and the Sniffers
     title: Tiny Bikini
-    timestamp: ''
 featured: false
 draft: false
 ---

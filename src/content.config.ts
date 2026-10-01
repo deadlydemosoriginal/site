@@ -47,7 +47,11 @@ const shows = defineCollection({
           artist: z.string(),
           title: z.string(),
           /** M:SS or H:MM:SS — makes the entry a seek link in the player. */
-          timestamp: z.string().regex(/^\d{1,2}:\d{2}(:\d{2})?$/).optional(),
+          // The CMS may serialize an empty optional field as "" rather than omit it.
+          timestamp: z.preprocess(
+            (value) => (typeof value === 'string' && value.trim() === '' ? undefined : value),
+            z.string().regex(/^\d{1,2}:\d{2}(:\d{2})?$/).optional(),
+          ),
         }),
       )
       .default([]),
