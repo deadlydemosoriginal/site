@@ -1,7 +1,7 @@
 ---
 title: Christmas Advent Calendar
 episode: 17
-date: 2026-10-02
+date: 2025-12-13
 hosts:
   - isaac
   - liam
