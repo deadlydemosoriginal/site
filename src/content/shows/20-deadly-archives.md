@@ -1,7 +1,7 @@
 ---
 title: Deadly Archives
 episode: 20
-date: 2026-10-02
+date: 2026-02-05
 hosts:
   - isaac
   - liam
