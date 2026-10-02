@@ -1,7 +1,7 @@
 ---
 title: Chill
 episode: 7
-date: 2026-10-02
+date: 2025-05-10
 hosts:
   - isaac
   - liam
