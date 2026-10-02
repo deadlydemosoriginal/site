@@ -1,7 +1,7 @@
 ---
 title: Indie
 episode: 5
-date: 2026-10-02
+date: 2025-04-26
 hosts:
   - liam
   - isaac
