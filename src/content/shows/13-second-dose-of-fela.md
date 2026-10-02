@@ -1,7 +1,7 @@
 ---
 title: Second dose of Fela
 episode: 13
-date: 2026-10-02
+date: 2025-10-25
 hosts:
   - isaac
   - liam
