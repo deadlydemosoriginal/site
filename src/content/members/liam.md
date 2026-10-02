@@ -2,8 +2,10 @@
 name: Liam
 role: Words, arguments, and most of the writing
 order: 2
+photo: /uploads/IMG_3955.jpeg
 links:
-  - { label: Instagram, url: "https://www.instagram.com/deadlydemos" }
+  - label: My Wikipedia
+    url: https://en.wikipedia.org/wiki/Graeme_Dott
 ---
 
 Writes the long ones. Has strong feelings about sequencing, sleeve notes,
