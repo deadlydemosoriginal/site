@@ -1,6 +1,6 @@
 ---
 title: Indie
-episode: 9
+episode: 5
 date: 2026-10-02
 hosts:
   - liam
