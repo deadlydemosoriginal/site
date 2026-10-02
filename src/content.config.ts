@@ -80,13 +80,59 @@ const articles = defineCollection({
 });
 
 /**
- * Playlists are markdown files; when SPOTIFY_CLIENT_ID/SECRET are set, each
- * build replaces the file's hand-written `tracks` with the live Spotify
- * tracklist. If credentials are missing, or a playlist can't be fetched
- * (private, editorial and some other Spotify-owned playlists are refused to
- * API apps), that playlist keeps the tracks typed into the CMS.
+ * Playlists are markdown files; each build replaces a file's hand-written
+ * `tracks` with the live Spotify tracklist. Order tried per playlist:
+ *   1. The Web API, when SPOTIFY_CLIENT_ID/SECRET are set. Development-mode
+ *      apps are often refused (403) on playlist tracks, so this may not work.
+ *   2. The public embed page, which lists tracks without a login. Unofficial,
+ *      so it can change without notice.
+ *   3. The tracks typed into the CMS.
  */
 const playlistFiles = glob({ pattern: '**/*.md', base: './src/content/playlists' });
+
+type Track = { artist: string; title: string };
+
+async function tracksFromApi(playlistId: string, token: string): Promise<Track[]> {
+  type Page = {
+    items: { track: { name: string; artists: { name: string }[] } | null }[];
+    next: string | null;
+  };
+  const tracks: Track[] = [];
+  let url: string | null =
+    `https://api.spotify.com/v1/playlists/${playlistId}/tracks` +
+    `?limit=100&fields=next,items(track(name,artists(name)))`;
+  while (url) {
+    const res: Response = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    const page = (await res.json()) as Page;
+    for (const { track } of page.items) {
+      if (track) tracks.push({ artist: track.artists.map((a) => a.name).join(', '), title: track.name });
+    }
+    url = page.next;
+  }
+  return tracks;
+}
+
+async function tracksFromEmbed(playlistId: string): Promise<Track[]> {
+  const res = await fetch(`https://open.spotify.com/embed/playlist/${playlistId}`, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; DeadlyDemosBuild)' },
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const html = await res.text();
+  const json = html.match(/<script id="__NEXT_DATA__"[^>]*>(.*?)<\/script>/s)?.[1];
+  if (!json) throw new Error('no page data found');
+  const list = JSON.parse(json)?.props?.pageProps?.state?.data?.entity?.trackList as
+    | { title?: string; subtitle?: string }[]
+    | undefined;
+  if (!Array.isArray(list)) throw new Error('no trackList in page data');
+  return list
+    .filter((t) => t.title)
+    .map((t) => ({
+      title: t.title!,
+      // Artists are separated by non-breaking spaces after the comma.
+      artist: (t.subtitle ?? '').replace(/ /g, ' ').trim(),
+    }));
+}
 
 const spotifyPlaylists: Loader = {
   name: 'spotify-playlists',
@@ -95,55 +141,57 @@ const spotifyPlaylists: Loader = {
 
     const id = process.env.SPOTIFY_CLIENT_ID ?? import.meta.env.SPOTIFY_CLIENT_ID;
     const secret = process.env.SPOTIFY_CLIENT_SECRET ?? import.meta.env.SPOTIFY_CLIENT_SECRET;
-    if (!id || !secret) return;
 
-    let token: string;
-    try {
-      const res = await fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: 'grant_type=client_credentials',
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
-      token = ((await res.json()) as { access_token: string }).access_token;
-    } catch (err) {
-      context.logger.warn(`Spotify auth failed, using tracks from the CMS: ${err}`);
-      return;
+    let token: string | undefined;
+    if (id && secret) {
+      try {
+        const res = await fetch('https://accounts.spotify.com/api/token', {
+          method: 'POST',
+          headers: {
+            Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: 'grant_type=client_credentials',
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+        token = ((await res.json()) as { access_token: string }).access_token;
+      } catch (err) {
+        context.logger.warn(`Spotify auth failed, trying the embed page instead: ${err}`);
+      }
     }
-
-    type Page = {
-      items: { track: { name: string; artists: { name: string }[] } | null }[];
-      next: string | null;
-    };
 
     for (const entry of [...context.store.values()]) {
       const playlistId = String(entry.data.spotifyUrl).split('/playlist/')[1]?.split(/[?/]/)[0];
       if (!playlistId) continue;
 
-      try {
-        const tracks: { artist: string; title: string }[] = [];
-        let url: string | null =
-          `https://api.spotify.com/v1/playlists/${playlistId}/tracks` +
-          `?limit=100&fields=next,items(track(name,artists(name)))`;
-        while (url) {
-          const res: Response = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const page = (await res.json()) as Page;
-          for (const { track } of page.items) {
-            if (track) tracks.push({ artist: track.artists.map((a) => a.name).join(', '), title: track.name });
-          }
-          url = page.next;
+      let tracks: Track[] | undefined;
+      let source = '';
+
+      if (token) {
+        try {
+          tracks = await tracksFromApi(playlistId, token);
+          source = 'the Spotify API';
+        } catch (err) {
+          context.logger.warn(`Spotify API failed for ${entry.id}: ${err}`);
         }
-        // Drop the digest so the store accepts the changed data.
-        const { digest: _digest, ...rest } = entry;
-        context.store.set({ ...rest, data: { ...entry.data, tracks } });
-        context.logger.info(`Loaded ${tracks.length} tracks for ${entry.id} from Spotify`);
-      } catch (err) {
-        context.logger.warn(`Spotify fetch failed for ${entry.id}, using tracks from the CMS: ${err}`);
       }
+      if (!tracks?.length) {
+        try {
+          tracks = await tracksFromEmbed(playlistId);
+          source = 'the Spotify embed page';
+        } catch (err) {
+          context.logger.warn(`Spotify embed fetch failed for ${entry.id}: ${err}`);
+        }
+      }
+
+      if (!tracks?.length) {
+        context.logger.warn(`No tracks from Spotify for ${entry.id}, using tracks from the CMS`);
+        continue;
+      }
+      // Drop the digest so the store accepts the changed data.
+      const { digest: _digest, ...rest } = entry;
+      context.store.set({ ...rest, data: { ...entry.data, tracks } });
+      context.logger.info(`Loaded ${tracks.length} tracks for ${entry.id} from ${source}`);
     }
   },
 };
