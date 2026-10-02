@@ -1,7 +1,7 @@
 ---
 title: Soul
 episode: 4
-date: 2026-10-02
+date: 2025-02-08
 hosts:
   - tom
   - liam
