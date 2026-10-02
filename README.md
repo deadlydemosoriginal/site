@@ -295,6 +295,5 @@ This is intended, because the player persists across pages. If you add new pages
 - **There's no Spotify API integration.** The workflow passes `SPOTIFY_*` secrets and a schema comment says track data is "fetched at build time", but playlist pages only use the Spotify embed plus the optional hand-written `tracks` list.
 - **`publish_mode: editorial_workflow`** is set in the CMS config, but saves are landing directly on `main`. Treat every CMS save as going live.
 - **Umami analytics** hooks exist in the player, but no Umami script is loaded.
-- `src/lib/socials.ts` → `email` is still a placeholder (`hello@deadlydemos.com`).
 - Show filenames start with a number (`037-…`) that doesn't have to match `episode`. The URL comes from the filename, and the numeral shown comes from `episode`.
 - The loose `Red and Black Square Community Logo (*).png` files in the repo root are source logos and aren't used by the site (the site uses `public/brand/`).

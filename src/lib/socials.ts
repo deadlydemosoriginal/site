@@ -11,5 +11,5 @@ export const socials = [
   { label: 'TikTok',    url: 'https://www.tiktok.com/@deadlydemos' },
 ] as const;
 
-/** Placeholder — swap for the real inbox. */
-export const email = 'hello@deadlydemos.com';
+/** Public contact inbox (Cloudflare Email Routing forwards it to the team). */
+export const email = 'info@deadlydemos.com';
