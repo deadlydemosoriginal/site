@@ -20,6 +20,19 @@ logo_url: /brand/dd-mark.png
 media_folder: public/uploads
 public_folder: /uploads
 
+# Show audio goes to Cloudflare R2. It's defined here (not just on the Audio
+# field) because the CMS Settings dialog only offers a place to enter the R2
+# Secret Access Key for site-wide storage. Each editor pastes it once under
+# Settings → Media; the access key ID below is safe to publish. Image fields
+# switch R2 off so images keep going to public/uploads.
+media_libraries:
+  cloudflare_r2:
+    account_id: ab5094676ada5b76f192b802804cb133
+    bucket: deadlydemos-audio
+    access_key_id: a4210646c67ccdb168bc1a89ddbb4750
+    public_url: https://audio.deadlydemos.com
+    prefix: shows/
+
 # Filenames made from titles: plain lowercase ASCII, no accents or symbols.
 slug:
   encoding: ascii
@@ -53,9 +66,8 @@ collections:
         multiple: true
         hint: "Everyone who presented this episode."
       - { name: description, label: Description, widget: text, hint: "One or two sentences. Shows on the episode card and when shared." }
-      # Uploads go straight from the browser to Cloudflare R2, never into git.
-      # Each editor enters the R2 Secret Access Key once in the CMS Settings;
-      # the access key ID below is safe to publish.
+      # Uploads go straight from the browser to Cloudflare R2 (see
+      # media_libraries at the top), never into git.
       - name: audioUrl
         label: Audio
         widget: file
@@ -67,13 +79,7 @@ collections:
           all:
             max_file_size: 300000000
             slugify_filename: true
-          cloudflare_r2:
-            account_id: ab5094676ada5b76f192b802804cb133
-            bucket: deadlydemos-audio
-            access_key_id: a4210646c67ccdb168bc1a89ddbb4750
-            public_url: https://audio.deadlydemos.com
-            prefix: shows/
-      - { name: artwork, label: Artwork, widget: image, required: false, hint: "Optional. Without it, a colour-blocked cover is generated from the episode number." }
+      - { name: artwork, label: Artwork, widget: image, media_libraries: { cloudflare_r2: false }, required: false, hint: "Optional. Without it, a colour-blocked cover is generated from the episode number." }
       - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: purple, hint: "Background colour for the cover when there's no artwork." }
       - { name: tags, label: Tags, widget: list, default: [], hint: "Genres or themes, lowercase, separated by commas — e.g. dub, industrial." }
       - name: tracklist
@@ -115,7 +121,7 @@ collections:
         value_field: "{{slug}}"
         search_fields: [name]
         display_fields: [name]
-      - { name: heroImage, label: Hero image, widget: image, required: false, hint: "Optional. A wide photo works best (landscape, at least 1600px across)." }
+      - { name: heroImage, label: Hero image, widget: image, media_libraries: { cloudflare_r2: false }, required: false, hint: "Optional. A wide photo works best (landscape, at least 1600px across)." }
       - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: paper, hint: "Colour of the article's card on the Articles page." }
       - { name: tags, label: Tags, widget: list, default: [], hint: "Lowercase, separated by commas — e.g. essay, review." }
       - { name: draft, label: Draft, widget: boolean, default: false, hint: "Ticked = hidden from the site. Untick when it's ready to go out." }
@@ -169,7 +175,7 @@ collections:
       - { name: name, label: Name, widget: string }
       - { name: role, label: Role, widget: string, hint: "One line under your name, e.g. Playlists, digging, and the archive." }
       - { name: order, label: Sort order, widget: number, value_type: int, default: 0, hint: "Position on the About page — 1 is first." }
-      - { name: photo, label: Photo, widget: image, required: false, hint: "Optional. Square works best. Without one, a coloured block with your initial is shown." }
+      - { name: photo, label: Photo, widget: image, media_libraries: { cloudflare_r2: false }, required: false, hint: "Optional. Square works best. Without one, a coloured block with your initial is shown." }
       - name: links
         label: Links
         widget: list
