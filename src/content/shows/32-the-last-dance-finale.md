@@ -1,7 +1,7 @@
 ---
 title: The Last Dance - Finale
 episode: 32
-date: 2026-10-02
+date: 2026-06-06
 hosts:
   - isaac
   - liam
