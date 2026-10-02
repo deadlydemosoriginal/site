@@ -79,8 +79,77 @@ const articles = defineCollection({
   }),
 });
 
+/**
+ * Playlists are markdown files; when SPOTIFY_CLIENT_ID/SECRET are set, each
+ * build replaces the file's hand-written `tracks` with the live Spotify
+ * tracklist. If credentials are missing, or a playlist can't be fetched
+ * (private, editorial and some other Spotify-owned playlists are refused to
+ * API apps), that playlist keeps the tracks typed into the CMS.
+ */
+const playlistFiles = glob({ pattern: '**/*.md', base: './src/content/playlists' });
+
+const spotifyPlaylists: Loader = {
+  name: 'spotify-playlists',
+  async load(context) {
+    await playlistFiles.load(context);
+
+    const id = process.env.SPOTIFY_CLIENT_ID ?? import.meta.env.SPOTIFY_CLIENT_ID;
+    const secret = process.env.SPOTIFY_CLIENT_SECRET ?? import.meta.env.SPOTIFY_CLIENT_SECRET;
+    if (!id || !secret) return;
+
+    let token: string;
+    try {
+      const res = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'grant_type=client_credentials',
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+      token = ((await res.json()) as { access_token: string }).access_token;
+    } catch (err) {
+      context.logger.warn(`Spotify auth failed, using tracks from the CMS: ${err}`);
+      return;
+    }
+
+    type Page = {
+      items: { track: { name: string; artists: { name: string }[] } | null }[];
+      next: string | null;
+    };
+
+    for (const entry of [...context.store.values()]) {
+      const playlistId = String(entry.data.spotifyUrl).split('/playlist/')[1]?.split(/[?/]/)[0];
+      if (!playlistId) continue;
+
+      try {
+        const tracks: { artist: string; title: string }[] = [];
+        let url: string | null =
+          `https://api.spotify.com/v1/playlists/${playlistId}/tracks` +
+          `?limit=100&fields=next,items(track(name,artists(name)))`;
+        while (url) {
+          const res: Response = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const page = (await res.json()) as Page;
+          for (const { track } of page.items) {
+            if (track) tracks.push({ artist: track.artists.map((a) => a.name).join(', '), title: track.name });
+          }
+          url = page.next;
+        }
+        // Drop the digest so the store accepts the changed data.
+        const { digest: _digest, ...rest } = entry;
+        context.store.set({ ...rest, data: { ...entry.data, tracks } });
+        context.logger.info(`Loaded ${tracks.length} tracks for ${entry.id} from Spotify`);
+      } catch (err) {
+        context.logger.warn(`Spotify fetch failed for ${entry.id}, using tracks from the CMS: ${err}`);
+      }
+    }
+  },
+};
+
 const playlists = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/playlists' }),
+  loader: spotifyPlaylists,
   schema: z.object({
     title: z.string(),
     description: z.string(),
