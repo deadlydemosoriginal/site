@@ -17,7 +17,7 @@ const d = entry.data;
 const spotifyId = d.spotifyUrl.split('/playlist/')[1]?.split('?')[0] ?? '';
 ---
 
-<Base title={d.title} description={d.description}>
+<Base title={d.title} description={d.description} ogImage={`/og/playlists/${entry.id}.png`}>
   <article>
     <section class={`shell-full top on-${d.tone}`}>
       <div class="shell">
