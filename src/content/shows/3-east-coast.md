@@ -1,7 +1,7 @@
 ---
 title: East Coast
 episode: 3
-date: 2026-10-02
+date: 2025-02-01
 hosts:
   - isaac
   - liam
