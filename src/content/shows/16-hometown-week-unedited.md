@@ -1,7 +1,7 @@
 ---
 title: Hometown Week (This and everything after hasn't been edited yet)
 episode: 16
-date: 2026-10-02
+date: 2025-12-06
 hosts:
   - isaac
   - liam
