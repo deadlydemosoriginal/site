@@ -1,7 +1,7 @@
 ---
 title: Reminiscing
 episode: 26
-date: 2026-10-02
+date: 2026-03-28
 hosts:
   - liam
   - tom
