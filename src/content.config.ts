@@ -80,13 +80,14 @@ const articles = defineCollection({
 });
 
 /**
- * Playlists are markdown files; each build replaces a file's hand-written
- * `tracks` with the live Spotify tracklist. Order tried per playlist:
+ * Playlists are markdown files; each build fills in `tracks` from the live
+ * Spotify tracklist. Order tried per playlist:
  *   1. The Web API, when SPOTIFY_CLIENT_ID/SECRET are set. Development-mode
  *      apps are often refused (403) on playlist tracks, so this may not work.
  *   2. The public embed page, which lists tracks without a login. Unofficial,
  *      so it can change without notice.
- *   3. The tracks typed into the CMS.
+ *   3. No tracklist: the page shows just the Spotify embed.
+ * Tracks are never typed into the CMS, so a failed fetch leaves none.
  */
 const playlistFiles = glob({ pattern: '**/*.md', base: './src/content/playlists' });
 
@@ -185,13 +186,13 @@ const spotifyPlaylists: Loader = {
       }
 
       if (!tracks?.length) {
-        context.logger.warn(`No tracks from Spotify for ${entry.id}, using tracks from the CMS`);
-        continue;
+        context.logger.warn(`No tracks from Spotify for ${entry.id}, showing the embed only`);
+        tracks = [];
       }
       // Drop the digest so the store accepts the changed data.
       const { digest: _digest, ...rest } = entry;
       context.store.set({ ...rest, data: { ...entry.data, tracks } });
-      context.logger.info(`Loaded ${tracks.length} tracks for ${entry.id} from ${source}`);
+      if (tracks.length) context.logger.info(`Loaded ${tracks.length} tracks for ${entry.id} from ${source}`);
     }
   },
 };
@@ -210,7 +211,7 @@ const playlists = defineCollection({
     curator: reference('members'),
     date: z.coerce.date(),
     tone: tone.default('ultrasonic'),
-    /** Hand-written fallback used when Spotify credentials aren't configured. */
+    /** Filled in at build time by the loader above; not edited in the CMS. */
     tracks: z
       .array(z.object({ artist: z.string(), title: z.string() }))
       .default([]),

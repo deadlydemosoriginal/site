@@ -33,33 +33,21 @@ const spotifyId = d.spotifyUrl.split('/playlist/')[1]?.split('?')[0] ?? '';
 
     <section class="shell section body">
       <div class="body__notes">
-        <h2 class="meta body__label">Sleeve note</h2>
-        <div class="prose"><Content /></div>
-
-        <a class="spotify" href={d.spotifyUrl} target="_blank" rel="noopener noreferrer">
-          Open in Spotify ↗
-        </a>
-      </div>
-
-      <div class="body__tracks">
-        <h2 class="meta body__label">
-          Tracklist{d.tracks.length > 0 && <> · {d.tracks.length}</>}
-        </h2>
-
-        {d.tracks.length > 0 ? (
-          <ol class="tracks">
-            {d.tracks.map((t, i) => (
-              <li class="track">
-                <span class="meta track__num">{String(i + 1).padStart(2, '0')}</span>
-                <span class="track__text">
-                  <span class="track__artist">{t.artist}</span>
-                  <span class="track__title">{t.title}</span>
-                </span>
-              </li>
-            ))}
-          </ol>
-        ) : (
-          <p class="meta pending">Tracklist syncs from Spotify at build time.</p>
+        {d.tracks.length > 0 && (
+          <>
+            <h2 class="meta body__label">Tracklist · {d.tracks.length}</h2>
+            <ol class="tracks">
+              {d.tracks.map((t, i) => (
+                <li class="track">
+                  <span class="meta track__num">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="track__text">
+                    <span class="track__artist">{t.artist}</span>
+                    <span class="track__title">{t.title}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </>
         )}
 
         {spotifyId && (
@@ -131,7 +119,6 @@ const spotifyId = d.spotifyUrl.split('/playlist/')[1]?.split('?')[0] ?? '';
   .track__artist { font-weight: 700; }
   .track__title { color: var(--fg-muted); font-size: 0.95rem; }
 
-  .pending { border: 1px dashed var(--rule); padding: 0.75rem 1rem; margin-bottom: 2rem; }
   .embed { border: 0; display: block; }
 
   @media (max-width: 900px) {

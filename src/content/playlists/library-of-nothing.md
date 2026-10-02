@@ -5,7 +5,6 @@ spotifyUrl: https://open.spotify.com/playlist/0D39VgNWcOc0QSUEK67y0n
 curator: isaac
 date: 2026-07-30
 tone: periwinkle
-tracks: []
 draft: false
 ---
 

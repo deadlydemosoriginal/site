@@ -149,6 +149,31 @@ collections:
         display_fields: [name]
       - { name: date, label: Date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMM YYYY", time_format: false, default: "{{now}}" }
       - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: ultrasonic }
+      - { name: draft, label: Draft, widget: boolean, default: false, hint: "Ticked = hidden from the site. Untick when it's ready to go out." }
+      - { name: body, label: Body, widget: markdown, hint: "Use the toolbar for headings, bold, links and quotes." }
+
+  - name: playlists
+    label: Playlists
+    label_singular: Playlist
+    description: "Spotify playlists. The tracklist and cover are pulled from Spotify automatically."
+    folder: src/content/playlists
+    preview_path: "playlists/{{slug}}"
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: { fields: [date, title], default: { field: date, direction: descending } }
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Description, widget: text, hint: "One or two sentences about the mood." }
+      - { name: spotifyUrl, label: Spotify URL, widget: string, pattern: ['^https://open\.spotify\.com/playlist/', "Must be an open.spotify.com playlist link"], hint: "In Spotify: ⋯ → Share → Copy link to playlist, then paste here." }
+      - name: curator
+        label: Curator
+        widget: relation
+        collection: members
+        value_field: "{{slug}}"
+        search_fields: [name]
+        display_fields: [name]
+      - { name: date, label: Date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMM YYYY", time_format: false, default: "{{now}}" }
+      - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: ultrasonic }
       - name: tracks
         label: Tracklist (fallback)
         widget: list
