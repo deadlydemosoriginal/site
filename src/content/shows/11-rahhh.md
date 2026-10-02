@@ -3,7 +3,8 @@ title: Rahhh
 episode: 11
 date: 2026-10-02
 hosts:
-  - liam
+  - tom
+  - isaac
 description: Garage
 audioUrl: https://audio.deadlydemos.com/shows/garage.mp3
 artwork: ''
