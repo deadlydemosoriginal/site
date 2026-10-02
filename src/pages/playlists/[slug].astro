@@ -13,7 +13,7 @@ const { Content } = await render(entry);
 const curator = await getEntry('members', entry.data.curator.id);
 const d = entry.data;
 
-/** Spotify playlist id, for the embed fallback. */
+/** Spotify playlist id, for the embed. */
 const spotifyId = d.spotifyUrl.split('/playlist/')[1]?.split('?')[0] ?? '';
 ---
 
@@ -32,34 +32,24 @@ const spotifyId = d.spotifyUrl.split('/playlist/')[1]?.split('?')[0] ?? '';
     </section>
 
     <section class="shell section body">
-      <div class="body__notes">
-        {d.tracks.length > 0 && (
-          <>
-            <h2 class="meta body__label">Tracklist · {d.tracks.length}</h2>
-            <ol class="tracks">
-              {d.tracks.map((t, i) => (
-                <li class="track">
-                  <span class="meta track__num">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="track__text">
-                    <span class="track__artist">{t.artist}</span>
-                    <span class="track__title">{t.title}</span>
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </>
-        )}
+      {spotifyId && (
+        <iframe
+          class="embed"
+          src={`https://open.spotify.com/embed/playlist/${spotifyId}?theme=0`}
+          width="100%" height="450" frameborder="0"
+          loading="lazy"
+          allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          title={`${d.title} on Spotify`}
+        ></iframe>
+      )}
 
-        {spotifyId && (
-          <iframe
-            class="embed"
-            src={`https://open.spotify.com/embed/playlist/${spotifyId}?theme=0`}
-            width="100%" height="380" frameborder="0"
-            loading="lazy"
-            allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            title={`${d.title} on Spotify`}
-          ></iframe>
-        )}
+      <div class="body__notes">
+        <h2 class="meta body__label">Sleeve note</h2>
+        <div class="prose"><Content /></div>
+
+        <a class="spotify" href={d.spotifyUrl} target="_blank" rel="noopener noreferrer">
+          Open in Spotify ↗
+        </a>
       </div>
     </section>
   </article>
@@ -81,12 +71,6 @@ const spotifyId = d.spotifyUrl.split('/playlist/')[1]?.split('?')[0] ?? '';
   .top__desc { max-width: 52ch; margin-top: 1.5rem; font-size: var(--step-s); line-height: 1.4; }
   .top__date { margin-top: 1.5rem; }
 
-  .body {
-    display: grid;
-    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
-    gap: clamp(2rem, 5vw, 4rem);
-    align-items: start;
-  }
   .body__label { margin-bottom: 1.25rem; color: var(--fg); font-weight: 700; }
 
   .prose { max-width: var(--measure); }
@@ -106,22 +90,5 @@ const spotifyId = d.spotifyUrl.split('/playlist/')[1]?.split('?')[0] ?? '';
   }
   .spotify:hover { border-color: var(--lavender); color: var(--lavender); }
 
-  .tracks { list-style: none; padding: 0; margin: 0 0 2rem; }
-  .track {
-    display: grid;
-    grid-template-columns: 2rem 1fr;
-    gap: 1rem;
-    align-items: baseline;
-    padding-block: 0.7rem;
-    border-bottom: var(--hair);
-  }
-  .track__text { display: grid; gap: 0.15rem; }
-  .track__artist { font-weight: 700; }
-  .track__title { color: var(--fg-muted); font-size: 0.95rem; }
-
-  .embed { border: 0; display: block; }
-
-  @media (max-width: 900px) {
-    .body { grid-template-columns: 1fr; }
-  }
+  .embed { border: 0; display: block; margin-bottom: 2.5rem; }
 </style>

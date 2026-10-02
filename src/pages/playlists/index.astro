@@ -40,7 +40,6 @@ const rows = await Promise.all(
 
           <p class="meta pl__foot">
             {formatDate(entry.data.date)}
-            {entry.data.tracks.length > 0 && <> · {entry.data.tracks.length} tracks</>}
           </p>
         </a>
       ))}

@@ -22,7 +22,7 @@ const wire = [
   })),
   ...playlists.slice(0, 2).map((e) => ({
     kind: 'Playlist', href: `/playlists/${e.id}/`, title: e.data.title,
-    meta: `${formatDate(e.data.date)}${e.data.tracks.length ? ` · ${e.data.tracks.length} tracks` : ''}`,
+    meta: formatDate(e.data.date),
     tone: e.data.tone, date: e.data.date,
   })),
 ]

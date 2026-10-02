@@ -69,8 +69,6 @@ jobs:
       # Log is kept so a failed build can be reported back in plain sight.
       - run: set -o pipefail; npm run build 2>&1 | tee build.log
         env:
-          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
 
       # A bad CMS save fails the build and the live site simply stays as it
