@@ -154,7 +154,11 @@ const playlists = defineCollection({
     title: z.string(),
     description: z.string(),
     /** Full open.spotify.com playlist URL. Track data is fetched at build time. */
-    spotifyUrl: z.string().url(),
+    spotifyUrl: z
+      .string()
+      .url()
+      // Drop the ?si= share-tracking query so it never reaches the page.
+      .transform((u) => u.split('?')[0]),
     curator: reference('members'),
     date: z.coerce.date(),
     tone: tone.default('ultrasonic'),
