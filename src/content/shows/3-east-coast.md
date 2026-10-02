@@ -12,7 +12,7 @@ artwork: ''
 tone: purple
 tags:
   - Hip-Hop
-  - East Coast
+  - East Coast Rap
 tracklist: []
 duration: ''
 featured: false
