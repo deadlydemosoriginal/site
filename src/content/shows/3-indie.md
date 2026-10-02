@@ -5,7 +5,7 @@ date: 2025-04-26
 hosts:
   - liam
   - isaac
-description: Indie
+description: Indie.
 audioUrl: https://audio.deadlydemos.com/shows/indie.mp3
 artwork: ''
 tone: purple
@@ -25,3 +25,5 @@ draft: false
 ---
 
 Indie
+
+There were a couple more shows before this but the recordings were lost somewhere in the ether
