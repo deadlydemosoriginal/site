@@ -196,9 +196,11 @@ The site has a canonical URL, OG/Twitter meta per page (`layouts/Base.astro`), a
 4. Images uploaded in the CMS go to `public/uploads/`.
 
 **Adding a show:**
-1. Upload the MP3 to Cloudflare R2.
-2. In the CMS, create a new Show and paste the public R2 URL into **Audio URL**.
-3. Fill in the episode number, date, and hosts, then save.
+1. In the CMS, create a new Show.
+2. In the **Audio** field, upload the MP3. It goes straight from your browser to Cloudflare R2 (`audio.deadlydemos.com/shows/…`), never into git, and the field fills in the URL. You can also paste a direct `.mp3` link.
+3. Fill in the episode number, date, hosts, and duration, then save.
+
+**First-time R2 setup for each editor:** uploading needs the R2 *Secret Access Key* for the `cms-audio-upload` token (Object Read & Write on `deadlydemos-audio` only). Get it privately from an admin and paste it into the CMS **Settings** dialog once. It's stored in your browser and never committed. The account ID, bucket and access key ID live in `public/admin/config.yml` and are safe to publish.
 
 New **members** can't be created from the CMS (`create: false`). Add the Markdown file in the repo by hand, and give the person GitHub access.
 
@@ -229,7 +231,7 @@ Set these in **GitHub → Settings → Secrets and variables → Actions**, and 
 | `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` | Passed to the build, but **nothing reads them yet**. See loose ends. | No effect |
 
 Outside GitHub:
-- **Cloudflare R2:** audio hosting (`audio.deadlydemos.com`).
+- **Cloudflare R2:** audio hosting (bucket `deadlydemos-audio` → `audio.deadlydemos.com`). The CMS uploads to it using the `cms-audio-upload` API token. The bucket CORS must allow `GET`/`PUT`/`HEAD` with all headers from `https://deadlydemos.com` and `http://localhost:4321`, and expose `ETag`.
 - **Cloudflare Workers:** the CMS OAuth worker.
 - **GitHub OAuth app** (org `deadlydemosoriginal`): its client ID/secret live in the Worker's settings, not in this repo.
 - **DNS:** `deadlydemos.com` points to GitHub Pages, and `public/CNAME` must stay in place.

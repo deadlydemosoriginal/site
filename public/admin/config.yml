@@ -32,7 +32,7 @@ collections:
   - name: shows
     label: Shows
     label_singular: Show
-    description: "Radio episodes. Upload the MP3 to R2 first, then paste its link into Audio URL."
+    description: "Radio episodes. Upload the MP3 in the Audio field — it goes to Cloudflare R2, not this repo."
     folder: src/content/shows
     preview_path: "shows/{{slug}}"
     sortable_fields: { fields: [episode, date, title], default: { field: episode, direction: descending } }
@@ -53,11 +53,26 @@ collections:
         multiple: true
         hint: "Everyone who presented this episode."
       - { name: description, label: Description, widget: text, hint: "One or two sentences. Shows on the episode card and when shared." }
+      # Uploads go straight from the browser to Cloudflare R2, never into git.
+      # Each editor enters the R2 Secret Access Key once in the CMS Settings;
+      # the access key ID below is safe to publish.
       - name: audioUrl
-        label: Audio URL
-        widget: string
+        label: Audio
+        widget: file
         required: false
-        hint: "Public MP3 URL on Cloudflare R2 (audio.deadlydemos.com/...). Upload the file to R2 first — MP3s must never go in this repo."
+        accept: audio/mpeg
+        hint: "Upload the MP3 (it goes to audio.deadlydemos.com, not this repo), or paste a direct .mp3 link."
+        media_libraries:
+          default: false
+          all:
+            max_file_size: 300000000
+            slugify_filename: true
+          cloudflare_r2:
+            account_id: ab5094676ada5b76f192b802804cb133
+            bucket: deadlydemos-audio
+            access_key_id: a4210646c67ccdb168bc1a89ddbb4750
+            public_url: https://audio.deadlydemos.com
+            prefix: shows/
       - { name: duration, label: Duration, widget: string, required: false, pattern: ['^\d{1,2}:\d{2}:\d{2}$', "Use HH:MM:SS"], hint: "Running time as hours:minutes:seconds, e.g. 01:58:20." }
       - { name: artwork, label: Artwork, widget: image, required: false, hint: "Optional. Without it, a colour-blocked cover is generated from the episode number." }
       - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: purple, hint: "Background colour for the cover when there's no artwork." }
