@@ -1,7 +1,7 @@
 ---
 title: Our Albums of the Year
 episode: 14
-date: 2026-10-02
+date: 2025-11-15
 hosts:
   - liam
   - isaac
