@@ -42,7 +42,7 @@ You can create an optional `.env` in the repo root (it's git-ignored):
 INSTAGRAM_ACCESS_TOKEN=...
 ```
 
-Without it, the homepage reels row uses the hand-written fallbacks in `src/content/reels/`. Everything else works with no env vars.
+Without it, the homepage reels row is hidden (or you can add hand-written entries to `src/content/reels/`). Everything else works with no env vars.
 
 ---
 
@@ -94,7 +94,6 @@ src/
   pages/                Routes (see below)
   styles/               tokens.css (palette, type scale) + global.css
   assets/fonts/         Self-hosted fonts (WOFF2 for the site, TTF for OG images)
-Claude/                 Original build plan + design inspiration (not shipped)
 ```
 
 ### Routes
@@ -145,7 +144,7 @@ Each collection supports a palette tone: `purple`, `ultrasonic`, `periwinkle`, `
 
 ### playlists
 
-`title`, `description`, `spotifyUrl` (must be an `open.spotify.com/playlist/...` link), `curator` (a member slug), and `date` are required. `tone` (default `ultrasonic`), `tracks[]` (a hand-written fallback list), and `draft` are optional. The page embeds Spotify's player using the ID parsed from `spotifyUrl`.
+`title`, `description`, `spotifyUrl` (must be an `open.spotify.com/playlist/...` link), `curator` (a member slug), and `date` are required. `tone` (default `ultrasonic`) and `draft` are optional. The page embeds Spotify's player using the ID parsed from `spotifyUrl`, so there is no tracklist to type.
 
 ### members
 
@@ -154,7 +153,7 @@ Each collection supports a palette tone: `purple`, `ultrasonic`, `periwinkle`, `
 
 ### reels
 
-These come from the Instagram API when `INSTAGRAM_ACCESS_TOKEN` is set. If there's no token, or the API fails, the build uses `src/content/reels/*.md` (`url`, `caption`, `date`, optional `thumbnail`/`tone`/`draft`). Instagram thumbnails are downloaded and re-hosted at build time (allowed domains are set in `astro.config.mjs`).
+These come from the Instagram API when `INSTAGRAM_ACCESS_TOKEN` is set. If there's no token, or the API fails, the build uses any `src/content/reels/*.md` files (currently none, so the row is hidden; fields are `url`, `caption`, `date`, optional `thumbnail`/`tone`/`draft`). Instagram thumbnails are downloaded and re-hosted at build time (allowed domains are set in `astro.config.mjs`).
 
 ### Drafts
 
@@ -229,8 +228,7 @@ Set these in **GitHub → Settings → Secrets and variables → Actions**, and 
 
 | Name | Used for | If missing |
 |---|---|---|
-| `INSTAGRAM_ACCESS_TOKEN` | Reels row (Instagram API with Instagram Login; needs a Business/Creator account) | Falls back to `src/content/reels/` |
-| `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` | Passed to the build, but **nothing reads them yet**. See loose ends. | No effect |
+| `INSTAGRAM_ACCESS_TOKEN` | Reels row (Instagram API with Instagram Login; needs a Business/Creator account) | Reels row is hidden unless `src/content/reels/` has entries |
 
 Outside GitHub:
 - **Cloudflare R2:** audio hosting (bucket `deadlydemos-audio` → `audio.deadlydemos.com`). The CMS uploads to it using the `cms-audio-upload` API token. The bucket CORS must allow `GET`/`PUT`/`HEAD` with all headers from `https://deadlydemos.com` and `http://localhost:4321`, and expose `ETag`.
@@ -267,8 +265,8 @@ Reproduce locally with `npm run build`. It's the same check CI runs.
 - R2 objects must be public, and the bucket's CORS must allow `deadlydemos.com` (needed for seeking and duration on some browsers).
 - Check the browser console for 403/404 errors on the MP3.
 
-### The reels row shows old or placeholder posts
-- If there's no token or the API errored, the build log contains `Instagram fetch failed, using local reels: ...`.
+### The reels row is missing or shows old posts
+- If there's no token or the API errored, the row falls back to `src/content/reels/` (empty by default, so it disappears). The build log contains `Instagram fetch failed, using local reels: ...`.
 - Long-lived Instagram tokens **expire after 60 days without a refresh**. The hourly build refreshes them, but if builds stop for 60+ days the token dies. Generate a new one in the Meta developer dashboard and update the secret.
 - **GitHub disables scheduled workflows after 60 days with no repo activity.** If the cron has stopped, re-enable it in the Actions tab. Any push also keeps it alive.
 
@@ -292,8 +290,7 @@ This is intended, because the player persists across pages. If you add new pages
 ## Known quirks & loose ends
 
 - **`featured` on shows is not used.** The homepage mixes the newest 3 shows, 2 articles and 2 playlists by date, whatever the checkbox says.
-- **There's no Spotify API integration.** The workflow passes `SPOTIFY_*` secrets and a schema comment says track data is "fetched at build time", but playlist pages only use the Spotify embed plus the optional hand-written `tracks` list.
-- **`publish_mode: editorial_workflow`** is set in the CMS config, but saves are landing directly on `main`. Treat every CMS save as going live.
+- **CMS saves go live immediately.** There is no editorial workflow, so every CMS save commits straight to `main`.
 - **Umami analytics** hooks exist in the player, but no Umami script is loaded.
 - Show filenames start with a number (`037-…`) that doesn't have to match `episode`. The URL comes from the filename, and the numeral shown comes from `episode`.
 - The loose `Red and Black Square Community Logo (*).png` files in the repo root are source logos and aren't used by the site (the site uses `public/brand/`).

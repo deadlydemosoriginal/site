@@ -38,9 +38,6 @@ slug:
   encoding: ascii
   clean_accents: true
 
-# Editing goes via a PR-style workflow so a bad save never breaks the live site.
-publish_mode: editorial_workflow
-
 collections:
   - name: shows
     label: Shows
@@ -94,7 +91,7 @@ collections:
           - { name: title, label: Track, widget: string }
           - { name: timestamp, label: Timestamp, widget: string, required: false, hint: "M:SS or H:MM:SS — makes this track a seek link in the player." }
       - { name: duration, label: Duration (optional), widget: string, required: false, pattern: ['^\d{1,2}:\d{2}:\d{2}$', "Use HH:MM:SS"], hint: "Leave blank: it's worked out from the MP3 when the site rebuilds. Only fill this in if there's no MP3 or the automatic one is wrong. Format HH:MM:SS, e.g. 01:58:20." }
-      - { name: featured, label: Feature on homepage, widget: boolean, default: false, hint: "Puts this episode in the big slot on the homepage." }
+      - { name: featured, label: Feature on homepage, widget: boolean, default: false, hint: "Currently unused: the homepage ignores this." }
       - { name: draft, label: Draft, widget: boolean, default: false }
       - { name: body, label: Show notes, widget: markdown, required: false, hint: "Optional longer write-up shown on the episode page." }
       # Waveform data. Normally worked out from the MP3 at build time (scripts/audio-meta.mjs);
@@ -164,7 +161,7 @@ collections:
     sortable_fields: [order, name]
     fields:
       - { name: name, label: Name, widget: string }
-      - { name: role, label: Role, widget: string, hint: "One line under your name, e.g. Playlists, digging, and the archive." }
+      - { name: role, label: Role, widget: string, hint: "One line under your name, e.g. Words, playlists, and the archive." }
       - { name: order, label: Sort order, widget: number, value_type: int, default: 0, hint: "Position on the About page — 1 is first." }
       - { name: photo, label: Photo, widget: image, media_libraries: { cloudflare_r2: false }, required: false, hint: "Optional. Square works best. Without one, a coloured block with your initial is shown." }
       - name: links
