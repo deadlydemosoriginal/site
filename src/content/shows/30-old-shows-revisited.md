@@ -1,7 +1,7 @@
 ---
 title: Old Shows Revisited
 episode: 30
-date: 2026-10-02
+date: 2026-05-16
 hosts:
   - isaac
   - liam
