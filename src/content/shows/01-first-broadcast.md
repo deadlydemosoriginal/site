@@ -1,7 +1,7 @@
 ---
 title: The Beginning...
 episode: 1
-date: 2026-06-12
+date: 2024-12-07
 hosts:
   - isaac
   - tom
@@ -21,10 +21,7 @@ tracklist:
   - artist: Amyl and the Sniffers
     title: Tiny Bikini
     timestamp: ''
-duration: 01:55:50
+duration: ''
 featured: false
 draft: false
 ---
-
-Kept for the archive rather than the quality. The mic is peaking for the
-entire first twenty minutes and nobody noticed until afterwards.
