@@ -127,6 +127,7 @@
     min-width: 4rem;
   }
 
+  .player[data-wave='true'] .player__scrub { height: clamp(2.75rem, 6vw, 3.25rem); }
   .player__wave { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
   .player[data-wave='true'] .player__wave { display: block; }
   .player[data-wave='true'] .player__prog { display: none; }
@@ -247,17 +248,30 @@
 
       const styles = getComputedStyle(document.documentElement);
       const done = styles.getPropertyValue('--lavender').trim() || '#A551E4';
-      const todo = styles.getPropertyValue('--rule').trim() || '#2A2A2E';
+      const todo = styles.getPropertyValue('--paper').trim() || '#FAFAFA';
       const pct = audio.duration ? audio.currentTime / audio.duration : 0;
 
-      const gap = 1;
-      const barW = Math.max(1, w / peaks.length - gap);
+      // Spread the bars across the full width whatever the screen size, and
+      // drop the gap when they get too thin for one (narrow phones).
+      const n = peaks.length;
+      const step = w / n;
+      const gap = step >= 3 ? 1 : 0;
+      const barW = Math.max(0.5, step - gap);
       peaks.forEach((p, i) => {
-        const x = i * (barW + gap);
-        const bh = Math.max(2, p * h);
-        ctx.fillStyle = x / w < pct ? done : todo;
-        ctx.fillRect(x, (h - bh) / 2, barW, bh);
+        // Lift quiet passages a little so talk segments still read as shape.
+        const bh = Math.max(2, Math.pow(p, 0.75) * h);
+        const played = (i + 0.5) / n < pct;
+        ctx.globalAlpha = played ? 1 : 0.28;
+        ctx.fillStyle = played ? done : todo;
+        ctx.fillRect(i * step, (h - bh) / 2, barW, bh);
       });
+
+      // Playhead.
+      if (pct > 0) {
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = todo;
+        ctx.fillRect(Math.min(w - 2, pct * w), 0, 2, h);
+      }
     };
 
     const paint = () => {
@@ -288,6 +302,14 @@
     const api = {
       load(opts: { src: string; title: string; episode?: number; href?: string; slug?: string; peaks?: number[] }) {
         const same = audio.src === opts.src;
+        // Same show started again from a page that knows its waveform (e.g.
+        // first played from the shows list): upgrade the progress bar.
+        if (same && !peaks.length && opts.peaks?.length) {
+          peaks = opts.peaks;
+          root.setAttribute('data-wave', 'true');
+          setHeight();
+          drawWave();
+        }
         if (!same) {
           audio.src = opts.src;
           peaks = opts.peaks || [];

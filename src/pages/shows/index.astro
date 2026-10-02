@@ -83,6 +83,7 @@ const rows = await Promise.all(
               data-episode={show.data.episode}
               data-slug={show.id}
               data-href={`/shows/${show.id}/`}
+              data-peaks={show.data.peaks ? JSON.stringify(show.data.peaks) : undefined}
               aria-label={`Play ${show.data.title}`}
             >
               <span class="row__playicon" aria-hidden="true"></span>
