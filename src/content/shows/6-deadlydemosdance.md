@@ -1,7 +1,7 @@
 ---
 title: DeadlyDemosDance
 episode: 6
-date: 2026-10-02
+date: 2025-05-03
 hosts:
   - isaac
   - liam
