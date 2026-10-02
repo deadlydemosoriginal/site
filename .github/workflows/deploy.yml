@@ -40,7 +40,18 @@ jobs:
           key: audio-meta-${{ github.run_id }}
           restore-keys: audio-meta-
 
-      - run: npm run audio-meta
+      - id: audio-check
+        run: npm run audio-meta -- --check
+        continue-on-error: true
+
+      # The runner image doesn't ship ffmpeg; only install it when a show
+      # actually needs analysing, so the hourly rebuilds stay quick.
+      - if: steps.audio-check.outputs.pending != '' && steps.audio-check.outputs.pending != '0'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg
+        continue-on-error: true
+
+      - if: steps.audio-check.outputs.pending != '' && steps.audio-check.outputs.pending != '0'
+        run: npm run audio-meta
         continue-on-error: true
 
       - uses: actions/cache/save@v4

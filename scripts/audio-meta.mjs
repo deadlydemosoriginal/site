@@ -6,7 +6,7 @@
 // Never fails the build: a show it can't analyse just keeps the plain
 // progress bar and no duration.
 
-import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readdir, readFile, writeFile, mkdir, appendFile } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 
 const SHOWS_DIR = 'src/content/shows';
@@ -73,35 +73,59 @@ function analyse(url) {
 async function isAudio(url) {
   try {
     const res = await fetch(url, { method: 'HEAD', redirect: 'follow' });
-    return res.ok && (res.headers.get('content-type') || '').startsWith('audio/');
+    // Reject web pages (e.g. an archive.org /details/ link) and dead links.
+    // Anything else gets a go: storage doesn't always label MP3s as audio/*.
+    const type = res.headers.get('content-type') || '';
+    return res.ok && !/html|text\/|json|xml/.test(type);
   } catch {
     return false;
   }
 }
 
-async function main() {
-  if (!(await hasFfmpeg())) {
-    console.log('audio-meta: ffmpeg not found, skipping.');
-    return;
-  }
-
-  let cache = {};
-  try {
-    cache = JSON.parse(await readFile(CACHE_FILE, 'utf8'));
-  } catch {}
-
-  let changed = false;
+/** Shows that have audio but no duration/peaks yet, and aren't cached. */
+async function pending(cache) {
+  const out = [];
   for (const file of (await readdir(SHOWS_DIR)).filter((f) => f.endsWith('.md'))) {
     const text = await readFile(`${SHOWS_DIR}/${file}`, 'utf8');
     const fm = text.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? '';
     const url = field(fm, 'audioUrl');
     if (!url || cache[url]) continue;
     if (field(fm, 'duration') && field(fm, 'peaks')) continue;
-
     if (!(await isAudio(url))) {
       console.warn(`audio-meta: ${file}: ${url} isn't a direct audio file, skipping.`);
       continue;
     }
+    out.push({ file, url });
+  }
+  return out;
+}
+
+async function main() {
+  let cache = {};
+  try {
+    cache = JSON.parse(await readFile(CACHE_FILE, 'utf8'));
+  } catch {}
+
+  const todo = await pending(cache);
+
+  // `--check` only reports whether there's work, so CI can skip installing
+  // ffmpeg on the (usual) runs where every show is already cached.
+  if (process.argv.includes('--check')) {
+    console.log(`audio-meta: ${todo.length} show(s) to analyse.`);
+    if (process.env.GITHUB_OUTPUT) await appendFile(process.env.GITHUB_OUTPUT, `pending=${todo.length}\n`);
+    return;
+  }
+  if (!todo.length) {
+    console.log(`audio-meta: nothing to do, ${Object.keys(cache).length} show(s) in cache.`);
+    return;
+  }
+  if (!(await hasFfmpeg())) {
+    console.warn('::warning::audio-meta: ffmpeg not found, so duration and waveforms were not generated.');
+    return;
+  }
+
+  let changed = false;
+  for (const { file, url } of todo) {
     try {
       const started = Date.now();
       cache[url] = await analyse(url);
