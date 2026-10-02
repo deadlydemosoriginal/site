@@ -1,7 +1,7 @@
 ---
 title: Krule Blunt Type Beat
 episode: 12
-date: 2026-10-02
+date: 2025-10-18
 hosts:
   - isaac
   - tom
