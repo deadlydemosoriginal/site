@@ -34,11 +34,16 @@ jobs:
 
       # Duration + waveform for shows with audio, worked out from the MP3 once
       # and kept in the Actions cache (not the repo). See scripts/audio-meta.mjs.
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v6
         with:
           path: .cache/audio-meta.json
           key: audio-meta-${{ github.run_id }}
           restore-keys: audio-meta-
+
+      # Remember what was restored so an unchanged cache isn't saved again
+      # (saving under a key that already exists only produces a warning).
+      - id: audio-before
+        run: echo "hash=${{ hashFiles('.cache/audio-meta.json') }}" >> "$GITHUB_OUTPUT"
 
       - id: audio-check
         run: npm run audio-meta -- --check
@@ -54,8 +59,8 @@ jobs:
         run: npm run audio-meta
         continue-on-error: true
 
-      - uses: actions/cache/save@v4
-        if: hashFiles('.cache/audio-meta.json') != ''
+      - uses: actions/cache/save@v6
+        if: hashFiles('.cache/audio-meta.json') != '' && hashFiles('.cache/audio-meta.json') != steps.audio-before.outputs.hash
         continue-on-error: true
         with:
           path: .cache/audio-meta.json
