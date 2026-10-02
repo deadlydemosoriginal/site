@@ -136,12 +136,13 @@ const d = show.data;
 
   .top__grid {
     display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
     gap: clamp(1.5rem, 4vw, 3.5rem);
     align-items: center;
   }
 
-  .top__body { display: grid; gap: 1.1rem; justify-items: start; }
+  .top__grid :global(.top__cover) { grid-column: 2; grid-row: 1; }
+  .top__body { grid-column: 1; grid-row: 1; display: grid; gap: 1.1rem; justify-items: start; }
 
   .top__title {
     font-size: var(--step-l);
@@ -246,6 +247,7 @@ const d = show.data;
 
   @media (max-width: 900px) {
     .top__grid { grid-template-columns: 1fr; }
+    .top__grid :global(.top__cover), .top__body { grid-column: 1; grid-row: auto; }
     .body { grid-template-columns: 1fr; }
   }
 </style>
