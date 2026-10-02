@@ -1,6 +1,6 @@
 ---
 title: Tony Allen Appreciation Club
-episode: 10
+episode: 9
 date: 2026-10-02
 hosts:
   - liam
