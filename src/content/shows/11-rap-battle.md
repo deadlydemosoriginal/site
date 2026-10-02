@@ -1,7 +1,7 @@
 ---
 title: Rap Battle
 episode: 10
-date: 2026-10-02
+date: 2025-09-27
 hosts:
   - liam
   - tom
