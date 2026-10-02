@@ -1,6 +1,10 @@
 import { defineCollection, reference, z } from 'astro:content';
 import { glob, type Loader } from 'astro/loaders';
 
+/** Treats a blank string as a missing value. */
+const blankToUndefined = (value: unknown) =>
+  typeof value === 'string' && value.trim() === '' ? undefined : value;
+
 /** Palette tones a colour-blocked tile can use. */
 const tone = z.enum(['purple', 'ultrasonic', 'periwinkle', 'paper', 'ink']);
 
@@ -32,9 +36,10 @@ const shows = defineCollection({
      * (GitHub Pages caps files at 100MB; a 2h show is ~110MB).
      * Optional so shows can be catalogued before the audio is uploaded.
      */
-    audioUrl: z.string().url().optional(),
+    // The CMS serializes empty optional fields as "" rather than omitting them.
+    audioUrl: z.preprocess(blankToUndefined, z.string().url().optional()),
     /** Runtime as HH:MM:SS. */
-    duration: z.string().regex(/^\d{1,2}:\d{2}:\d{2}$/).optional(),
+    duration: z.preprocess(blankToUndefined, z.string().regex(/^\d{1,2}:\d{2}:\d{2}$/).optional()),
 
     /** Falls back to a procedural colour-blocked cover. */
     artwork: z.string().optional(),
