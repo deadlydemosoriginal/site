@@ -1,7 +1,7 @@
 ---
 title: Samples with Soden
 episode: 31
-date: 2026-10-02
+date: 2026-05-16
 hosts:
   - isaac
   - liam
