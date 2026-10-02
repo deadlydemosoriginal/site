@@ -1,7 +1,7 @@
 ---
 title: Rahhh
 episode: 11
-date: 2026-10-02
+date: 2025-10-11
 hosts:
   - tom
   - isaac
