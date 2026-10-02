@@ -1,7 +1,7 @@
 ---
 title: Jazz Rap
 episode: 24
-date: 2026-10-02
+date: 2026-02-28
 hosts:
   - liam
   - tom
