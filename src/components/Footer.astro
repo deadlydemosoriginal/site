@@ -74,15 +74,15 @@ const columns = [
     gap: 3rem var(--gutter);
   }
 
-  /* Full circular badge. Art occupies the middle 65.7% x 60.6% of the
-     square PNG (measured), so 152% background-size crops to it. */
+  /* Badge artwork: the purple parts only, drawn black on a transparent PNG
+     so it sits directly on the purple footer. */
   .foot__badge {
     display: block;
-    width: clamp(9rem, 18vw, 13rem);
-    aspect-ratio: 1.08;
-    background-image: url('/brand/dd-badge.png');
-    background-size: 152% auto;
-    background-position: 50.9% 49.2%;
+    width: clamp(7rem, 14vw, 10rem);
+    aspect-ratio: 942 / 1199;
+    background-image: url('/brand/dd-badge-black.png');
+    background-size: contain;
+    background-position: left center;
     background-repeat: no-repeat;
   }
 
