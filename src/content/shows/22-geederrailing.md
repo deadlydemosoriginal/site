@@ -1,7 +1,7 @@
 ---
 title: Geederrailing
 episode: 22
-date: 2026-10-02
+date: 2026-02-21
 hosts:
   - liam
   - isaac
