@@ -5,12 +5,13 @@ date: 2026-10-02
 hosts:
   - isaac
 description: Jungle
-audioUrl: ''
-artwork: ''
-tone: purple
+audioUrl: https://audio.deadlydemos.com/shows/jungle.mp3
+artwork: /uploads/102_1007.JPG
+tone: ultrasonic
 tags:
   - Jungle
-  - Isaac
+  - Ragga
+  - DnB
 tracklist: []
 duration: ''
 featured: false
