@@ -276,6 +276,22 @@
       if (u && typeof u.track === 'function') u.track(event, { show: slug });
     };
 
+    // While the seek bar is being dragged we only preview the position, and
+    // after letting go we keep showing the target until the audio catches up.
+    // Seeking on every pixel of a drag restarts the download each time (a long
+    // MP3 then never buffers and sits silent), and repainting from
+    // audio.currentTime mid-drag made the playhead spring back.
+    let scrubTo: number | null = null; // being dragged
+    let pendingSeek: number | null = null; // released, waiting for the seek to land
+    const shownTime = () => scrubTo ?? pendingSeek ?? audio.currentTime;
+    const seek = (t: number) => {
+      if (!isFinite(audio.duration)) return;
+      t = Math.max(0, Math.min(t, audio.duration - 0.5));
+      pendingSeek = t;
+      audio.currentTime = t;
+      paint();
+    };
+
     const drawWave = () => {
       if (!peaks.length) return;
       const dpr = window.devicePixelRatio || 1;
@@ -292,7 +308,7 @@
       const styles = getComputedStyle(document.documentElement);
       const done = styles.getPropertyValue('--lavender').trim() || '#A551E4';
       const todo = styles.getPropertyValue('--paper').trim() || '#FAFAFA';
-      const pct = audio.duration ? audio.currentTime / audio.duration : 0;
+      const pct = audio.duration ? shownTime() / audio.duration : 0;
 
       // Spread the bars across the full width whatever the screen size, and
       // drop the gap when they get too thin for one (narrow phones).
@@ -319,18 +335,20 @@
 
     const paint = () => {
       const d = audio.duration;
-      const c = audio.currentTime;
+      const c = shownTime();
       curEl.textContent = fmt(c, d);
       if (isFinite(d)) durEl.textContent = fmt(d);
       const pct = d ? c / d : 0;
-      range.value = String(Math.round(pct * 1000));
+      if (scrubTo === null) range.value = String(Math.round(pct * 1000));
       fill.style.width = `${pct * 100}%`;
       if (peaks.length) drawWave();
 
       // Listen-through milestones — this is what a custom player buys us
-      // that an embedded third-party widget never would.
+      // that an embedded third-party widget never would. Counted from what's
+      // actually been reached, not a drag preview.
+      const heard = d ? (audio.currentTime / d) * 100 : 0;
       [25, 50, 75].forEach((m) => {
-        if (pct * 100 >= m && !seen.has(m)) {
+        if (heard >= m && !seen.has(m)) {
           seen.add(m);
           track(`show_progress_${m}`);
         }
@@ -355,6 +373,7 @@
         }
         if (!same) {
           audio.src = opts.src;
+          scrubTo = pendingSeek = null;
           peaks = opts.peaks || [];
           slug = opts.slug || opts.title;
           seen = new Set();
@@ -374,7 +393,7 @@
         else audio.pause();
       },
       seekTo(seconds: number) {
-        if (isFinite(audio.duration)) audio.currentTime = seconds;
+        seek(seconds);
       },
       get audio() { return audio; },
     };
@@ -399,15 +418,26 @@
 
     root.querySelectorAll<HTMLButtonElement>('[data-skip]').forEach((btn) =>
       btn.addEventListener('click', () => {
-        const t = audio.currentTime + Number(btn.dataset.skip);
-        audio.currentTime = Math.max(0, isFinite(audio.duration) ? Math.min(t, audio.duration - 0.5) : t);
-        paint();
+        seek(shownTime() + Number(btn.dataset.skip));
       }),
     );
 
     range.addEventListener('input', () => {
       if (!isFinite(audio.duration)) return;
-      audio.currentTime = (Number(range.value) / 1000) * audio.duration;
+      scrubTo = (Number(range.value) / 1000) * audio.duration;
+      paint();
+    });
+    // One real seek when the drag ends. `change` covers mouse, touch and
+    // keyboard; the pointer/blur events catch a release that didn't move it.
+    const commitScrub = () => {
+      if (scrubTo === null) return;
+      const t = scrubTo;
+      scrubTo = null;
+      seek(t);
+    };
+    ['change', 'pointerup', 'pointercancel', 'blur'].forEach((ev) => range.addEventListener(ev, commitScrub));
+    audio.addEventListener('seeked', () => {
+      pendingSeek = null;
       paint();
     });
 
