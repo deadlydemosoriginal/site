@@ -14,3 +14,5 @@ node_modules/
 
 # logs
 npm-debug.log*
+# audio-meta results (kept between CI runs by actions/cache)
+.cache/

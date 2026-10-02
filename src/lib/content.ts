@@ -1,11 +1,37 @@
+import { readFileSync } from 'node:fs';
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 
 /** Drafts are hidden in production but visible while running `astro dev`. */
 const visible = (entry: { data: { draft?: boolean } }) =>
   import.meta.env.DEV || !entry.data.draft;
 
+/**
+ * Duration + waveform worked out from the MP3 by scripts/audio-meta.mjs in CI.
+ * Keyed by audioUrl. Anything set by hand in the show file wins.
+ */
+type AudioMeta = Record<string, { duration: string; peaks: number[] }>;
+let audioMeta: AudioMeta | undefined;
+function loadAudioMeta(): AudioMeta {
+  if (!audioMeta) {
+    try {
+      audioMeta = JSON.parse(readFileSync('.cache/audio-meta.json', 'utf8'));
+    } catch {
+      audioMeta = {};
+    }
+  }
+  return audioMeta!;
+}
+
 export async function getShows() {
-  const shows = await getCollection('shows', visible);
+  const meta = loadAudioMeta();
+  const shows = (await getCollection('shows', visible)).map((show) => {
+    const m = show.data.audioUrl ? meta[show.data.audioUrl] : undefined;
+    if (!m) return show;
+    return {
+      ...show,
+      data: { ...show.data, duration: show.data.duration || m.duration, peaks: show.data.peaks?.length ? show.data.peaks : m.peaks },
+    };
+  });
   return shows.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 

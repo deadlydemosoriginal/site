@@ -130,12 +130,12 @@ Each collection supports a palette tone: `purple`, `ultrasonic`, `periwinkle`, `
 | `hosts` | ✔ | List of member slugs (`isaac`, `liam`, `tom`). Must match a file in `members/`. Can't be empty. |
 | `description` | ✔ | Card text + meta description. |
 | `audioUrl` | | Must be a **direct, playable audio URL** (an R2 MP3). If it's missing, no play button is shown. |
-| `duration` | | `HH:MM:SS` exactly (e.g. `01:55:50`). |
+| `duration` | | `HH:MM:SS` exactly (e.g. `01:55:50`). If left blank, it's worked out from the MP3 at build time. |
 | `artwork` | | Image path. If absent, a colour-blocked cover is generated. |
 | `tone` | | Default `purple`. |
 | `tags` | | Used by the tag filter on `/shows/`. |
 | `tracklist[]` | | `{ artist, title, timestamp? }`. `timestamp` is `M:SS` or `H:MM:SS` and becomes a seek link. |
-| `peaks` | | Array of 0–1 numbers for a real waveform. Generated offline and hidden in the CMS. |
+| `peaks` | | Array of 0–1 numbers for a real waveform. Hidden in the CMS; worked out from the MP3 at build time (see below). |
 | `featured` | | Currently unused, see [loose ends](#known-quirks--loose-ends). |
 | `draft` | | `true` hides it in production. |
 
@@ -198,7 +198,9 @@ The site has a canonical URL, OG/Twitter meta per page (`layouts/Base.astro`), a
 **Adding a show:**
 1. In the CMS, create a new Show.
 2. In the **Audio** field, upload the MP3. It goes straight from your browser to Cloudflare R2 (`audio.deadlydemos.com/shows/…`), never into git, and the field fills in the URL. You can also paste a direct `.mp3` link.
-3. Fill in the episode number, date, hosts, and duration, then save.
+3. Fill in the episode number, date, and hosts, then save. Duration and the waveform are filled in automatically on the next deploy.
+
+**Duration and waveform (`scripts/audio-meta.mjs`):** before each build, CI analyses any show that has an MP3 but no `duration` or `peaks`, using `ffmpeg`. Results go in `.cache/audio-meta.json`, which is kept between runs by the Actions cache and never committed, and `getShows()` in `src/lib/content.ts` merges them in. Each MP3 is analysed once. A value typed into the show file always wins. If it can't analyse a show (e.g. the link is a web page, not an MP3), it logs a warning and the build carries on. Locally it only runs if you call `npm run audio-meta` (needs `ffmpeg`).
 
 **First-time R2 setup for each editor:** uploading needs the R2 *Secret Access Key* for the `cms-audio-upload` token (Object Read & Write on `deadlydemos-audio` only). Get it privately from an admin and paste it into the CMS **Settings** dialog once. It's stored in your browser and never committed. The account ID, bucket and access key ID live in `public/admin/config.yml` and are safe to publish.
 
@@ -213,7 +215,7 @@ New **members** can't be created from the CMS (`create: false`). Add the Markdow
 - manual dispatch (Actions → *Deploy to GitHub Pages* → Run workflow),
 - **every hour** (cron), so the reels row stays fresh and the Instagram token keeps getting refreshed.
 
-Steps: `npm ci` → `npm run build` (output saved to `build.log`) → upload `dist/` → deploy to Pages.
+Steps: `npm ci` → `npm run audio-meta` → `npm run build` (output saved to `build.log`) → upload `dist/` → deploy to Pages.
 
 **When a build fails**, the live site isn't touched, and the workflow opens a GitHub issue titled **"Site build failed"** with the relevant part of the log. If that issue is already open, later failures add comments to it instead of opening new issues. Close the issue once things are fixed.
 
@@ -292,7 +294,6 @@ This is intended, because the player persists across pages. If you add new pages
 - **`featured` on shows is not used.** The homepage mixes the newest 3 shows, 2 articles and 2 playlists by date, whatever the checkbox says.
 - **There's no Spotify API integration.** The workflow passes `SPOTIFY_*` secrets and a schema comment says track data is "fetched at build time", but playlist pages only use the Spotify embed plus the optional hand-written `tracks` list.
 - **`publish_mode: editorial_workflow`** is set in the CMS config, but saves are landing directly on `main`. Treat every CMS save as going live.
-- **`peaks` (waveform data)** has no generator script in the repo yet. It's supposed to be generated offline (e.g. with `audiowaveform`) and pasted in.
 - **Umami analytics** hooks exist in the player, but no Umami script is loaded.
 - `src/lib/socials.ts` → `email` is still a placeholder (`hello@deadlydemos.com`).
 - Show filenames start with a number (`037-…`) that doesn't have to match `episode`. The URL comes from the filename, and the numeral shown comes from `episode`.

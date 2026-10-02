@@ -32,6 +32,24 @@ jobs:
 
       - run: npm ci
 
+      # Duration + waveform for shows with audio, worked out from the MP3 once
+      # and kept in the Actions cache (not the repo). See scripts/audio-meta.mjs.
+      - uses: actions/cache/restore@v4
+        with:
+          path: .cache/audio-meta.json
+          key: audio-meta-${{ github.run_id }}
+          restore-keys: audio-meta-
+
+      - run: npm run audio-meta
+        continue-on-error: true
+
+      - uses: actions/cache/save@v4
+        if: hashFiles('.cache/audio-meta.json') != ''
+        continue-on-error: true
+        with:
+          path: .cache/audio-meta.json
+          key: audio-meta-${{ hashFiles('.cache/audio-meta.json') }}
+
       # Log is kept so a failed build can be reported back in plain sight.
       - run: set -o pipefail; npm run build 2>&1 | tee build.log
         env:
