@@ -74,16 +74,23 @@ const columns = [
     gap: 3rem var(--gutter);
   }
 
-  /* Badge artwork: the purple parts only, drawn black on a transparent PNG
-     so it sits directly on the purple footer. */
+  /* Badge artwork: the purple parts only, drawn black on a transparent PNG.
+     It sits on a brand-purple patch so the black has strong contrast against
+     the dark footer. */
   .foot__badge {
     display: block;
-    width: clamp(7rem, 14vw, 10rem);
+    box-sizing: content-box;
+    width: clamp(6rem, 12vw, 8.5rem);
     aspect-ratio: 942 / 1199;
+    padding: 1.25rem;
+    background-color: var(--lavender);
     background-image: url('/brand/dd-badge-black.png');
     background-size: contain;
-    background-position: left center;
+    background-position: center;
+    background-origin: content-box;
+    background-clip: padding-box;
     background-repeat: no-repeat;
+    border-radius: 1rem;
   }
 
   .foot__tag { margin-top: 1.25rem; }
