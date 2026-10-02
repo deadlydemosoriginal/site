@@ -191,7 +191,7 @@ The site has a canonical URL, OG/Twitter meta per page (`layouts/Base.astro`), a
 
 1. Go to **https://deadlydemos.com/admin** and sign in with GitHub. The account needs write access to `deadlydemosoriginal/site`.
 2. Login goes through a Cloudflare Worker (`sveltia-cms-auth.deadlydemos.workers.dev`), which is a fork of `sveltia/sveltia-cms-auth` backed by a GitHub OAuth app owned by the `deadlydemosoriginal` org.
-3. Saving commits Markdown to `main` (you'll see commits like *Update Show "037-first-broadcast"*). That push triggers a deploy, and the site updates in about 1–2 minutes.
+3. Saving commits Markdown to `main` (you'll see commits like *Update Show "01-first-broadcast"*). That push triggers a deploy, and the site updates in about 1–2 minutes.
 4. Images uploaded in the CMS go to `public/uploads/`.
 
 **Adding a show:**
@@ -292,5 +292,5 @@ This is intended, because the player persists across pages. If you add new pages
 - **`featured` on shows is not used.** The homepage mixes the newest 3 shows, 2 articles and 2 playlists by date, whatever the checkbox says.
 - **CMS saves go live immediately.** There is no editorial workflow, so every CMS save commits straight to `main`.
 - **Umami analytics** hooks exist in the player, but no Umami script is loaded.
-- Show filenames start with a number (`037-…`) that doesn't have to match `episode`. The URL comes from the filename, and the numeral shown comes from `episode`.
+- Show filenames start with a number (`01-…`) that doesn't have to match `episode`. The URL comes from the filename, and the numeral shown comes from `episode`.
 - The loose `Red and Black Square Community Logo (*).png` files in the repo root are source logos and aren't used by the site (the site uses `public/brand/`).
