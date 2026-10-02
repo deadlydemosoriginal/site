@@ -1,6 +1,6 @@
 ---
 title: Rap Battle
-episode: 11
+episode: 10
 date: 2026-10-02
 hosts:
   - liam
