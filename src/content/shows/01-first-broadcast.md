@@ -11,8 +11,6 @@ artwork: ''
 tone: purple
 tags:
   - postpunk
-  - isaac
-  - tom
 tracklist:
   - artist: HMLTD
     title: Is This What You Wanted
