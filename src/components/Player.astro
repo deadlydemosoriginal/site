@@ -218,14 +218,18 @@
     let slug = '';
     let seen = new Set<number>();
 
-    const fmt = (s: number) => {
+    // `like` is the show's length: the current time is written in the same
+    // shape (0:59:59 rather than 59:59 in a 2-hour show, 09:59 in a 45-minute
+    // one) so the readout never changes width and the waveform beside it
+    // doesn't jump when the clock rolls past 10 minutes or an hour.
+    const fmt = (s: number, like = s) => {
       if (!isFinite(s) || s < 0) s = 0;
+      if (!isFinite(like) || like < s) like = s;
       const h = Math.floor(s / 3600);
       const m = Math.floor((s % 3600) / 60);
-      const sec = Math.floor(s % 60);
-      return h > 0
-        ? `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
-        : `${m}:${String(sec).padStart(2, '0')}`;
+      const sec = String(Math.floor(s % 60)).padStart(2, '0');
+      if (like >= 3600) return `${h}:${String(m).padStart(2, '0')}:${sec}`;
+      return `${like >= 600 ? String(m).padStart(2, '0') : m}:${sec}`;
     };
 
     const track = (event: string) => {
@@ -277,7 +281,7 @@
     const paint = () => {
       const d = audio.duration;
       const c = audio.currentTime;
-      curEl.textContent = fmt(c);
+      curEl.textContent = fmt(c, d);
       if (isFinite(d)) durEl.textContent = fmt(d);
       const pct = d ? c / d : 0;
       range.value = String(Math.round(pct * 1000));
