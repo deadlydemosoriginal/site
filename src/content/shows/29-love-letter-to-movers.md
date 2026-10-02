@@ -1,7 +1,7 @@
 ---
 title: Love letter to Movers
 episode: 29
-date: 2026-10-02
+date: 2026-05-02
 hosts:
   - isaac
   - liam
