@@ -1,7 +1,7 @@
 ---
 title: Tim Spackman Special
 episode: 15
-date: 2026-10-02
+date: 2025-11-22
 hosts:
   - isaac
 description: ..n
