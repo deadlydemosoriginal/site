@@ -13,16 +13,22 @@ const routes = [
     cta: email,
   },
   {
-    label: 'Play on the show',
-    body: 'If you want to guest, send a rough idea of what you would play and roughly how long for. Two hours is the usual slot.',
-    action: `mailto:${email}?subject=Guest%20slot`,
-    cta: 'Pitch a guest slot',
+    label: 'Copyright inquiries',
+    body: 'If you are a rights holder and want to get in touch about a track we have used, please do. We will respond promptly.',
+    action: `mailto:${email}?subject=Copyright%20inquiry`,
+    cta: 'Contact us',
   },
   {
     label: 'Everything else',
-    body: 'Corrections, arguments about sequencing, and people who think we got something wrong. Especially those.',
+    body: 'Corrections, arguments about sequencing, and anyone who just wants to say hello.',
     action: `mailto:${email}?subject=Hello`,
     cta: 'Just say hello',
+  },
+  {
+    label: 'Complaints',
+    body: 'If you have a complaint, please let us know. We take all feedback seriously and will do our best to address your concerns.',
+    action: `https://screamintothevoid.com/`,
+    cta: 'File a complaint',
   },
 ];
 
