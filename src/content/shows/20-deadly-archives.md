@@ -9,7 +9,6 @@ hosts:
 description: Trip-hop crossover
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Trip-Hop
 tracklist: []

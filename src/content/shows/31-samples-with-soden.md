@@ -9,7 +9,6 @@ hosts:
 description: heater banger clanger
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Samples
 tracklist: []

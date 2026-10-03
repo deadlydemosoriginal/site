@@ -16,7 +16,10 @@ const tagList = z
     ...new Set(tags.map((t) => t.trim().replace(/\s+/g, ' ').toLowerCase()).filter(Boolean)),
   ]);
 
-/** Palette tones a colour-blocked tile can use. */
+/**
+ * Palette tones a colour-blocked tile can use. Shows, articles and playlists
+ * don't store one: src/lib/content.ts derives it from the slug.
+ */
 const tone = z.enum(['purple', 'ultrasonic', 'periwinkle', 'paper', 'ink']);
 
 const members = defineCollection({
@@ -54,7 +57,6 @@ const shows = defineCollection({
 
     /** Falls back to a procedural colour-blocked cover. */
     artwork: z.string().optional(),
-    tone: tone.default('purple'),
 
     tags: tagList,
     tracklist: z
@@ -89,7 +91,6 @@ const articles = defineCollection({
     date: z.coerce.date(),
     author: reference('members'),
     heroImage: z.string().optional(),
-    tone: tone.default('paper'),
     tags: tagList,
     draft: z.boolean().default(false),
   }),
@@ -108,7 +109,6 @@ const playlists = defineCollection({
       .transform((u) => u.split('?')[0]),
     curator: reference('members'),
     date: z.coerce.date(),
-    tone: tone.default('ultrasonic'),
     draft: z.boolean().default(false),
   }),
 });

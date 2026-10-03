@@ -8,7 +8,6 @@ hosts:
 description: Europe
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - European
   - Experimental

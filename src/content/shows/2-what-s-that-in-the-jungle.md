@@ -7,7 +7,6 @@ hosts:
 description: Jungle
 audioUrl: https://audio.deadlydemos.com/shows/jungle.mp3
 artwork: /uploads/102_1007.JPG
-tone: ultrasonic
 tags:
   - Jungle
   - Ragga

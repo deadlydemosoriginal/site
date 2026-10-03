@@ -9,7 +9,6 @@ hosts:
 description: DDD
 audioUrl: https://audio.deadlydemos.com/shows/deadlydemosdance.mp3
 artwork: ''
-tone: purple
 tags:
   - Dance
   - Electronic

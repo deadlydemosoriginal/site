@@ -77,7 +77,6 @@ collections:
             max_file_size: 300000000
             slugify_filename: true
       - { name: artwork, label: Artwork, widget: image, media_libraries: { cloudflare_r2: false }, required: false, hint: "Optional. Without it, a colour-blocked cover is generated from the episode number." }
-      - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: purple, hint: "Background colour for the cover when there's no artwork." }
       - { name: tags, label: Tags, widget: list, default: [], hint: "Genres or themes, lowercase, separated by commas — e.g. dub, industrial." }
       - name: tracklist
         label: Tracklist
@@ -119,7 +118,6 @@ collections:
         search_fields: [name]
         display_fields: [name]
       - { name: heroImage, label: Hero image, widget: image, media_libraries: { cloudflare_r2: false }, required: false, hint: "Optional. A wide photo works best (landscape, at least 1600px across)." }
-      - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: paper, hint: "Colour of the article's card on the Articles page." }
       - { name: tags, label: Tags, widget: list, default: [], hint: "Lowercase, separated by commas — e.g. essay, review." }
       - { name: draft, label: Draft, widget: boolean, default: false, hint: "Ticked = hidden from the site. Untick when it's ready to go out." }
       - { name: body, label: Body, widget: markdown, hint: "Use the toolbar for headings, bold, links and quotes." }
@@ -145,7 +143,6 @@ collections:
         search_fields: [name]
         display_fields: [name]
       - { name: date, label: Date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMM YYYY", time_format: false, default: "{{now}}" }
-      - { name: tone, label: Colour tone, widget: select, options: [purple, ultrasonic, periwinkle, paper, ink], default: ultrasonic }
       - { name: draft, label: Draft, widget: boolean, default: false, hint: "Ticked = hidden from the site." }
       - { name: body, label: Sleeve note, widget: markdown, required: false, hint: "Optional. A short note about the playlist." }
 

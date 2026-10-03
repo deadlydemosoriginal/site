@@ -7,7 +7,6 @@ hosts:
 description: solo
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Solo Show
   - RnB

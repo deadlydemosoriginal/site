@@ -8,7 +8,6 @@ hosts:
 description: Umqombothi
 audioUrl: https://audio.deadlydemos.com/shows/africa.mp3
 artwork: ''
-tone: ink
 tags:
   - African
   - Afrobeat

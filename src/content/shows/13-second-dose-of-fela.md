@@ -8,7 +8,6 @@ hosts:
 description: Africa part 2
 audioUrl: https://audio.deadlydemos.com/shows/africatwo.mp3
 artwork: ''
-tone: purple
 tags:
   - African
   - Afrobeat

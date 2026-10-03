@@ -9,7 +9,6 @@ hosts:
 description: Tunes
 audioUrl: https://audio.deadlydemos.com/shows/4.%20Soul.mp3
 artwork: ''
-tone: purple
 tags:
   - Soul
 tracklist: []

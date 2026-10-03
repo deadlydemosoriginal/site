@@ -9,7 +9,6 @@ hosts:
 description: heaven on earth
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Dance
   - Pop

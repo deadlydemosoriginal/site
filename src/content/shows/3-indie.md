@@ -8,7 +8,6 @@ hosts:
 description: Indie.
 audioUrl: https://audio.deadlydemos.com/shows/indie.mp3
 artwork: ''
-tone: purple
 tags:
   - Indie
   - Rock

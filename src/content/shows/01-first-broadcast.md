@@ -8,7 +8,6 @@ hosts:
 description: '"Hello hello, happy Saturday." This is where it all began. Isaac and Tom figure out how to do everything.'
 audioUrl: https://audio.deadlydemos.com/shows/1-post-punk-revival.mp3
 artwork: ''
-tone: purple
 tags:
   - postpunk
 tracklist:

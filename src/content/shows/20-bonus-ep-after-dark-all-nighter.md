@@ -8,7 +8,6 @@ hosts:
 description: 3-5am. why.
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Nina Simone
   - Trip-Hop
