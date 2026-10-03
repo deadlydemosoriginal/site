@@ -9,7 +9,6 @@ hosts:
 description: .
 audioUrl: https://audio.deadlydemos.com/shows/wrapped.mp3
 artwork: ''
-tone: periwinkle
 tags:
   - All of us
 tracklist: []

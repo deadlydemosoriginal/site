@@ -9,7 +9,6 @@ hosts:
 description: 4 hour bumper final show
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - tears
 tracklist: []

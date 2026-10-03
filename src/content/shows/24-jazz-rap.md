@@ -8,7 +8,6 @@ hosts:
 description: clues in the name
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Hip-Hop
   - Jazz

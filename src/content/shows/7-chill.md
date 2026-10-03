@@ -9,7 +9,6 @@ hosts:
 description: +Leather
 audioUrl: https://audio.deadlydemos.com/shows/chillfeat.mp3
 artwork: ''
-tone: paper
 tags:
   - Chill
   - LoFi

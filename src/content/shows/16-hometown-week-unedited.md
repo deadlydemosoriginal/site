@@ -12,7 +12,6 @@ description: |-
   Also did Spotify Wrapped.
 audioUrl: https://audio.deadlydemos.com/shows/hometown.mp3
 artwork: ''
-tone: paper
 tags:
   - dance
   - grime

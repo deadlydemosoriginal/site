@@ -7,7 +7,6 @@ hosts:
 description: Tom and Gemma
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Experimental
 tracklist: []

@@ -9,7 +9,6 @@ hosts:
 description: summer
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Dance
 tracklist: []

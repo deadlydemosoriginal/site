@@ -9,7 +9,6 @@ hosts:
 description: DD uni recap show
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - dk
 tracklist: []

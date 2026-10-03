@@ -9,7 +9,6 @@ hosts:
 description: Looking at what 2026 has to explore
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - not a clue
 tracklist: []

@@ -8,7 +8,6 @@ hosts:
 description: Deadly Demos goes mainstream.
 audioUrl: https://audio.deadlydemos.com/shows/ddgomainstream.mp3
 artwork: ''
-tone: purple
 tags:
   - Pop
   - Rock

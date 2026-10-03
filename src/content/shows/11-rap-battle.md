@@ -8,7 +8,6 @@ hosts:
 description: .
 audioUrl: https://audio.deadlydemos.com/shows/rapbattle.mp3
 artwork: ''
-tone: purple
 tags:
   - Hip-Hop
   - West Coast Rap

@@ -117,7 +117,7 @@ A page's slug is its filename without `.md`. For example, `src/content/shows/042
 
 Schemas are defined in `src/content.config.ts`. **The CMS field definitions in `public/admin/config.yml` mirror them by hand, so if you change one, change the other.**
 
-Each collection supports a palette tone: `purple`, `ultrasonic`, `periwinkle`, `paper`, or `ink`.
+Shows, articles and playlists get a palette tone (`purple`, `ultrasonic`, `periwinkle`, `paper`, or `ink`) automatically, derived from the slug, so there's nothing to pick.
 
 ### shows
 
@@ -131,7 +131,6 @@ Each collection supports a palette tone: `purple`, `ultrasonic`, `periwinkle`, `
 | `audioUrl` | | Must be a **direct, playable audio URL** (an R2 MP3). If it's missing, no play button is shown. |
 | `duration` | | `HH:MM:SS` exactly (e.g. `01:55:50`). If left blank, it's worked out from the MP3 at build time. |
 | `artwork` | | Image path. If absent, a colour-blocked cover is generated. |
-| `tone` | | Default `purple`. |
 | `tags` | | Used by the tag filter on `/shows/`. |
 | `tracklist[]` | | `{ artist, title, timestamp? }`. `timestamp` is `M:SS` or `H:MM:SS` and becomes a seek link. |
 | `peaks` | | Array of 0–1 numbers for a real waveform. Hidden in the CMS; worked out from the MP3 at build time (see below). |
@@ -140,11 +139,11 @@ Each collection supports a palette tone: `purple`, `ultrasonic`, `periwinkle`, `
 
 ### articles
 
-`title`, `standfirst`, `date`, and `author` (a member slug) are required. `heroImage`, `tone` (default `paper`), `tags`, and `draft` are optional. The body is Markdown.
+`title`, `standfirst`, `date`, and `author` (a member slug) are required. `heroImage`, `tags`, and `draft` are optional. The body is Markdown.
 
 ### playlists
 
-`title`, `description`, `spotifyUrl` (must be an `open.spotify.com/playlist/...` link), `curator` (a member slug), and `date` are required. `tone` (default `ultrasonic`) and `draft` are optional. The page embeds Spotify's player using the ID parsed from `spotifyUrl`, so there is no tracklist to type.
+`title`, `description`, `spotifyUrl` (must be an `open.spotify.com/playlist/...` link), `curator` (a member slug), and `date` are required. `draft` is optional. The page embeds Spotify's player using the ID parsed from `spotifyUrl`, so there is no tracklist to type.
 
 ### members
 

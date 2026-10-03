@@ -9,7 +9,6 @@ hosts:
 description: fuck off
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Dance
 tracklist: []

@@ -7,7 +7,6 @@ hosts:
 description: y
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - House
   - Dance

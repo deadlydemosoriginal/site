@@ -9,7 +9,6 @@ hosts:
 description: Valentines and soul. system was fucked
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Soul
 tracklist: []

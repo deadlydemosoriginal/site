@@ -9,7 +9,6 @@ hosts:
 description: a song from every day of the month
 audioUrl: ''
 artwork: ''
-tone: purple
 tags:
   - Christmas
 tracklist: []

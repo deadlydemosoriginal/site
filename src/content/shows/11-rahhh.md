@@ -8,7 +8,6 @@ hosts:
 description: Garage
 audioUrl: https://audio.deadlydemos.com/shows/garage.mp3
 artwork: ''
-tone: purple
 tags:
   - Garage
   - Dance

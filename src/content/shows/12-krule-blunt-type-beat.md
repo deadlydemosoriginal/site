@@ -8,7 +8,6 @@ hosts:
 description: k
 audioUrl: https://audio.deadlydemos.com/shows/kruleblunttypebeat.mp3
 artwork: ''
-tone: purple
 tags:
   - LoFI
   - Experimental

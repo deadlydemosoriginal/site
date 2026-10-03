@@ -22,26 +22,44 @@ function loadAudioMeta(): AudioMeta {
   return audioMeta!;
 }
 
+const TONES = ['purple', 'ultrasonic', 'periwinkle', 'paper', 'ink'] as const;
+
+/**
+ * Colour for an entry's cover/tile. Editors don't pick one: it's a hash of the
+ * slug, so it looks random across the site but never changes between builds
+ * or between an entry's list card and its page.
+ */
+export function toneFor(id: string): (typeof TONES)[number] {
+  let h = 0;
+  for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return TONES[h % TONES.length]!;
+}
+
+const withTone = <T extends { id: string; data: object }>(e: T) => ({
+  ...e,
+  data: { ...e.data, tone: toneFor(e.id) },
+});
+
 export async function getShows() {
   const meta = loadAudioMeta();
   const shows = (await getCollection('shows', visible)).map((show) => {
     const m = show.data.audioUrl ? meta[show.data.audioUrl] : undefined;
-    if (!m) return show;
-    return {
+    if (!m) return withTone(show);
+    return withTone({
       ...show,
       data: { ...show.data, duration: show.data.duration || m.duration, peaks: show.data.peaks?.length ? show.data.peaks : m.peaks },
-    };
+    });
   });
   return shows.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
 export async function getArticles() {
-  const articles = await getCollection('articles', visible);
+  const articles = (await getCollection('articles', visible)).map(withTone);
   return articles.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
 export async function getPlaylists() {
-  const playlists = await getCollection('playlists', visible);
+  const playlists = (await getCollection('playlists', visible)).map(withTone);
   return playlists.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
