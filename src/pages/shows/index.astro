@@ -4,7 +4,11 @@ import Cover from '../../components/Cover.astro';
 import { getShows, resolveMembers, formatDate, collectTags } from '../../lib/content';
 
 const shows = await getShows();
-const tags = collectTags(shows);
+const allTags = collectTags(shows);
+// Frequency-ordered, so the head is the "top used" row and the rest go in the More menu.
+const TOP_TAGS = 8;
+const topTags = allTags.slice(0, TOP_TAGS);
+const moreTags = allTags.slice(TOP_TAGS);
 
 const rows = await Promise.all(
   shows.map(async (show) => ({
@@ -33,11 +37,31 @@ const rows = await Promise.all(
   <section class="shell filters">
     <div class="filters__row" role="group" aria-label="Filter shows by tag">
       <button class="chip" type="button" data-filter="*" aria-pressed="true">All</button>
-      {tags.map(({ tag, count }) => (
+      {topTags.map(({ tag, count }) => (
         <button class="chip" type="button" data-filter={tag} aria-pressed="false">
           {tag} <span class="chip__count">{count}</span>
         </button>
       ))}
+      {moreTags.length > 0 && (
+        <div class="more">
+          <button
+            class="chip more__toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="more-tags"
+            data-more-toggle
+          >
+            <span data-more-label>More</span> <span class="chip__count">{moreTags.length}</span> <span aria-hidden="true">▾</span>
+          </button>
+          <div class="more__panel" id="more-tags" hidden>
+            {moreTags.map(({ tag, count }) => (
+              <button class="chip" type="button" data-filter={tag} aria-pressed="false">
+                {tag} <span class="chip__count">{count}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   </section>
 
@@ -131,6 +155,28 @@ const rows = await Promise.all(
   }
   .chip__count { opacity: 0.5; }
 
+  .more { position: relative; }
+  .more__toggle[data-has-selection='true'] {
+    border-color: var(--fg);
+    color: var(--fg);
+  }
+  .more__panel {
+    position: absolute;
+    z-index: 5;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    width: min(32rem, calc(100vw - 2 * var(--gutter)));
+    max-height: 18rem;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: var(--ink);
+    border: 1px solid var(--rule);
+  }
+  .more__panel[hidden] { display: none; }
+
   .list { list-style: none; padding: 0; margin: 0; }
 
   .row {
@@ -214,12 +260,31 @@ const rows = await Promise.all(
     const chips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
     const rows = document.querySelectorAll<HTMLLIElement>('#show-list .row');
     const empty = document.getElementById('show-empty');
+    const toggle = document.querySelector<HTMLButtonElement>('[data-more-toggle]');
+    const label = document.querySelector<HTMLElement>('[data-more-label]');
+    const panel = document.getElementById('more-tags');
     if (!chips.length || !rows.length) return;
 
+    const setPanel = (open: boolean) => {
+      if (!toggle || !panel) return;
+      panel.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+    // Assigned, not added: init runs twice on first load.
+    if (toggle) toggle.onclick = () => setPanel(panel!.hidden);
+
     chips.forEach((chip) => {
-      chip.addEventListener('click', () => {
+      chip.onclick = () => {
         const want = chip.dataset.filter!;
         chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+
+        // Surface a tag picked from the overflow menu on the toggle itself.
+        const fromMore = !!panel?.contains(chip);
+        if (toggle && label) {
+          label.textContent = fromMore ? want : 'More';
+          toggle.dataset.hasSelection = String(fromMore);
+        }
+        setPanel(false);
 
         let shown = 0;
         rows.forEach((row) => {
@@ -229,9 +294,27 @@ const rows = await Promise.all(
           if (match) shown++;
         });
         if (empty) empty.hidden = shown > 0;
-      });
+      };
     });
   }
+
+  // Registered once (not per navigation); looks the menu up fresh each time.
+  document.addEventListener('click', (e) => {
+    const panel = document.getElementById('more-tags');
+    if (panel && !panel.hidden && !(e.target as Element).closest('.more')) {
+      panel.hidden = true;
+      document.querySelector('[data-more-toggle]')?.setAttribute('aria-expanded', 'false');
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    const panel = document.getElementById('more-tags');
+    if (e.key === 'Escape' && panel && !panel.hidden) {
+      panel.hidden = true;
+      const toggle = document.querySelector<HTMLButtonElement>('[data-more-toggle]');
+      toggle?.setAttribute('aria-expanded', 'false');
+      toggle?.focus();
+    }
+  });
 
   initShowFilter();
   document.addEventListener('astro:page-load', initShowFilter);
