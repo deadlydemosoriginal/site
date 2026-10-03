@@ -11,6 +11,7 @@ on:
 permissions:
   contents: read
   issues: write
+  actions: write
   pages: write
   id-token: write
 
@@ -23,6 +24,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # GitHub switches scheduled workflows off after 60 days without repo
+      # activity, which would also stop the Instagram token being refreshed.
+      # Re-enabling the workflow on every scheduled run resets that timer.
+      - name: Keep the schedule alive
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/deploy.yml/enable"
+        continue-on-error: true
+
       - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v7
@@ -95,6 +106,36 @@ jobs:
             gh issue comment "$existing" --body-file report.md
           else
             gh issue create --title "Site build failed" --body-file report.md
+          fi
+
+      # The reels loader swallows Instagram errors (the row just disappears),
+      # so surface them here: open an issue when the fetch fails, close it
+      # again once posts load.
+      - name: Report Instagram status
+        if: always() && hashFiles('build.log') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list --state open --search 'in:title "Instagram reels not loading"' --json number --jq '.[0].number')
+          if grep -q 'Instagram fetch failed' build.log; then
+            {
+              echo "The homepage reels row is hidden because the Instagram fetch failed."
+              echo
+              echo "Usually the access token has expired or been revoked. Generate a new one in the Meta developer dashboard and update the \`INSTAGRAM_ACCESS_TOKEN\` repo secret."
+              echo
+              echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              echo
+              echo '```'
+              grep 'Instagram fetch failed' build.log | head -n 3
+              echo '```'
+            } > ig.md
+            if [ -n "$existing" ]; then
+              gh issue comment "$existing" --body-file ig.md
+            else
+              gh issue create --title "Instagram reels not loading" --body-file ig.md
+            fi
+          elif grep -q 'Loaded .* posts from Instagram' build.log && [ -n "$existing" ]; then
+            gh issue close "$existing" --comment "Instagram posts are loading again."
           fi
 
       - uses: actions/upload-pages-artifact@v5
