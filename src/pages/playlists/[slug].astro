@@ -12,6 +12,7 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const curator = await getEntry('members', entry.data.curator.id);
 const d = entry.data;
+const hasNote = Boolean(entry.body?.trim());
 
 /** Spotify playlist id, for the embed. */
 const spotifyId = d.spotifyUrl.split('/playlist/')[1]?.split('?')[0] ?? '';
@@ -44,8 +45,12 @@ const spotifyId = d.spotifyUrl.split('/playlist/')[1]?.split('?')[0] ?? '';
       )}
 
       <div class="body__notes">
-        <h2 class="meta body__label">Sleeve note</h2>
-        <div class="prose"><Content /></div>
+        {hasNote && (
+          <>
+            <h2 class="meta body__label">Sleeve note</h2>
+            <div class="prose"><Content /></div>
+          </>
+        )}
 
         <a class="spotify" href={d.spotifyUrl} target="_blank" rel="noopener noreferrer">
           Open in Spotify ↗
