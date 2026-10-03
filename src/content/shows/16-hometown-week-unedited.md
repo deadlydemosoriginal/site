@@ -18,7 +18,7 @@ tags:
   - grime
   - rock
   - pop
-  - east-coast rap
+  - east coast rap
   - goth
   - jungle
   - rave

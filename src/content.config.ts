@@ -5,6 +5,17 @@ import { glob, type Loader } from 'astro/loaders';
 const blankToUndefined = (value: unknown) =>
   typeof value === 'string' && value.trim() === '' ? undefined : value;
 
+/**
+ * Tags are matched exactly by the filter chips, so "Dance" and "dance" would
+ * show up as two tags. Normalise to trimmed lowercase and drop repeats.
+ */
+const tagList = z
+  .array(z.string())
+  .default([])
+  .transform((tags) => [
+    ...new Set(tags.map((t) => t.trim().replace(/\s+/g, ' ').toLowerCase()).filter(Boolean)),
+  ]);
+
 /** Palette tones a colour-blocked tile can use. */
 const tone = z.enum(['purple', 'ultrasonic', 'periwinkle', 'paper', 'ink']);
 
@@ -45,7 +56,7 @@ const shows = defineCollection({
     artwork: z.string().optional(),
     tone: tone.default('purple'),
 
-    tags: z.array(z.string()).default([]),
+    tags: tagList,
     tracklist: z
       .array(
         z.object({
@@ -79,7 +90,7 @@ const articles = defineCollection({
     author: reference('members'),
     heroImage: z.string().optional(),
     tone: tone.default('paper'),
-    tags: z.array(z.string()).default([]),
+    tags: tagList,
     draft: z.boolean().default(false),
   }),
 });
