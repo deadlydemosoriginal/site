@@ -1,5 +1,5 @@
 ---
-title: Hometown Week (This and everything after hasn't been edited yet)
+title: Take Me Home
 episode: 16
 date: 2025-12-06
 hosts:
@@ -7,9 +7,10 @@ hosts:
   - liam
   - tom
 description: |-
+  Hometown Week.
   Yorkshire vs North West vs North London. Categories style show.
   Also did Spotify Wrapped.
-audioUrl: ''
+audioUrl: https://audio.deadlydemos.com/shows/hometown.mp3
 artwork: ''
 tone: paper
 tags:
