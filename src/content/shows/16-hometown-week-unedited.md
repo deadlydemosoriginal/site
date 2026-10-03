@@ -14,8 +14,14 @@ audioUrl: https://audio.deadlydemos.com/shows/hometown.mp3
 artwork: /uploads/IMG_6752.jpeg
 tone: paper
 tags:
-  - Dance
-  - Grime
+  - dance
+  - grime
+  - rock
+  - pop
+  - east-coast rap
+  - goth
+  - jungle
+  - rave
 tracklist:
   - artist: Skepta, JME
     title: That's Not Me
