@@ -11,7 +11,7 @@ description: |-
   Also did Spotify Wrapped.
 audioUrl: ''
 artwork: ''
-tone: purple
+tone: paper
 tags:
   - Dance
   - Grime
