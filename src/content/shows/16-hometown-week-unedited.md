@@ -11,7 +11,7 @@ description: |-
   Yorkshire vs North West vs North London. Categories style show.
   Also did Spotify Wrapped.
 audioUrl: https://audio.deadlydemos.com/shows/hometown.mp3
-artwork: /uploads/IMG_6752.jpeg
+artwork: ''
 tone: paper
 tags:
   - dance
