@@ -6,7 +6,9 @@ hosts:
   - isaac
   - liam
   - tom
-description: Yorkshire vs North West vs North London
+description: |-
+  Yorkshire vs North West vs North London. Categories style show.
+  Also did Spotify Wrapped.
 audioUrl: ''
 artwork: ''
 tone: purple
