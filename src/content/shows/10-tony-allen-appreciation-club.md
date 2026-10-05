@@ -5,7 +5,7 @@ date: 2025-05-24
 hosts:
   - liam
   - isaac
-description: Umqombothi
+description: A tour of Africa
 audioUrl: https://audio.deadlydemos.com/shows/africa.mp3
 artwork: ''
 tags:
