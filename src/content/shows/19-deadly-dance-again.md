@@ -6,7 +6,7 @@ hosts:
   - isaac
   - liam
   - tom
-description: fuck off
+description: p
 audioUrl: ''
 artwork: ''
 tags:
