@@ -8,6 +8,8 @@ links:
     url: https://www.instagram.com/isaac.spackman?stkn=d2M1YmtxZDFpNGF3&utm_source=qr
   - label: Spotify
     url: https://open.spotify.com/user/y69i9958aem3qdjj6rwxklvcu?si=3RVBwlJlS0CD-z23eV2f_A&utm_source=copy-link
+  - label: LinkedIn
+    url: https://www.linkedin.com/in/isaac-spackman-665a00331?utm_source=share_via&utm_content=profile&utm_medium=member_ios
   - label: E-mail
     url: mailto:isaac@deadlydemos.com
 ---
