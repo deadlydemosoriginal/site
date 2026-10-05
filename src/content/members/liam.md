@@ -2,10 +2,8 @@
 name: Liam
 role: Words, arguments, and most of the writing
 order: 2
-photo: /uploads/IMG_3955.jpeg
-links:
-  - label: My Wikipedia
-    url: https://en.wikipedia.org/wiki/Graeme_Dott
+photo: ''
+links: []
 ---
 
 GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED GEED
