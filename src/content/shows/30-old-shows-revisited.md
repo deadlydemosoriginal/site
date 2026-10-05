@@ -6,7 +6,7 @@ hosts:
   - isaac
   - liam
   - tom
-description: Valentines and soul. system was fucked
+description: Valentines and soul. system was buggered
 audioUrl: ''
 artwork: ''
 tags:
