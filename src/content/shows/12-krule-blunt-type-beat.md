@@ -5,7 +5,7 @@ date: 2025-10-18
 hosts:
   - isaac
   - tom
-description: Tom and Isaac return again for a show which was a long time coming, giving the limelight to the more ambient and experimental artists this show has took a shine to in King Krule and Dean Blunt and the other aliases and artists that accompany them.
+description: Tom and Isaac return again for a show which was a long time coming, giving the limelight to the more ambient and experimental artists this show has took a shine to, in King Krule and Dean Blunt , along with the other aliases and artists that accompany them.
 audioUrl: https://audio.deadlydemos.com/shows/kruleblunttypebeat.mp3
 artwork: ''
 tags:
