@@ -34,7 +34,7 @@ tracklist:
   - artist: The Rolling Stones
     title: Sympathy For The Devil
     timestamp: ''
-  - artist: The Notorious B.I.G., Lil' Kim, P. D*ddy
+  - artist: The Notorious B.I.G., Lil' Kim, *****
     title: Notorious B.I.G.
     timestamp: ''
   - artist: Eagles
