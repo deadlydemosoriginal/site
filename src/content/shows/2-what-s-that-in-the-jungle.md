@@ -4,7 +4,7 @@ episode: 2
 date: 2024-12-14
 hosts:
   - isaac
-description: Jungle
+description: An ode to Goldie
 audioUrl: https://audio.deadlydemos.com/shows/jungle.mp3
 artwork: /uploads/102_1007.JPG
 tags:
