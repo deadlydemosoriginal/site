@@ -6,7 +6,7 @@ hosts:
   - isaac
   - liam
   - tom
-description: A Christmas show with a twist.
+description: A Christmas show with a twist...
 audioUrl: https://audio.deadlydemos.com/shows/adventcalendar.mp3
 artwork: ''
 tags:
