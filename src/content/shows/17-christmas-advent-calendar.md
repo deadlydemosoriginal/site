@@ -83,7 +83,7 @@ tracklist:
     title: About A Girl
     timestamp: ''
 duration: ''
-featured: false
+featured: true
 draft: false
 ---
 
