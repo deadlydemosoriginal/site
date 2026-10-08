@@ -87,6 +87,6 @@ featured: false
 draft: false
 ---
 
-Welcome to the Deadly Demos advent calendar show! Christmas songs can get a bit monotonous so we decided for this year's festive season we'd put a deadly twist on the advent calendar. Enjoy singles/albums released on (almost) every day of December.
+Welcome to the Deadly Demos advent calendar show. Christmas songs can get a bit monotonous so we decided for this year's festive season we'd put a deadly twist on the advent calendar. Enjoy singles/albums released on (almost) every day of December.
 
 This one took a lot of research and we locked in big time so let us know if you enjoy!
