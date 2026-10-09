@@ -6,7 +6,7 @@ hosts:
   - isaac
   - liam
   - tom
-description: p
+description: Getting groovy
 audioUrl: https://audio.deadlydemos.com/shows/deadlydanceagain.mp3
 artwork: ''
 tags:
