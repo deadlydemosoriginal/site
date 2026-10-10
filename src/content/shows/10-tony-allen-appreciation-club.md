@@ -36,6 +36,21 @@ tracklist:
   - artist: Basa Basa
     title: Love, Love, Love
     timestamp: ''
+  - artist: Ebo Taylor
+    title: Heaven
+    timestamp: ''
+  - artist: The Lijadu Sisters
+    title: Orere-Elejigbo
+    timestamp: ''
+  - artist: Carthago
+    title: Alech
+    timestamp: ''
+  - artist: Freh Kodja
+    title: La Coladera
+    timestamp: ''
+  - artist: Kamal Keila
+    title: Agricultural Revolution
+    timestamp: ''
 duration: ''
 featured: false
 draft: false
