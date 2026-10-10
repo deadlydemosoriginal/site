@@ -9,7 +9,8 @@ description: '"Hello hello, happy Saturday." This is where it all began. Isaac a
 audioUrl: https://audio.deadlydemos.com/shows/1-post-punk-revival.mp3
 artwork: ''
 tags:
-  - postpunk
+  - post-punk
+  - christmas
 tracklist:
   - artist: HMLTD
     title: Is This What You Wanted
