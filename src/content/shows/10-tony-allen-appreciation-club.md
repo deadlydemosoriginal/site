@@ -14,7 +14,10 @@ tags:
   - Soul
   - Funk
   - Pop
-tracklist: []
+tracklist:
+  - artist: Tony Allen
+    title: Afrodisco Beat
+    timestamp: ''
 duration: ''
 featured: false
 draft: false
