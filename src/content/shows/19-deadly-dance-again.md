@@ -6,7 +6,7 @@ hosts:
   - isaac
   - liam
   - tom
-description: Getting groovy
+description: Production of the century
 audioUrl: https://audio.deadlydemos.com/shows/deadlydanceagain.mp3
 artwork: ''
 tags:
@@ -17,4 +17,4 @@ featured: false
 draft: false
 ---
 
-Production of the year
+I fucking went off with this edit
