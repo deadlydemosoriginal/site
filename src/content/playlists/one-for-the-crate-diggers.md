@@ -1,5 +1,5 @@
 ---
-title: One for the crate diggers
+title: One For The Crate Diggers
 description: Deep cuts inspired by Movers
 spotifyUrl: https://open.spotify.com/playlist/6WQdLuHlxRl6qD0S2F5Fvb?si=8FS483VmR7ifPh7kIG2EvA&utm_source=copy-link&pi=wHFnlwmDTNWB5
 curator: isaac
