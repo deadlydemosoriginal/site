@@ -5,7 +5,7 @@ date: 2025-05-24
 hosts:
   - liam
   - isaac
-description: A tour of Africa
+description: Isaac and Liam stayed up til 2:30am the night before this show researching the deepest goldmines of African music and jamming out in the kitchen. Come on a tour of Africa with us to relive that experience.
 audioUrl: https://audio.deadlydemos.com/shows/africa.mp3
 artwork: ''
 tags:
