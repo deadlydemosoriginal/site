@@ -11,6 +11,8 @@ artwork: ''
 tags:
   - post-punk
   - christmas
+  - experimental
+  - rock
 tracklist:
   - artist: HMLTD
     title: Is This What You Wanted
