@@ -33,6 +33,9 @@ tracklist:
   - artist: Freedom Family
     title: Lala Li
     timestamp: ''
+  - artist: Basa Basa
+    title: Love, Love, Love
+    timestamp: ''
 duration: ''
 featured: false
 draft: false
