@@ -18,6 +18,21 @@ tracklist:
   - artist: Tony Allen
     title: Afrodisco Beat
     timestamp: ''
+  - artist: Yannis & The Yaw, Tony Allen
+    title: Under The Strikes
+    timestamp: ''
+  - artist: Lucky Dube
+    title: House of Exile
+    timestamp: ''
+  - artist: Oliver Mtukudzi
+    title: Wasakara
+    timestamp: ''
+  - artist: E.T. Mensah
+    title: Ghana-Guinea-Mali
+    timestamp: ''
+  - artist: Freedom Family
+    title: Lala Li
+    timestamp: ''
 duration: ''
 featured: false
 draft: false
