@@ -2,7 +2,7 @@
 name: Isaac
 role: Records, racket, and the tape machine
 order: 1
-photo: ''
+photo: /uploads/IMG_1707.jpeg
 links:
   - label: Instagram
     url: https://www.instagram.com/isaac.spackman?stkn=d2M1YmtxZDFpNGF3&utm_source=qr
