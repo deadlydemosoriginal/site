@@ -1,6 +1,6 @@
 ---
 name: Isaac
-role: Founding father, the ideas guy
+role: Founding father
 order: 1
 photo: /uploads/IMG_1707.jpeg
 links:
