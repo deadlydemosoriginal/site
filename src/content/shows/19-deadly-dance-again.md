@@ -10,7 +10,10 @@ description: Deadly Dance comes back for it's second instalment with smoother tr
 audioUrl: https://audio.deadlydemos.com/shows/deadlydanceagain.mp3
 artwork: ''
 tags:
-  - Dance
+  - dance
+  - jungle
+  - experimental
+  - electronic
 tracklist:
   - artist: Mall Grab
     title: Love Reigns
