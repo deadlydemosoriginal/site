@@ -10,9 +10,10 @@ description: Friend of the show Leather becomes our first ever guest on our chil
 audioUrl: https://audio.deadlydemos.com/shows/chillfeat.mp3
 artwork: ''
 tags:
-  - Chill
-  - LoFi
-  - Hip-Hop
+  - chill
+  - lofi
+  - hip-hop
+  - collab
 tracklist:
   - artist: Loyle Carner
     title: Looking Back
