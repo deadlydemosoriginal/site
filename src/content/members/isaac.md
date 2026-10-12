@@ -1,6 +1,6 @@
 ---
 name: Isaac
-role: Records, racket, and the tape machine
+role: Founding father, the ideas guy
 order: 1
 photo: /uploads/IMG_1707.jpeg
 links:
