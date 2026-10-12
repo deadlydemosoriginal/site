@@ -6,7 +6,7 @@ hosts:
   - isaac
   - liam
   - tom
-description: Deadly Dance comes back for it's second instalment with smoother transitions, four different themes, bouncing tunes and some serious deadly demos enthusiasm.
+description: Deadly Dance comes back for it's second instalment with smoother transitions, four different themes, bouncing tunes and some serious Deadly Demos enthusiasm.
 audioUrl: https://audio.deadlydemos.com/shows/deadlydanceagain.mp3
 artwork: ''
 tags:
