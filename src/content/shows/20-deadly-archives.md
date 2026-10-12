@@ -7,10 +7,12 @@ hosts:
   - liam
   - tom
 description: Crossover of the century
-audioUrl: ''
+audioUrl: https://audio.deadlydemos.com/shows/deadlyarchives.mp3
 artwork: ''
 tags:
   - trip-hop
+  - experimental
+  - collab
 tracklist:
   - artist: Massive Attack, Shara Nelson
     title: Safe From Harm
