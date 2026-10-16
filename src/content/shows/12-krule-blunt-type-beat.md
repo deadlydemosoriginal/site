@@ -9,8 +9,8 @@ description: Tom and Isaac return again for a show which was a long time coming,
 audioUrl: https://audio.deadlydemos.com/shows/kruleblunttypebeat.mp3
 artwork: ''
 tags:
-  - LoFI
-  - Experimental
+  - lofI
+  - experimental
 tracklist:
   - artist: King Krule
     title: Stoned Again
