@@ -3,7 +3,7 @@ title: Welcome
 standfirst: It's the start of a new era. The Deadly Demos internet takeover. The radio show will still carry on as usual this year, but now we're branching out. Socials, articles, curated playlists, who knows what else? We might even reprise the Deadly Demos Podcast.
 date: 2026-10-16
 author: isaac
-heroImage: ''
+heroImage: /uploads/IMG_0186.jpeg
 tags:
   - info
 draft: false
