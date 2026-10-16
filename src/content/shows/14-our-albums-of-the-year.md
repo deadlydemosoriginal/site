@@ -9,10 +9,76 @@ description: The Student Radio Awards have just happened, and the lads have deci
 audioUrl: https://audio.deadlydemos.com/shows/ddgomainstream.mp3
 artwork: ''
 tags:
-  - Pop
-  - Rock
-  - Hip-Hop
-tracklist: []
+  - pop
+  - rock
+  - hip-hop
+  - hardcore
+  - indie
+  - dance
+tracklist:
+  - artist: Maruja
+    title: The Invisible Man
+    timestamp: ''
+  - artist: English Teacher
+    title: Nearly Daffodils
+    timestamp: ''
+  - artist: Takuya Nakamura
+    title: Liquid Kid
+    timestamp: ''
+  - artist: The Murder Capital
+    title: Words Lost Meaning
+    timestamp: ''
+  - artist: Black Star
+    title: Definition
+    timestamp: ''
+  - artist: Freddie Gibbs, The Alchemist
+    title: Ensalada (feat. Anderson .Paak)
+    timestamp: ''
+  - artist: Pulp
+    title: Spike Island
+    timestamp: ''
+  - artist: Elvis Presley
+    title: In the Ghetto
+    timestamp: ''
+  - artist: Little River Band
+    title: Reminiscing
+    timestamp: ''
+  - artist: Dean Blunt, Elias Rønnenfelt
+    title: '2'
+    timestamp: ''
+  - artist: Clipse
+    title: So Be It
+    timestamp: ''
+  - artist: Turnstile
+    title: Seein' Stars
+    timestamp: ''
+  - artist: Skin On Skin, Nia Archives
+    title: Burn Dem Bridges (Nia Archives Edit)
+    timestamp: ''
+  - artist: Tyler, The Creator
+    title: 911/Mr Lonely (feat. Frank Ocean, Steve Lacy)
+    timestamp: ''
+  - artist: The Prodigy
+    title: Take Me to the Hospital
+    timestamp: ''
+  - artist: Wet Leg
+    title: CPR
+    timestamp: ''
+  - artist: The XX
+    title: On Hold
+    timestamp: ''
+  - artist: Gorillaz
+    title: Garage Palace (feat. Little Simz)
+    timestamp: ''
+  - artist: Geese
+    title: Cobra
+    timestamp: ''
+  - artist: Maruja
+    title: Break the Tension
+    timestamp: ''
+  - artist: Maruja
+    title: Born to Die
+    timestamp: ''
 duration: ''
 featured: false
 draft: false
