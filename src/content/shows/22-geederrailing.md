@@ -1,6 +1,6 @@
 ---
 title: Geederrailing
-episode: 22
+episode: 21
 date: 2026-02-21
 hosts:
   - liam
