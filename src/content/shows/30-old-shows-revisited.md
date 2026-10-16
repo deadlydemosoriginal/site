@@ -1,6 +1,6 @@
 ---
 title: Old Shows Revisited
-episode: 30
+episode: 29
 date: 2026-05-16
 hosts:
   - isaac
