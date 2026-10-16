@@ -15,6 +15,7 @@ tags:
   - hardcore
   - indie
   - dance
+  - punk
 tracklist:
   - artist: Maruja
     title: The Invisible Man
