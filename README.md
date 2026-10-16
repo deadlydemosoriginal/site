@@ -105,7 +105,7 @@ src/
 | `/articles/`, `/articles/<slug>/` | `pages/articles/` |
 | `/playlists/`, `/playlists/<slug>/` | `pages/playlists/` (Spotify embed) |
 | `/about/` | `pages/about.astro` (members, sorted by `order`) |
-| `/contact/` | `pages/contact.astro` |
+| ~~`/contact/`~~ | `pages/_contact.astro`: parked, not built (drop the `_` and restore the nav/footer links to bring it back) |
 | `/og/default.png`, `/og/shows/<slug>.png`, `/og/articles/<slug>.png` | Generated social share images |
 | `/sitemap-index.xml` | `@astrojs/sitemap` (excludes `/admin`) |
 
