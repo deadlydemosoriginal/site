@@ -5,7 +5,7 @@ date: 2026-02-10
 hosts:
   - liam
   - isaac
-description: 3-5am. why.
+description: 3-5am, who thought that was a good idea?
 audioUrl: https://audio.deadlydemos.com/shows/allnighter.mp3
 artwork: ''
 tags:
