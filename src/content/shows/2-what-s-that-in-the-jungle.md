@@ -8,9 +8,9 @@ description: An ode to Goldie
 audioUrl: https://audio.deadlydemos.com/shows/jungle.mp3
 artwork: /uploads/102_1007.JPG
 tags:
-  - Jungle
-  - Ragga
-  - DnB
+  - jungle
+  - dance
+  - dub
 tracklist:
   - artist: The House Crew
     title: Keep The Fire Burning
