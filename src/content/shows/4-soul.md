@@ -10,7 +10,8 @@ description: An all timer, the lads find their feet.
 audioUrl: https://audio.deadlydemos.com/shows/4.%20Soul.mp3
 artwork: ''
 tags:
-  - Soul
+  - soul
+  - funk
 tracklist:
   - artist: Marvin Gaye
     title: What's Going On
