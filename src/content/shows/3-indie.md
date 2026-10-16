@@ -9,8 +9,8 @@ description: The absolute Indie essentials.
 audioUrl: https://audio.deadlydemos.com/shows/indie.mp3
 artwork: ''
 tags:
-  - Indie
-  - Rock
+  - indie
+  - rock
 tracklist:
   - artist: Fontaines D.C.
     title: Romance
