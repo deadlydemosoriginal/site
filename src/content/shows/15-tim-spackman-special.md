@@ -46,6 +46,39 @@ tracklist:
   - artist: Iggy & The Stooges
     title: Search and Destroy
     timestamp: ''
+  - artist: Black Country, New Road
+    title: Concorde
+    timestamp: ''
+  - artist: Pulp
+    title: Something Changed
+    timestamp: ''
+  - artist: Pulp
+    title: Live Bed Show
+    timestamp: ''
+  - artist: Mac DeMarco
+    title: Let Her Go
+    timestamp: ''
+  - artist: Geese
+    title: Trinidad
+    timestamp: ''
+  - artist: Radiohead
+    title: Exit Music (For A Film)
+    timestamp: ''
+  - artist: Radiohead
+    title: Idioteque
+    timestamp: ''
+  - artist: Pixies
+    title: Hey
+    timestamp: ''
+  - artist: Stevie Wonder
+    title: I Wish
+    timestamp: ''
+  - artist: Kanye West
+    title: Jesus Walks
+    timestamp: ''
+  - artist: Massive Attack, Horace Andy
+    title: Angel
+    timestamp: ''
 duration: ''
 featured: false
 draft: false
