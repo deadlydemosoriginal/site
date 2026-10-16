@@ -1,6 +1,6 @@
 ---
 title: RnB
-episode: 23
+episode: 22
 date: 2026-02-25
 hosts:
   - tom
