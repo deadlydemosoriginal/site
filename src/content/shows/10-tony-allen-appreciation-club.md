@@ -9,11 +9,11 @@ description: Isaac and Liam stayed up til 2:30am the night before this show rese
 audioUrl: https://audio.deadlydemos.com/shows/africa.mp3
 artwork: ''
 tags:
-  - African
-  - Afrobeat
-  - Soul
-  - Funk
-  - Pop
+  - african
+  - afrobeat
+  - soul
+  - funk
+  - pop
 tracklist:
   - artist: Tony Allen
     title: Afrodisco Beat
