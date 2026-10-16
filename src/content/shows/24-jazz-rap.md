@@ -1,6 +1,6 @@
 ---
 title: Jazz Rap
-episode: 24
+episode: 23
 date: 2026-02-28
 hosts:
   - liam
