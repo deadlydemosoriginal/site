@@ -21,6 +21,7 @@ tags:
   - lofi
   - shoegaze
   - experimental
+  - electronic
 tracklist:
   - artist: HMLTD
     title: Is This What You Wanted?
