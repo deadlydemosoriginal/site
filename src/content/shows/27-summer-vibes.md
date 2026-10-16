@@ -1,6 +1,6 @@
 ---
 title: Summer Tuners
-episode: 27
+episode: 26
 date: 2026-04-18
 hosts:
   - isaac
