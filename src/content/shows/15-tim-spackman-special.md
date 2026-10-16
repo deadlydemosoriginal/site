@@ -13,6 +13,7 @@ tags:
   - post-punk
   - reggae
   - trip-hop
+  - punk
   - collab
 tracklist:
   - artist: The Jacksons
@@ -41,6 +42,9 @@ tracklist:
     timestamp: ''
   - artist: Shame
     title: Snow Day
+    timestamp: ''
+  - artist: Iggy & The Stooges
+    title: Search and Destroy
     timestamp: ''
 duration: ''
 featured: false
