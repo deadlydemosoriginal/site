@@ -9,9 +9,9 @@ description: Liam and Tom have a rap battle to kick off season 2, (no, not actua
 audioUrl: https://audio.deadlydemos.com/shows/rapbattle.mp3
 artwork: ''
 tags:
-  - Hip-Hop
-  - West Coast Rap
-  - East Coast Rap
+  - hip-hop
+  - west coast rap
+  - east coast rap
 tracklist:
   - artist: Missy Elliot
     title: Work It
