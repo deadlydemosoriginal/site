@@ -6,7 +6,7 @@ hosts:
   - isaac
 description: An ode to Goldie
 audioUrl: https://audio.deadlydemos.com/shows/jungle.mp3
-artwork: /uploads/102_1007.JPG
+artwork: ''
 tags:
   - jungle
   - dance
