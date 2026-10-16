@@ -2,7 +2,7 @@
 name: Isaac
 role: Founding father
 order: 1
-photo: /uploads/IMG_1707.jpeg
+photo: /uploads/38732b1e-3f7f-4db2-929d-5b77b5e9282a.jpeg
 links:
   - label: Instagram
     url: https://www.instagram.com/isaac.spackman?stkn=d2M1YmtxZDFpNGF3&utm_source=qr
