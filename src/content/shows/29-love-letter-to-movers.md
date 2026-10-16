@@ -1,6 +1,6 @@
 ---
 title: Love letter to Movers
-episode: 29
+episode: 28
 date: 2026-05-02
 hosts:
   - isaac
