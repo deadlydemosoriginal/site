@@ -1,6 +1,6 @@
 ---
 title: Deadly Dance Again
-episode: 19
+episode: 18
 date: 2026-01-31
 hosts:
   - isaac
