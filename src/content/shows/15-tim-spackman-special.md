@@ -4,7 +4,7 @@ episode: 15
 date: 2025-11-29
 hosts:
   - isaac
-description: This week Isaac was joined by the most special guest of them all. He's a superfan of the show and also, his dad.
+description: This week Isaac was joined by the most special guest of them all. He's a superfan of the show and also... his dad.
 audioUrl: https://audio.deadlydemos.com/shows/familieswithtim.mp3
 artwork: ''
 tags:
