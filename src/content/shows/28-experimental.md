@@ -1,6 +1,6 @@
 ---
 title: Experimental
-episode: 28
+episode: 27
 date: 2026-04-25
 hosts:
   - tom
