@@ -6,7 +6,7 @@ hosts:
   - liam
   - isaac
 description: 3-5am. why.
-audioUrl: ''
+audioUrl: https://audio.deadlydemos.com/shows/allnighter.mp3
 artwork: ''
 tags:
   - Nina Simone
