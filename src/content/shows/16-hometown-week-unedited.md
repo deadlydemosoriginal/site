@@ -6,10 +6,7 @@ hosts:
   - isaac
   - liam
   - tom
-description: |-
-  Hometown Week.
-  Yorkshire vs North West vs North London. Categories style show.
-  Also did Spotify Wrapped.
+description: This week we represented where we come from in a hometown battle of the ages. Yorkshire vs North West vs North London.
 audioUrl: https://audio.deadlydemos.com/shows/hometown.mp3
 artwork: ''
 tags:
