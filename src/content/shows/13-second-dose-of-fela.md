@@ -1,5 +1,5 @@
 ---
-title: Second dose of Fela
+title: Second Dose of Fela
 episode: 13
 date: 2025-10-25
 hosts:
