@@ -50,7 +50,7 @@ tracklist:
     title: So Be It
     timestamp: ''
   - artist: Turnstile
-    title: Seein' Stars
+    title: SEEIN' STARS
     timestamp: ''
   - artist: Skin On Skin, Nia Archives
     title: Burn Dem Bridges (Nia Archives Edit)
