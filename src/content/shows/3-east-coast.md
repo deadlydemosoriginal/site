@@ -10,8 +10,8 @@ description: Enter Liam Clarke.
 audioUrl: https://audio.deadlydemos.com/shows/3.%20East%20Coast.mp3
 artwork: ''
 tags:
-  - Hip-Hop
-  - East Coast Rap
+  - hip-hop
+  - east coast rap
 tracklist:
   - artist: The Alchemist
     title: Arrival
