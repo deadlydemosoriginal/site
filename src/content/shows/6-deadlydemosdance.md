@@ -10,9 +10,9 @@ description: Studio got a bit more funky as the sun came out, a very fun show.
 audioUrl: https://audio.deadlydemos.com/shows/deadlydemosdance.mp3
 artwork: ''
 tags:
-  - Dance
-  - Electronic
-  - House
+  - dance
+  - electronic
+  - house
 tracklist:
   - artist: Overmono
     title: So U Kno
