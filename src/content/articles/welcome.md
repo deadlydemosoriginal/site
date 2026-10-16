@@ -11,6 +11,6 @@ draft: false
 
 Have a browse around. We'll be archiving (nearly) all of our shows - some stinkers had to go. The website's still young so we'll be uploading the rest of our shows as we go but we couldn't wait to launch. We're just too bloody excited!
 
-We'll see soon,
+We'll see you soon,
 
 Isaac, Tom and Liam x
