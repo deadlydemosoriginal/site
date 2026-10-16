@@ -1,6 +1,6 @@
 ---
 title: Deadly Archives
-episode: 20
+episode: 19
 date: 2026-02-05
 hosts:
   - isaac
