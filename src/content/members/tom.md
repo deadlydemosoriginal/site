@@ -1,11 +1,15 @@
 ---
 name: Tom
-role: Playlists, digging, and the archive
+role: The King Of One Liners
 order: 3
+photo: /uploads/IMG_4382.jpeg
 links:
-  - { label: Spotify, url: "https://open.spotify.com/user/t0m.ss" }
-  - { label: Instagram, url: "https://www.instagram.com/tomstewardsmith" }
-  - { label: E-mail, url: "mailto:tomstewardsmith@yahoo.com" }
+  - label: Spotify
+    url: https://open.spotify.com/user/t0m.ss
+  - label: Instagram
+    url: https://www.instagram.com/tomstewardsmith
+  - label: E-mail
+    url: mailto:tomstewardsmith@yahoo.com
 ---
 
 I began my time at Deadly Demos starting out as Isaac’s producer for his radio show, before we swiftly decided to make the show a collaborative effort, then along came the weekly genre changes, and most importantly the tattoos.
