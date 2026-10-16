@@ -9,8 +9,8 @@ description: Tom and Isaac try to define Garage in their first attempt at mixing
 audioUrl: https://audio.deadlydemos.com/shows/garage.mp3
 artwork: ''
 tags:
-  - Garage
-  - Dance
+  - garage
+  - dance
 tracklist:
   - artist: TJR, Xavier
     title: Just Gets Better
