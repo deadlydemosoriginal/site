@@ -1,6 +1,6 @@
 ---
 title: House w Ewan
-episode: 25
+episode: 24
 date: 2026-03-21
 hosts:
   - liam
