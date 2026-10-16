@@ -1,6 +1,6 @@
 ---
 title: Reminiscing
-episode: 26
+episode: 25
 date: 2026-03-28
 hosts:
   - liam
