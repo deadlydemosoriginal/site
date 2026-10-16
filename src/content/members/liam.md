@@ -1,6 +1,6 @@
 ---
 name: Liam
-role: Words, arguments, and most of the writing
+role: Still knocking about at uni
 order: 2
 photo: /uploads/IMG_2539.jpeg
 links: []
