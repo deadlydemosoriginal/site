@@ -10,7 +10,17 @@ description: As our first year on Deadly Demos came to a close, we decided to re
 audioUrl: https://audio.deadlydemos.com/shows/wrapped.mp3
 artwork: ''
 tags:
-  - All of us
+  - indie
+  - rock
+  - post-punk
+  - jungle
+  - hip-hop
+  - dance
+  - soul
+  - funk
+  - lofi
+  - shoegaze
+  - experimental
 tracklist:
   - artist: HMLTD
     title: Is This What You Wanted?
