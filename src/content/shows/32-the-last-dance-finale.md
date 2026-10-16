@@ -1,6 +1,6 @@
 ---
 title: The Last Dance - Finale
-episode: 32
+episode: 31
 date: 2026-06-06
 hosts:
   - isaac
