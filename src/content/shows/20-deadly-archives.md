@@ -6,7 +6,7 @@ hosts:
   - isaac
   - liam
   - tom
-description: Crossover of the century. The first (and only) time anyone managed to pull us away from our Saturday night slot
+description: Crossover of the century. The first (and only) time anyone managed to pull us away from our Saturday night slot.
 audioUrl: https://audio.deadlydemos.com/shows/deadlyarchives.mp3
 artwork: ''
 tags:
