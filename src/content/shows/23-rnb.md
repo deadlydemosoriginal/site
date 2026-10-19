@@ -8,8 +8,8 @@ description: solo
 audioUrl: ''
 artwork: ''
 tags:
-  - Solo Show
-  - RnB
+  - solo show
+  - rnb
 tracklist: []
 duration: ''
 featured: false
