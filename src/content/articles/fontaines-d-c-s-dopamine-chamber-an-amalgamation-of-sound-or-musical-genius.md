@@ -9,6 +9,8 @@ tags:
   - Irish
   - Review
   - Experimental
+  - Album
+  - New
 draft: false
 ---
 
