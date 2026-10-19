@@ -1,5 +1,5 @@
 ---
-title: Fontaines D.C.’s Dopamine Chamber, An amalgamation of sound or Musical Genius?
+title: Fontaines D.C.’s Dopamine Chamber, An amalgamation of sound or a piece of Musical Genius?
 standfirst: "After over two years on a hiatus, Irish Post-Punk giants Fontaines D.C return with their fifth studio album: 'Dopamine Chamber.' Here, I'll be giving you a track by track review of the bands plunge into their new experimental sound, giving my thoughts as to whether it is a piece of musical genius or rather a messy amalgamation of sound."
 date: 2026-10-19
 author: tom
@@ -18,7 +18,7 @@ After 2 years or 784 days of waiting for the successor to the Irish bands award 
 
 Coming off the trails of their success stepping into a more experimental side of their music, as seen with songs like ‘\_Starburster\_’ taking off when _‘Romance’_ released, to the reception of the band's new appearance in their unconventional clothing, hair and makeup, it was clear that the band was trying to take a step in a new, more diverse direction, and with the release of _‘Dopamine Chamber’_, it is clear they have settled into disrupting the norm of what is expected from an Irish post punk band.
 
-So, welcome to _Deadly Demos_ first album review, with me Tom! I’ll be taking you track by track, letting you know my opinions and views on the tunes and album overall as we go along, let’s kick things off with the album's opening act… 
+So, welcome to _Deadly Demos_ first album review, with me, Tom! I’ll be taking you track by track, letting you know my opinions and views on the tunes and album overall as we go along, let’s kick things off with the album's opening act… 
 
 1. **_‘Six Shot Morning’ 4:56_**
 
@@ -138,7 +138,7 @@ This song shows that this album is not afraid to be both beautiful and ugly at t
 
 10. **_‘Japan’ 3:14_**
 
-‘\_Japan\_’ is the ‘\_Favourite\_’ of ‘\_Dopamine\_ \_Chamber\_’ if you want to put it that way, it’s catchy, it’s relatable, it describes a shitty partner, what’s not to love, I could easily see this shoot up the charts, let’s look at the chorus: 
+‘Japan’ is the ‘Favourite’ of ‘Dopamine Chamber’ if you want to put it that way, it’s catchy, it’s relatable, it describes a shitty partner, what’s not to love, I could easily see this shoot up the charts, let’s look at the chorus: 
 
 _“Well, you know she is the mime, got a boyfriend in Japan_
 
@@ -148,13 +148,13 @@ _When they fuck, she leaves her body for a while_
 
 _And she pays for all his shit 'til he says thanks without a smile”_
 
-The folky guitar on this song is lovely and the harmonising by Grian and Deego is beautiful, I love the musical direction this album has headed in, while this song is not musically revolutionary, it doesn’t need to be, the lyrics, tune of the song perfectly encapsulate the theme of the album, without needing to cross genres to do so, ‘\_Japan’\_ is just put simply a great song.
+The folky guitar on this song is lovely and the harmonising by Grian and Deego is beautiful, I love the musical direction this album has headed in, while this song is not musically revolutionary, it doesn’t need to be, the lyrics, tune of the song perfectly encapsulate the theme of the album, without needing to cross genres to do so, ‘Japan’ is just put simply a great song.
 
 **_8/10_**
 
 11. **_‘Intimate’ 3:57_**
 
-‘\_Intimate\_’ reverts back to this electronic moody theme we were accustomed to at the start of the album, but turns it into a shouty, depressing amalgamation of sound.
+‘Intimate’ reverts back to this electronic moody theme we were accustomed to at the start of the album, but turns it into a shouty, depressing amalgamation of sound.
 
 The musical direction of this song feels quite cyberpunk-esque, with the clattering drums and a droning, constant synthesizer to end the album as Grian chants over this song in what feels like a chant, sharing his views on connections in the modern world. (Again, no pun intended)
 
@@ -170,7 +170,7 @@ The only weakness of this album is I think some songs in it would lack substance
 
 **8/10**
 
-Massive Thanks for reading my first article, this is the first time I’ve ever written something like this so I’ll take any feedback I can get.
+Massive thanks for reading my first article, this is the first time I’ve ever written something like this so I’ll take any feedback I can get.
 
 Stay tuned in to our socials from future articles from all 3 of us!
 
