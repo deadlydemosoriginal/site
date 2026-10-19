@@ -1,5 +1,5 @@
 ---
-title: What's that in the jungle?
+title: What's That in the Jungle?
 episode: 2
 date: 2024-12-14
 hosts:
@@ -8,6 +8,7 @@ description: An ode to Goldie
 audioUrl: https://audio.deadlydemos.com/shows/jungle.mp3
 artwork: ''
 tags:
+  - solo show
   - jungle
   - dance
   - dub
