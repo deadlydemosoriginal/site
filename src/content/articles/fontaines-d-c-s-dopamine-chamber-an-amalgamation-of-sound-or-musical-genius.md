@@ -1,5 +1,5 @@
 ---
-title: Fontaines D.C.’s Dopamine Chamber, An amalgamation of sound or Musical Genius?
+title: Fontaines D.C.’s Dopamine Chamber, An amalgamation of sound or a piece of Musical Genius?
 standfirst: "After over two years on a hiatus, Irish Post-Punk giants Fontaines D.C return with their fifth studio album: 'Dopamine Chamber.' Here, I'll be giving you a track by track review of the bands plunge into their new experimental sound, giving my thoughts as to whether it is a piece of musical genius or rather a messy amalgamation of sound."
 date: 2026-10-19
 author: tom
