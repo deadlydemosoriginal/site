@@ -12,6 +12,7 @@ tags:
   - european
   - experimental
   - goth
+  - pop
 tracklist: []
 duration: ''
 featured: false
