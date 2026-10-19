@@ -1,12 +1,12 @@
 ---
-title: The Last Dance - Finale
+title: The Last Dance
 episode: 31
 date: 2026-06-06
 hosts:
   - isaac
   - liam
   - tom
-description: 4 hour bumper final show
+description: The finale
 audioUrl: ''
 artwork: ''
 tags:
