@@ -42,8 +42,7 @@ const spans = ['span-5', 'span-7', 'span-4', 'span-4', 'span-4', 'span-6'];
 
     <h1 class="hero__head">
       <span class="hero__line hero__line--a">Latest</span>
-      <span class="hero__line hero__line--b">transmissions</span>
-      <span class="hero__line hero__line--c">from the</span>
+      <span class="hero__line hero__line--c">from</span>
       <span class="hero__line hero__line--d">deadly demos</span>
     </h1>
 
@@ -93,7 +92,6 @@ const spans = ['span-5', 'span-7', 'span-4', 'span-4', 'span-4', 'span-6'];
     display: grid;
   }
   .hero__line--a { font-variation-settings: 'wdth' 75; }
-  .hero__line--b { font-variation-settings: 'wdth' 100; color: var(--lavender); }
   .hero__line--c { font-variation-settings: 'wdth' 75; font-weight: 200; text-align: right; }
   .hero__line--d { font-variation-settings: 'wdth' 100; text-align: right; color: var(--accent); }
 
@@ -138,7 +136,6 @@ const spans = ['span-5', 'span-7', 'span-4', 'span-4', 'span-4', 'span-6'];
   @media (max-width: 700px) {
     .hero__eyebrow { flex-direction: column; gap: 0.35rem; }
     .hero__head { font-size: clamp(2.4rem, 12.5vw, 4rem); }
-    .hero__line--b,
     .hero__line--d { font-variation-settings: 'wdth' 75; }
   }
 
