@@ -91,6 +91,10 @@ const d = entry.data;
     hyphenate-limit-chars: 6 3 3;
   }
   .prose :global(blockquote p) { text-align: left; hyphens: manual; }
+  /* Too few words per line on a phone to justify without big gaps. */
+  @media (max-width: 700px) {
+    .prose :global(:is(p, li)) { text-align: left; hyphens: manual; }
+  }
   .prose :global(h2) {
     font-family: var(--face-serif);
     font-weight: 400;
