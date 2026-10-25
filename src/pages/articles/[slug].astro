@@ -85,6 +85,12 @@ const d = entry.data;
 
   .prose { max-width: var(--measure); padding-top: 2.5rem; }
   .prose :global(p) { margin-bottom: 1.25rem; line-height: 1.65; }
+  .prose :global(:is(p, li)) {
+    text-align: justify;
+    hyphens: auto;
+    hyphenate-limit-chars: 6 3 3;
+  }
+  .prose :global(blockquote p) { text-align: left; hyphens: manual; }
   .prose :global(h2) {
     font-family: var(--face-serif);
     font-weight: 400;
