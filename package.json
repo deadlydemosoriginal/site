@@ -12,6 +12,7 @@
     "audio-meta": "node scripts/audio-meta.mjs"
   },
   "dependencies": {
+    "@astrojs/markdown-satteri": "0.3.8",
     "@astrojs/sitemap": "^3.7.3",
     "@resvg/resvg-js": "^2.6.2",
     "astro": "^7.2.9",

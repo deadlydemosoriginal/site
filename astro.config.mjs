@@ -1,6 +1,8 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { satteri } from '@astrojs/markdown-satteri';
+import { looseEmphasis } from './src/lib/loose-emphasis.mjs';
 
 export default defineConfig({
   site: 'https://deadlydemos.com',
@@ -15,6 +17,9 @@ export default defineConfig({
   },
 
   integrations: [sitemap({ filter: (page) => !page.includes('/admin') })],
+
+  // The CMS editor escapes italics that touch curly quotes; render them anyway.
+  markdown: { processor: satteri({ mdastPlugins: [looseEmphasis] }) },
 
   // Fonts are served from our own origin — no third-party request,
   // no consent implications.
