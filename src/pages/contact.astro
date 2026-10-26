@@ -2,6 +2,10 @@
 import Base from '../layouts/Base.astro';
 import { socials, email } from '../lib/socials';
 
+// Parked: the page is just the one address for now. Flip this to bring the
+// four routes and the socials list back.
+const showRoutes = false;
+
 const routes = [
   {
     label: 'Send us a record',
@@ -46,6 +50,21 @@ const routes = [
   <hr class="rule" />
 
   <section class="shell section">
+    <a href={`mailto:${email}`} class="mail on-purple">
+      <span class="meta mail__top">
+        <span>Email</span>
+        <span>Demos · Copyright · Hellos</span>
+      </span>
+      <span class="mail__addr">
+        <span class="mail__user">info@</span>
+        <span class="mail__domain">deadlydemos.com</span>
+      </span>
+      <span class="meta mail__cta">Write to us <span class="mail__arrow" aria-hidden="true">→</span></span>
+    </a>
+  </section>
+
+  {showRoutes && (
+  <section class="shell section">
     <div class="grid12 routes">
       {routes.map((r, i) => (
         <div class={`route ${i === 0 ? 'route--wide' : ''}`}>
@@ -70,6 +89,7 @@ const routes = [
       </ul>
     </div>
   </section>
+  )}
 </Base>
 
 <style>
@@ -78,6 +98,41 @@ const routes = [
   .head__title { display: grid; font-size: var(--step-xl); text-transform: uppercase; line-height: 0.84; }
   .head__a { font-variation-settings: 'wdth' 75; }
   .head__b { font-variation-settings: 'wdth' 100; color: var(--accent); text-align: right; }
+
+  .mail {
+    display: grid;
+    gap: clamp(2rem, 6vw, 4.5rem);
+    padding: clamp(1.25rem, 4vw, 3rem);
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--bg);
+    transition: background-color 0.25s ease;
+  }
+  .mail:hover, .mail:focus-visible { background: var(--ultrasonic); }
+  .mail__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 1rem; color: var(--fg-muted); }
+
+  .mail__addr {
+    display: grid;
+    font-family: var(--face-display);
+    font-size: clamp(1.75rem, 11vw, 9.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+  }
+  .mail__user { font-weight: 200; font-variation-settings: 'wdth' 75; }
+  .mail__domain {
+    font-weight: 800;
+    font-variation-settings: 'wdth' 75;
+    color: var(--periwinkle);
+    text-align: right;
+  }
+
+  .mail__cta { justify-self: end; display: inline-flex; gap: 0.6rem; color: var(--fg); }
+  .mail__arrow { transition: transform 0.25s ease; }
+  .mail:hover .mail__arrow, .mail:focus-visible .mail__arrow { transform: translateX(0.4rem); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mail, .mail__arrow { transition: none; }
+  }
 
   .route {
     grid-column: span 4;
