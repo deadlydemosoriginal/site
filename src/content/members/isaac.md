@@ -16,7 +16,7 @@ links:
 
 Deadly Demos started out as a hobby in the second year of uni when I realised I could start a radio show, a dream job for me. It was an opportunity to be vain and almost force people to listen to my music taste. Sharing the show with the lads meant we were always teaching each other about different genres and artists and it turned into something bigger than the music but more of a document of our friendship.
 
-A year in I started writing articles for the uni’s music magazine before integrating social media content into Deadly Demos. Now somehow we have a website, archiving everything we do. 
+A year in I started writing articles for the uni’s music magazine before integrating social media content into Deadly Demos. Now, I write music content for various publications, and somehow Deadly Demos has a website, archiving everything we do. 
 
 Since graduating, I’ve had a real curiosity into the possibilities of what I can create with sound and have enjoyed meeting people from all walks of life at radio festivals and community stations who’ve given me a new perspective on the artistic process and filled me with inspiration to create anything I find interesting. I’m soon starting a new music show on [Chapel FM](http://chapelfm.co.uk/), focusing on artists from Leeds and the surrounding areas.
 
