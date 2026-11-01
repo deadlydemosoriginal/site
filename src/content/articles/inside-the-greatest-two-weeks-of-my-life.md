@@ -13,7 +13,7 @@ Right now I'm high on life. I've just had a whirlwind two weeks that I think mig
 
 **_Worky Stuff_**
 
-The past couple of weeks have been exceptional in terms of radio-adjacent achievements. It's been tough to get the ball rolling since graduating but it feels like something's happening now.
+The past couple of weeks have been unbelievable in terms of radio-adjacent achievements. It's been tough to get the ball rolling since graduating but it feels like something's finally happening now.
 
 For starters, I got an SRA nomination! Ever since attending last year and seeing the work of the incredibly talented and hard working student radio community across the country, I've been desperate to prove myself amongst the best. With Soundsystem (an event myself and a team of too many to count pulled out all the stops for) getting nominated for Best Multiplatform Initiative, I finally ticked an SRA nomination off the bucket list. Being able to share that moment with Emily, who worked so hard on the event and application with me, was very special. Seeing URN get 9 total nominations too is an testament to the incredible talent and people in that wonderful station. Best in the biz.
 
