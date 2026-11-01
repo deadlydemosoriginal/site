@@ -3,7 +3,7 @@ title: Inside the Greatest Two Weeks of My Life
 standfirst: You heard me.
 date: 2026-11-01
 author: isaac
-heroImage: ''
+heroImage: /uploads/Colorful Collage Best Friends Slam Book Fun Presentation.jpeg
 tags:
   - Blog
 draft: false
