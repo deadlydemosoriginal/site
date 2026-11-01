@@ -1,5 +1,5 @@
 ---
-title: Inside the Greatest Two Weeks of My Life
+title: The Last Two Weeks Have Been the Greatest of My Life
 standfirst: You heard me.
 date: 2026-11-01
 author: isaac
