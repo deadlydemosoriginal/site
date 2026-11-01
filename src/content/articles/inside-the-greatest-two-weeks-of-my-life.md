@@ -3,7 +3,7 @@ title: The Last Two Weeks Have Been the Greatest of My Life
 standfirst: You heard me.
 date: 2026-11-01
 author: isaac
-heroImage: /uploads/Colorful Collage Best Friends Slam Book Fun Presentation.jpeg
+heroImage: /uploads/Colorful Collage Best Friends Slam Book Fun Presentation-1.jpeg
 tags:
   - Blog
 draft: false
